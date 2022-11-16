@@ -140,7 +140,7 @@ obrazek niestety wklejony z pliku, ale myśle że da rade zrobić tak jak mówi�
 
 <details><summary>to jest mały kod w go, który rysuje to UI</summary>
 
-    ```golang
+```golang
 package main
 
 import (
@@ -190,7 +190,7 @@ func main() {
 	wnd.Run(loop)
 }
 
-        ```
+```
 
 </details>
 
