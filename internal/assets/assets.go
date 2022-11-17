@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+ * Copyright (c) 2022. Copyright 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
  * All Rights Reserved
  *
  * All copies of this software (if not stated otherway) are dedicated
@@ -24,7 +24,6 @@ import (
 )
 
 // AppCSS represents a CSS stylesheet for giu app
-//
 var (
 	//go:embed stylesheet/app.css
 	AppCSS []byte
