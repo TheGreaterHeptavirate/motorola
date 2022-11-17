@@ -13,7 +13,9 @@
 package app
 
 import (
+	"fmt"
 	"github.com/AllenDang/giu"
+	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
 )
 
 const (
@@ -32,6 +34,11 @@ func New() *App {
 func (a *App) Run() error {
 	// create master window
 	a.window = giu.NewMasterWindow(appTitle, appResolutionX, appResoultionY, 0)
+
+	// add stylesheet
+	if err := giu.ParseCSSStyleSheet(assets.AppCSS); err != nil {
+		return fmt.Errorf("error parsing CSS stylesheet: %w", err)
+	}
 
 	// start main loop
 	a.window.Run(a.render)
