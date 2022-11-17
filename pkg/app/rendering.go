@@ -9,6 +9,7 @@
 package app
 
 import (
+	"errors"
 	"github.com/AllenDang/giu"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/sqweek/dialog"
@@ -17,6 +18,7 @@ import (
 
 func (a *App) render() {
 	giu.SingleWindowWithMenuBar().Layout(
+		giu.PrepareMsgbox(),
 		a.menuBar(),
 		a.inputBar(),
 	)
@@ -47,14 +49,26 @@ func (a *App) inputBar() giu.Layout {
 
 						filepath, err := dialog.File().Load()
 						if err != nil {
+							// this error COULD come from fact that user exited dialog
+							// in this case, don't report app's error, just return
+							if errors.Is(err, dialog.ErrCancelled) {
+								logger.Info("File loading cancelled")
 
+								return
+							}
+
+							a.ReportError(err)
+
+							return
 						}
 
 						logger.Debugf("Path to file to load: %s", filepath)
 
 						data, err := os.ReadFile(filepath)
 						if err != nil {
+							a.ReportError(err)
 
+							return
 						}
 
 						logger.Debug("File loaded successfully!")
