@@ -33,6 +33,7 @@ func ParseInput(input string) ([]*aminoacid.AminoAcids, error) {
 	for offset := 0; offset < CodonLength; offset++ {
 		logger.Debugf("Reading codons for offset: %d", offset)
 		a := aminoacid.NewAmioAcids()
+		ribosome.SetOffset(offset)
 		for {
 			codon, err := ribosome.ReadCodon()
 			if err != nil {
@@ -51,7 +52,7 @@ func ParseInput(input string) ([]*aminoacid.AminoAcids, error) {
 				return nil, fmt.Errorf("unable to find amino acid for codon %s", codon)
 			}
 
-			logger.Debugf("Found amino acid: %s", aminoAcid.Name)
+			logger.Debugf("Found amino acid: %s", aminoAcid.ShortName)
 
 			a.Push(aminoAcid)
 		}

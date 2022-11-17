@@ -10,8 +10,10 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	"github.com/AllenDang/giu"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/sqweek/dialog"
 	"os"
 )
@@ -42,7 +44,7 @@ func (a *App) inputBar() giu.Layout {
 				availableW, _ = giu.GetAvailableRegion()
 				spacingW, _ = giu.GetItemSpacing()
 				giu.Row(
-					giu.Button("Wczytaj z pliku").Size((availableW-spacingW)/2, 0).OnClick(func() {
+					giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
 						logger.Info("Loading file to input textbox...")
 
 						filepath, err := dialog.File().Load()
@@ -73,9 +75,25 @@ func (a *App) inputBar() giu.Layout {
 
 						a.inputString = string(data)
 					}),
-					giu.Button("Czyść").Size((availableW-spacingW)/2, 0).OnClick(func() {
+					giu.Button("Czyść").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
 						logger.Debug("Clearing input textbox...")
 						a.inputString = ""
+					}),
+					giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
+						d, err := inputparser.ParseInput(a.inputString)
+						if err != nil {
+							a.ReportError(err)
+
+							return
+						}
+
+						// DEBUG CODE TODO
+						for i, v := range d {
+							fmt.Printf("offset %d\n", i)
+							for _, v2 := range *v {
+								fmt.Println(v2)
+							}
+						}
 					}),
 				).Build()
 			}),
