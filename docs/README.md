@@ -1,1 +1,2 @@
 - [Założenia Ogólne](https://science-cup.pl/wp-content/uploads/2022/11/MSC3_2022_Bioinformatyka.pdf)
+- Dokument: [design-doc - codding preview](./design-doc.md)
