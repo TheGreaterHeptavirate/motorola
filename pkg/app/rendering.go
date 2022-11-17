@@ -10,6 +10,7 @@ package app
 
 import (
 	"github.com/AllenDang/giu"
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/sqweek/dialog"
 	"os"
 )
@@ -42,19 +43,26 @@ func (a *App) inputBar() giu.Layout {
 				spacingW, _ = giu.GetItemSpacing()
 				giu.Row(
 					giu.Button("Wczytaj z pliku").Size((availableW-spacingW)/2, 0).OnClick(func() {
+						logger.Info("Loading file to input textbox...")
+
 						filepath, err := dialog.File().Load()
 						if err != nil {
 
 						}
+
+						logger.Debugf("Path to file to load: %s", filepath)
 
 						data, err := os.ReadFile(filepath)
 						if err != nil {
 
 						}
 
+						logger.Debug("File loaded successfully!")
+
 						a.inputString = string(data)
 					}),
 					giu.Button("Czyść").Size((availableW-spacingW)/2, 0).OnClick(func() {
+						logger.Debug("Clearing input textbox...")
 						a.inputString = ""
 					}),
 				).Build()

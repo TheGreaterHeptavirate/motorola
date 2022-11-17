@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"github.com/AllenDang/giu"
 	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
 
 const (
@@ -34,15 +35,20 @@ func New() *App {
 }
 
 func (a *App) Run() error {
+	logger.Info("Welcome to Motorola project!")
+
 	// create master window
+	logger.Debug("Creating master window...")
 	a.window = giu.NewMasterWindow(appTitle, appResolutionX, appResoultionY, 0)
 
 	// add stylesheet
+	logger.Debug("Adding main stylesheet...")
 	if err := giu.ParseCSSStyleSheet(assets.AppCSS); err != nil {
 		return fmt.Errorf("error parsing CSS stylesheet: %w", err)
 	}
 
 	// start main loop
+	logger.Debug("Starting main loop...")
 	a.window.Run(a.render)
 
 	return nil

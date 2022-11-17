@@ -10,6 +10,7 @@ package inputparser
 
 import (
 	"fmt"
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"io"
 	"strings"
 
@@ -17,6 +18,7 @@ import (
 )
 
 func ParseInput(input string) ([]*aminoacid.AminoAcids, error) {
+	logger.Debugf("Parsing input string: %s", input)
 	result := make([]*aminoacid.AminoAcids, 0)
 
 	ribosome := NewRibosome(input)
@@ -29,21 +31,27 @@ func ParseInput(input string) ([]*aminoacid.AminoAcids, error) {
 
 	// read codons
 	for offset := 0; offset < CodonLength; offset++ {
+		logger.Debugf("Reading codons for offset: %d", offset)
 		a := aminoacid.NewAmioAcids()
 		for {
 			codon, err := ribosome.ReadCodon()
 			if err != nil {
 				if err == io.EOF {
+					logger.Debug("received EOF, breaking")
 					break
 				}
 
 				return nil, err
 			}
 
+			logger.Debugf("Read codon: %s", codon)
+
 			aminoAcid := db.GetFromCodon(codon)
 			if aminoAcid == nil {
 				return nil, fmt.Errorf("unable to find amino acid for codon %s", codon)
 			}
+
+			logger.Debugf("Found amino acid: %s", aminoAcid.Name)
 
 			a.Push(aminoAcid)
 		}
@@ -104,7 +112,7 @@ func (r *Ribosome) ReadCodon() (string, error) {
 	r.codonsRead++
 
 	out := r.data[startIndex:endIndex]
-	if err := r.Validate(out); err != nil {
+	if err := Validate(out); err != nil {
 		return "", err
 	}
 
@@ -113,7 +121,7 @@ func (r *Ribosome) ReadCodon() (string, error) {
 
 // Validate validates codon
 // - it must contain only characters "ACGT" OR "ACGU"
-func (r *Ribosome) Validate(codon string) error {
+func Validate(codon string) error {
 	isDNA := strings.ContainsAny(codon, thymine)
 	isRNA := strings.ContainsAny(codon, uracil)
 	if isRNA && isDNA {
