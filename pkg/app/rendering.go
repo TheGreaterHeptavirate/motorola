@@ -10,6 +10,8 @@ package app
 
 import (
 	"github.com/AllenDang/giu"
+	"github.com/sqweek/dialog"
+	"os"
 )
 
 func (a *App) render() {
@@ -33,16 +35,30 @@ func (a *App) inputBar() giu.Layout {
 	var availableW float32
 	var spacingW float32
 	return giu.Layout{
-		giu.InputTextMultiline(&a.inputString).Size(-1, 0),
-		giu.Custom(func() {
-			availableW, _ = giu.GetAvailableRegion()
-			spacingW, _ = giu.GetItemSpacing()
-			giu.Row(
-				giu.Button("Wczytaj z pliku").Size((availableW-spacingW)/2, 0),
-				giu.Button("Czyść").Size((availableW-spacingW)/2, 0).OnClick(func() {
-					a.inputString = ""
-				}),
-			).Build()
-		}),
+		giu.TreeNode("Input textbox").Layout(
+			giu.InputTextMultiline(&a.inputString).Size(-1, 0),
+			giu.Custom(func() {
+				availableW, _ = giu.GetAvailableRegion()
+				spacingW, _ = giu.GetItemSpacing()
+				giu.Row(
+					giu.Button("Wczytaj z pliku").Size((availableW-spacingW)/2, 0).OnClick(func() {
+						filepath, err := dialog.File().Load()
+						if err != nil {
+
+						}
+
+						data, err := os.ReadFile(filepath)
+						if err != nil {
+
+						}
+
+						a.inputString = string(data)
+					}),
+					giu.Button("Czyść").Size((availableW-spacingW)/2, 0).OnClick(func() {
+						a.inputString = ""
+					}),
+				).Build()
+			}),
+		),
 	}
 }
