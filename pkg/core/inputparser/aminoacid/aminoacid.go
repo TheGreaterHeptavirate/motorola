@@ -1,27 +1,30 @@
 // Package aminoacid represents details about aminoacids system
 package aminoacid
 
-import "fmt"
-
 // AminoAcids represents a list/set of AminoAcid
 type AminoAcids []*AminoAcid
 
-// AminoAcid represents statistic of a single aminoacid
-type AminoAcid struct {
-	Sign      string
-	ShortName string
-	LongName  string
-	Mass      float32
+func NewAmioAcids() *AminoAcids {
+	result := make(AminoAcids, 0)
+	return &result
 }
 
-// GetDatabase returns a complete database
-// of all the AminoAcids loaded from assets.
-func GetDatabase() (*AminoAcids, error) {
-	result := &AminoAcids{
-		AminoAcids: make([]AminoAcid, 0),
-	}
+func (a *AminoAcids) Push(aminoAcid *AminoAcid) {
+	*a = append(*a, aminoAcid)
+}
 
-	if err := Json.Unmarshal(result, assets.DataBaseJSON); err != nil {
-		return nil, fmt.Errorf("unable to parse database: %w", err)
-	}
+// AminoAcid represents statistic of a single aminoacid
+type AminoAcid struct {
+	// Sing is the one-letter code from this circle-scheme
+	Sign string
+	// ShortName is the short name of aminoacid
+	ShortName string
+	// LongName is the "legal" name of aminoacid
+	LongName string
+	// Codes are the three-letter code from this circle-scheme
+	// it describes RNA codons
+	Codes []string
+
+	// Mass is the molecular mass of aminoacid
+	Mass float32
 }
