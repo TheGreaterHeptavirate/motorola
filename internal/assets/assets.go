@@ -25,5 +25,10 @@ import (
 
 // AppCSS represents a CSS stylesheet for giu app
 //
-//go:embed stylesheet/app.css
-var AppCSS []byte
+var (
+	//go:embed stylesheet/app.css
+	AppCSS []byte
+
+	//go:embed database/amino_acids.json
+	AminoAcidsJSON []byte
+)

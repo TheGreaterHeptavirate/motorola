@@ -45,9 +45,3 @@ func (a *App) Run() error {
 
 	return nil
 }
-
-func (a *App) render() {
-	giu.SingleWindow().Layout(
-		giu.Label("Hello, world!"),
-	)
-}

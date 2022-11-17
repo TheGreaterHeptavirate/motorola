@@ -1,0 +1,2 @@
+- app/ - main GUI's package
+- core/ - backend
