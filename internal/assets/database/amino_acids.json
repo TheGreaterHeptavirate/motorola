@@ -1,0 +1,24 @@
+[
+	{
+		"Sign": "F",
+		"ShortName": "Phe",
+		"LongName": "Phenylalanine",
+		"Codes": [
+			"UUU",
+			"UUC"
+		],
+		"Mass": 165.19
+	},
+	{
+		"Sign": "V",
+		"ShortName": "Val",
+		"LongName": "Valine",
+		"Codes": [
+			"GUU",
+			"GUC",
+			"GUA",
+			"GUG"
+		],
+		"Mass": 117.151
+	}
+]
