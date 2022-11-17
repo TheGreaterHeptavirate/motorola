@@ -26,10 +26,8 @@ func (a *App) render() {
 
 func (a *App) menuBar() *giu.MenuBarWidget {
 	return giu.MenuBar().Layout(
-		giu.Menu("File").Layout(
-			giu.MenuItem("Open"),
-			giu.MenuItem("Save"),
-			giu.MenuItem("Exit"),
+		giu.Menu("Plik").Layout(
+			giu.MenuItem("Zamknij"),
 		),
 	)
 }
