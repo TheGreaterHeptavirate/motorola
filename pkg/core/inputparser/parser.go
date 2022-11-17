@@ -2,9 +2,10 @@ package inputparser
 
 import (
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	"io"
 	"strings"
+
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 )
 
 func ParseInput(input string) ([]*aminoacid.AminoAcids, error) {
