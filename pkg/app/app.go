@@ -24,6 +24,8 @@ const (
 )
 
 type App struct {
+	inputString string
+
 	window *giu.MasterWindow
 }
 
