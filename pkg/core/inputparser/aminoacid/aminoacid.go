@@ -26,5 +26,6 @@ type AminoAcid struct {
 	Codes []string
 
 	// Mass is the molecular mass of aminoacid
+	// unit is: g/mol
 	Mass float32
 }
