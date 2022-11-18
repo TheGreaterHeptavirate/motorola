@@ -82,7 +82,7 @@ func StringToAminoAcids(input string) ([]*aminoacid.AminoAcids, error) {
 
 			aminoAcid := db.GetFromCodon(codon)
 			if aminoAcid == nil {
-				return nil, fmt.Errorf("unable to find amino acid for codon %s", codon)
+				return nil, fmt.Errorf("unable to find amino acid for codon %s: %w", codon, aminoacid.ErrInvalidCodon)
 			}
 
 			logger.Debugf("Found amino acid: %s", aminoAcid.ShortName)

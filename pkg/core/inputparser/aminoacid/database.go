@@ -10,9 +10,13 @@ package aminoacid
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
 )
+
+// ErrInvalidCodon is returned when the given codon cannot be found in database
+var ErrInvalidCodon = errors.New("invalid codon")
 
 // Database is the same as AminoAcids, but contains a bit more
 // extra logic (e.g. loading from json or Getter)
