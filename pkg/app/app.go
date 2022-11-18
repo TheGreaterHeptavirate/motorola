@@ -27,15 +27,32 @@ const (
 type App struct {
 	inputString string
 
-	window *giu.MasterWindow
+	window   *giu.MasterWindow
+	logLevel logger.LogLevel
 }
 
 func New() *App {
-	return &App{}
+	return &App{
+		logLevel: logger.LogLevelInfo,
+	}
+}
+
+// EnforceLogLevel sets log level to loglevel
+func (a *App) EnforceLogLevel(loglevel logger.LogLevel) {
+	a.logLevel = loglevel
+}
+
+// Verbose sets log level to debug
+// overrides EnforceLogLevel
+func (a *App) Verbose() {
+	a.logLevel = logger.LogLevelDebug
 }
 
 func (a *App) Run() error {
 	logger.Info("Welcome to Motorola project!")
+
+	logger.Infof("Setting log level to %s", a.logLevel)
+	logger.SetLevel(a.logLevel)
 
 	// create master window
 	logger.Debug("Creating master window...")

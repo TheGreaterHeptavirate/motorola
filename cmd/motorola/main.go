@@ -8,10 +8,21 @@
 
 package main
 
-import "github.com/TheGreaterHeptavirate/motorola/pkg/app"
+import (
+	"flag"
+
+	"github.com/TheGreaterHeptavirate/motorola/pkg/app"
+)
 
 func main() {
+	verbose := flag.Bool("verbose", false, "verbosing mode")
+	flag.Parse()
+
 	a := app.New()
+
+	if *verbose {
+		a.Verbose()
+	}
 
 	if err := a.Run(); err != nil {
 		panic(err)
