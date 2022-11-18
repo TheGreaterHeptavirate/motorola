@@ -90,7 +90,7 @@ func (a *App) inputBar() giu.Layout {
 						// DEBUG CODE TODO
 						for i, v := range d {
 							fmt.Printf("offset %d\n", i)
-							for _, v2 := range *v {
+							for _, v2 := range v.AminoAcids {
 								fmt.Println(v2)
 							}
 						}

@@ -12,13 +12,48 @@ import (
 	"fmt"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 	"io"
 )
 
-func ParseInput(input string) ([]*aminoacid.AminoAcids, error) {
+func ParseInput(input string) ([]*protein.Protein, error) {
 	logger.Debugf("Parsing input string: %s", input)
-	result := make([]*aminoacid.AminoAcids, 0)
+	result := make([]*protein.Protein, 0)
 
+	aminoAcids, err := StringToAminoAcids(input)
+	if err != nil {
+		return nil, fmt.Errorf("unable to convert input string to amino acids list: %w", err)
+	}
+
+	for _, aminoAcids := range aminoAcids {
+		var (
+			isReading = false
+			start     = 0
+		)
+		for i, aminoAcid := range *aminoAcids {
+			switch aminoAcid.Sign {
+			case aminoacid.StartCodon:
+				isReading = true
+				start = i
+			case aminoacid.StopCodon:
+				if isReading {
+					isReading = false
+					newProtein, err := protein.NewProtein((*aminoAcids)[start : i+1])
+					if err != nil {
+						return nil, fmt.Errorf("unable to create new protein (should not happen): %w", err)
+					}
+
+					result = append(result, newProtein)
+				}
+			}
+		}
+	}
+
+	return result, nil
+}
+
+func StringToAminoAcids(input string) ([]*aminoacid.AminoAcids, error) {
+	result := make([]*aminoacid.AminoAcids, 0)
 	ribosome := NewRibosome(input)
 	ribosome.SetOffset(0)
 
