@@ -12,6 +12,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/AllenDang/giu"
+	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
@@ -146,11 +147,16 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 	return giu.Layout{
 		giu.TreeNode("Zapis aminokwasowy").Layout(
 			giu.Custom(func() {
-				s := ""
+				giu.Label("").Build()
 				for _, v := range protein.AminoAcids {
-					s += v.Sign + " "
+					availableW, _ := giu.GetAvailableRegion()
+					textW, _ := giu.CalcTextSize(v.Sign)
+					if availableW > textW {
+						imgui.SameLine()
+						giu.Label(v.Sign).Build()
+						giu.Tooltip(fmt.Sprintf("%s (%s)\nMass: %v", v.LongName, v.ShortName, v.Mass)).Build()
+					}
 				}
-				giu.Label(s).Wrapped(true).Build()
 			}),
 		),
 	}
