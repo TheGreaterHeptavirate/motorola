@@ -42,7 +42,14 @@ func (a *App) inputBar() giu.Layout {
 	var spacingW float32
 	return giu.Layout{
 		giu.TreeNode("Input textbox").Layout(
-			giu.InputTextMultiline(&a.inputString).Size(-1, 0),
+			giu.Custom(func() {
+
+				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
+					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
+				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
+					return WrapInputtextMultiline(widget, c)
+				}).Build()
+			}),
 			giu.Custom(func() {
 				availableW, _ = giu.GetAvailableRegion()
 				spacingW, _ = giu.GetItemSpacing()
