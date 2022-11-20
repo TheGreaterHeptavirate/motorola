@@ -152,7 +152,6 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 				baseW := availableW
 				itemSpacingW, _ := giu.GetItemSpacing()
 				for _, v := range protein.AminoAcids {
-					fmt.Println(availableW)
 					textW, _ := giu.CalcTextSize(v.Sign)
 					availableW -= textW + itemSpacingW
 					if availableW > 0 {
