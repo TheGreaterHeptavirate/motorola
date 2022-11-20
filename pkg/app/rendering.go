@@ -148,14 +148,21 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 		giu.TreeNode("Zapis aminokwasowy").Layout(
 			giu.Custom(func() {
 				giu.Label("").Build()
+				availableW, _ := giu.GetAvailableRegion()
+				baseW := availableW
+				itemSpacingW, _ := giu.GetItemSpacing()
 				for _, v := range protein.AminoAcids {
-					availableW, _ := giu.GetAvailableRegion()
+					fmt.Println(availableW)
 					textW, _ := giu.CalcTextSize(v.Sign)
-					if availableW > textW {
+					availableW -= textW + itemSpacingW
+					if availableW > 0 {
 						imgui.SameLine()
-						giu.Label(v.Sign).Build()
-						giu.Tooltip(fmt.Sprintf("%s (%s)\nMass: %v", v.LongName, v.ShortName, v.Mass)).Build()
+					} else {
+						availableW = baseW
 					}
+
+					giu.Label(v.Sign).Build()
+					giu.Tooltip(fmt.Sprintf("%s (%s)\nMass: %v", v.LongName, v.ShortName, v.Mass)).Build()
 				}
 			}),
 		),
