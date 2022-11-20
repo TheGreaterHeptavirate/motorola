@@ -17,6 +17,15 @@ import (
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 )
 
+var data = aminoacid.AminoAcids{
+	&aminoacid.AminoAcid{"F", "Phe", "Phenylalanine", []string{"UUU", "UUC"}, 165.19},
+	&aminoacid.AminoAcid{"V", "Val", "Valine", []string{"GUU", "GUC", "GUA", "GUG"}, 165.19},
+	&aminoacid.AminoAcid{"[START]", "Met", "Methionine (START code)", []string{"AUG"}, 149.21},
+	&aminoacid.AminoAcid{"[STOP]", "STOP", "STOP code", []string{"UAA", "UAG", "UGA"}, 0},
+	&aminoacid.AminoAcid{"C", "Cys", "Cysteine", []string{"UGU", "UGC"}, 121.16},
+	&aminoacid.AminoAcid{"L", "Leu", "Leucine", []string{"UUA", "UUG", "CUU", "CUC", "CUA", "CUG"}, 131.17},
+}
+
 func main() {
 	fmt.Print(`
 Copyright 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
@@ -34,38 +43,13 @@ Are you OK with that? [y/n]: `)
 	var ans string
 	fmt.Scanln(&ans)
 
-	a := aminoacid.AminoAcids{
-		&aminoacid.AminoAcid{
-			Sign:      "F",
-			ShortName: "Phe",
-			LongName:  "Phenylalanine",
-			Codes: []string{
-				"UUU",
-				"UUC",
-			},
-			Mass: 165.19,
-		},
-		&aminoacid.AminoAcid{
-			Sign:      "V",
-			ShortName: "Val",
-			LongName:  "Valine",
-			Codes: []string{
-				"GUU",
-				"GUC",
-				"GUA",
-				"GUG",
-			},
-			Mass: 117.151,
-		},
-	}
-
 	if ans != "y" {
 		fmt.Println("ok, exitting")
 		return
 	}
 
 	fmt.Println("OK, generating output...")
-	data, err := json.MarshalIndent(a, "", "\t")
+	data, err := json.MarshalIndent(data, "", "\t")
 	if err != nil {
 		log.Fatal(err)
 	}

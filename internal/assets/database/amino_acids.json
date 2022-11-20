@@ -19,6 +19,50 @@
 			"GUA",
 			"GUG"
 		],
-		"Mass": 117.151
+		"Mass": 165.19
+	},
+	{
+		"Sign": "[START]",
+		"ShortName": "Met",
+		"LongName": "Methionine (START code)",
+		"Codes": [
+			"AUG"
+		],
+		"Mass": 149.21
+	},
+	{
+		"Sign": "[STOP]",
+		"ShortName": "STOP",
+		"LongName": "STOP code",
+		"Codes": [
+			"UAA",
+			"UAG",
+			"UGA"
+		],
+		"Mass": 0
+	},
+	{
+		"Sign": "C",
+		"ShortName": "Cys",
+		"LongName": "Cysteine",
+		"Codes": [
+			"UGU",
+			"UGC"
+		],
+		"Mass": 121.16
+	},
+	{
+		"Sign": "L",
+		"ShortName": "Leu",
+		"LongName": "Leucine",
+		"Codes": [
+			"UUA",
+			"UUG",
+			"CUU",
+			"CUC",
+			"CUA",
+			"CUG"
+		],
+		"Mass": 131.17
 	}
 ]
