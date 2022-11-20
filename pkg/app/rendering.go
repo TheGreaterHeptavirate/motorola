@@ -143,5 +143,15 @@ func (a *App) proteinsPresentation() giu.Layout {
 }
 
 func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
-	return giu.Layout{giu.Label("todo")}
+	return giu.Layout{
+		giu.TreeNode("Zapis aminokwasowy").Layout(
+			giu.Custom(func() {
+				s := ""
+				for _, v := range protein.AminoAcids {
+					s += v.Sign + " "
+				}
+				giu.Label(s).Wrapped(true).Build()
+			}),
+		),
+	}
 }
