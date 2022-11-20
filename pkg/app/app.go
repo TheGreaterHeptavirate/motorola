@@ -35,7 +35,8 @@ type App struct {
 
 func New() *App {
 	return &App{
-		logLevel: logger.LogLevelInfo,
+		inputString: "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
+		logLevel:    logger.LogLevelInfo,
 	}
 }
 
