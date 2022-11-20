@@ -17,6 +17,7 @@ import (
 	"github.com/AllenDang/giu"
 	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 )
 
 const (
@@ -25,7 +26,8 @@ const (
 )
 
 type App struct {
-	inputString string
+	inputString   string
+	foundProteins []*protein.Protein
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel

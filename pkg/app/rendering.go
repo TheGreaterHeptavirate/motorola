@@ -14,6 +14,7 @@ import (
 	"github.com/AllenDang/giu"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 	"github.com/sqweek/dialog"
 	"os"
 )
@@ -23,6 +24,7 @@ func (a *App) render() {
 		giu.PrepareMsgbox(),
 		a.menuBar(),
 		a.inputBar(),
+		a.proteinsPresentation(),
 	)
 }
 
@@ -94,9 +96,35 @@ func (a *App) inputBar() giu.Layout {
 								fmt.Println(v2)
 							}
 						}
+
+						a.foundProteins = d
 					}),
 				).Build()
 			}),
 		),
 	}
+}
+
+func (a *App) proteinsPresentation() giu.Layout {
+	return giu.Layout{
+		giu.Labelf("Found %d proteins", len(a.foundProteins)),
+		giu.Condition(
+			len(a.foundProteins) > 0,
+			giu.Layout{
+				giu.Custom(func() {
+					tabs := make([]*giu.TabItemWidget, 0)
+					for i, p := range a.foundProteins {
+						tabs = append(tabs, giu.TabItemf("Białko %d", i).Layout(a.presentProtein(p)))
+					}
+
+					giu.TabBar().TabItems(tabs...).Build()
+				}),
+			},
+			giu.Layout{},
+		),
+	}
+}
+
+func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
+	return giu.Layout{giu.Label("todo")}
 }
