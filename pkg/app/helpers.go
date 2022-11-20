@@ -70,8 +70,12 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 			if c == 32 {
 				spc = i
 			}
-			if TextWidth(string(buff[nl:i])) > w && spc > 0 {
-				buff[spc] = 10
+			if TextWidth(string(buff[nl:i])) > w {
+				if spc > 0 {
+					buff[spc] = 10
+				} else {
+					data.InsertBytes(len(buff)-1, []byte{10})
+				}
 				data.MarkBufferModified()
 			}
 		}
