@@ -111,16 +111,20 @@ func (a *App) proteinsPresentation() giu.Layout {
 		// 0, 5+ - białEK
 		// 1 - białKO
 		// 2-4 - białKA
-		giu.Label(fmt.Sprintf("Znaleziono %d biał%s", len(a.foundProteins), func() string {
+		giu.Custom(func() {
+
+			var ending string
 			switch len(a.foundProteins) {
 			case 1:
-				return "ko"
+				ending = "ko"
 			case 2, 3, 4:
-				return "ka"
+				ending = "ka"
 			default:
-				return "ek"
+				ending = "ek"
 			}
-		}())),
+
+			giu.Labelf("Znaleziono %d biał%s", len(a.foundProteins), ending).Build()
+		}),
 		giu.Condition(
 			len(a.foundProteins) > 0,
 			giu.Layout{
