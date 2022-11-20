@@ -22,7 +22,7 @@ import (
 
 const (
 	appTitle                       = "Motorola"
-	appResolutionX, appResoultionY = 800, 600
+	appResolutionX, appResolutionY = 800, 600
 )
 
 type App struct {
@@ -59,7 +59,7 @@ func (a *App) Run() error {
 
 	// create master window
 	logger.Debug("Creating master window...")
-	a.window = giu.NewMasterWindow(appTitle, appResolutionX, appResoultionY, 0)
+	a.window = giu.NewMasterWindow(appTitle, appResolutionX, appResolutionY, 0)
 
 	// add stylesheet
 	logger.Debug("Adding main stylesheet...")
