@@ -107,7 +107,20 @@ func (a *App) inputBar() giu.Layout {
 
 func (a *App) proteinsPresentation() giu.Layout {
 	return giu.Layout{
-		giu.Labelf("Found %d proteins", len(a.foundProteins)),
+		// here I'm going to do a small trick for spelling:
+		// 0, 5+ - białEK
+		// 1 - białKO
+		// 2-4 - białKA
+		giu.Label(fmt.Sprintf("Znaleziono %d biał%s", len(a.foundProteins), func() string {
+			switch len(a.foundProteins) {
+			case 1:
+				return "ko"
+			case 2, 3, 4:
+				return "ka"
+			default:
+				return "ek"
+			}
+		}())),
 		giu.Condition(
 			len(a.foundProteins) > 0,
 			giu.Layout{
