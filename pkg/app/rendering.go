@@ -98,14 +98,6 @@ func (a *App) inputBar() giu.Layout {
 							return
 						}
 
-						// DEBUG CODE TODO
-						for i, v := range d {
-							fmt.Printf("offset %d\n", i)
-							for _, v2 := range v.AminoAcids {
-								fmt.Println(v2)
-							}
-						}
-
 						a.foundProteins = d
 					}),
 				).Build()
