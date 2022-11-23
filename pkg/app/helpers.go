@@ -7,8 +7,8 @@
 package app
 
 import (
+	"github.com/AllenDang/cimgui-go"
 	"github.com/AllenDang/giu"
-	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"strings"
 )
@@ -28,29 +28,30 @@ func (a *App) ReportError(err error) {
 // WrapInputTextMultiline is a callback to wrap an input text multiline.
 // The following code comes from https://github.com/AllenDang/giu/issues/434
 // It is excluded from our license because it is not our code. ;-)
-func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.InputTextCallbackData) int32 {
-	switch data.EventFlag() {
-	case imgui.InputTextFlagsCallbackCharFilter:
-		c := data.EventChar()
+func WrapInputTextMultiline(widget *giu.InputTextMultilineWidget, data cimgui.ImGuiInputTextCallbackData) int {
+	switch data.GetEventFlag() {
+	case cimgui.ImGuiInputTextFlags_CallbackCharFilter:
+		//c := data.GetEventChar()
+		c := data.GetEventKey()
 		if c == '\n' {
 			data.SetEventChar('\u07FF') // pivot character 2-bytes in UTF-8
 		}
 
-	case imgui.InputTextFlagsCallbackAlways:
+	case cimgui.ImGuiInputTextFlags_CallbackAlways:
 		// 0. turn every pivot byte sequence into \r\n
-		buff := data.Buffer()
+		buff := []byte(data.GetBuf())
 		buff2 := []byte(strings.ReplaceAll(string(buff), "\u07FF", "\r\n"))
 		for i := range buff {
 			buff[i] = buff2[i]
 		}
-		data.MarkBufferModified()
+		data.SetBufDirty(true)
 
 		// 1. zap all newlines that are not preceeded by a CR (which was manually entered like above)
 		cr := false
 		for i, c := range buff {
 			if c == 10 && !cr {
 				buff[i] = 32
-				data.MarkBufferModified()
+				data.SetBufDirty(true)
 			} else {
 				if c == 13 {
 					cr = true
@@ -74,9 +75,10 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 				if spc > 0 {
 					buff[spc] = 10
 				} else {
-					data.InsertBytes(len(buff)-1, []byte{10})
+					data.InsertChars(int32(len(buff)-1), string(byte(10)))
 				}
-				data.MarkBufferModified()
+
+				data.SetBufDirty(true)
 			}
 		}
 	}
@@ -85,6 +87,7 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 
 // TextWidth returns the width of the given text.
 func TextWidth(s string) float32 {
-	w, _ := giu.CalcTextSize(s)
-	return w
+	out := cimgui.ImVec2{}
+	cimgui.CalcTextSize(&out, s)
+	return out.X
 }
