@@ -31,7 +31,7 @@ var drawingDatabase = map[string]drawCommand{
 		drawLine(UpRight, standardLine).
 		add(
 			draw().
-				drawLine(Up, standardLine).
+				doubleLine(Up, standardLine).
 				chemicalText("O", VAlignBottom, HAlignCenter).draw,
 		).
 		ignore(ignoreAll).
