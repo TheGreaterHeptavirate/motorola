@@ -13,15 +13,49 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"golang.org/x/image/colornames"
 	"image"
+	"strings"
+)
+
+type VAlignment byte
+
+const (
+	VAlignTop VAlignment = iota
+	VAlignCenter
+	VAlignBottom
+)
+
+type HAlignment byte
+
+const (
+	HAlignLeft HAlignment = iota
+	HAlignCenter
+	HAlignRight
 )
 
 // chemicalText draws a text but formats it as follows:
 // - string between `_`  characters is subscripted
 // it uses giu.SetFontSize to chenge font size
-func (d *drawCommands) chemicalText(t string) *drawCommands {
+func (d *drawCommands) chemicalText(t string, vAlignment VAlignment, halignment HAlignment) *drawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		textSize := imgui.CalcTextSize(t, true, 0)
-		startPos = startPos.Sub(image.Pt(0, int(textSize.Y)/2))
+		textSize := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
+		// do alignment
+		switch vAlignment {
+		case VAlignTop:
+			// noop
+		case VAlignCenter:
+			startPos.Y -= int(textSize.Y) / 2
+		case VAlignBottom:
+			startPos.Y -= int(textSize.Y)
+		}
+
+		switch halignment {
+		case HAlignLeft:
+			// noop
+		case HAlignCenter:
+			startPos.X -= int(textSize.X / 2)
+		case HAlignRight:
+			startPos.X -= int(textSize.X)
+		}
 
 		isSubscript := false
 
