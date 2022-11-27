@@ -172,5 +172,8 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 				}
 			}),
 		),
+		giu.TreeNode("Statystyki").Layout(
+			giu.Labelf("Masa: %v", protein.Mass()),
+		),
 	}
 }

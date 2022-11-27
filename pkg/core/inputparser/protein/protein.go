@@ -69,3 +69,12 @@ func (p *Protein) Validate() error {
 
 	return nil
 }
+
+// Mass returns a mass of protein in g/mol
+func (p *Protein) Mass() (mass float32) {
+	for _, a := range p.AminoAcids {
+		mass += a.Mass
+	}
+
+	return mass
+}
