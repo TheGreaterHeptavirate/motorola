@@ -14,6 +14,7 @@ import (
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/app/protein_drawer"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 	"github.com/sqweek/dialog"
@@ -175,5 +176,6 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 		giu.TreeNode("Statystyki").Layout(
 			giu.Labelf("Masa: %v", protein.Mass()),
 		),
+		protein_drawer.DrawProtein(protein),
 	}
 }
