@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/AllenDang/giu v0.6.3-0.20221123081050-5c8eb27684bd
+	github.com/AllenDang/imgui-go v1.12.1-0.20220322114136-499bbf6a42ad
 	github.com/kpango/glg v1.6.13
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 )

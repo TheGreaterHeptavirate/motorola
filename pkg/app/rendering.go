@@ -11,8 +11,8 @@ package app
 import (
 	"errors"
 	"fmt"
-	"github.com/AllenDang/cimgui-go"
 	"github.com/AllenDang/giu"
+	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
@@ -45,9 +45,9 @@ func (a *App) inputBar() giu.Layout {
 			giu.Custom(func() {
 
 				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
-					Flags(cimgui.ImGuiInputTextFlags_CallbackAlways | cimgui.ImGuiInputTextFlags_CallbackCharFilter)
-				widget.Callback(func(c cimgui.ImGuiInputTextCallbackData) int {
-					return WrapInputTextMultiline(widget, c)
+					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
+				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
+					return WrapInputtextMultiline(widget, c)
 				}).Build()
 			}),
 			giu.Custom(func() {
@@ -159,10 +159,10 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 				baseW := availableW
 				itemSpacingW, _ := giu.GetItemSpacing()
 				for _, v := range protein.AminoAcids {
-					textW := TextWidth(v.Sign)
+					textW, _ := giu.CalcTextSize(v.Sign)
 					availableW -= textW + itemSpacingW
 					if availableW > 0 {
-						cimgui.SameLine()
+						imgui.SameLine()
 					} else {
 						availableW = baseW
 					}
