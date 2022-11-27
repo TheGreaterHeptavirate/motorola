@@ -14,27 +14,21 @@ import (
 	"image"
 )
 
-type DrawCommand func(canvas *giu.Canvas, startPos image.Point) (size image.Point)
-
-func DrawingDatabase() map[string]DrawCommand {
-	return map[string]DrawCommand{
-		"[START]": func(canvas *giu.Canvas, startPos image.Point) (size image.Point) {
-			//startPos = startPos.Add(connect(DownRight, 200)(canvas, startPos))
-			//startPos = startPos.Add(connect(Right, 200)(canvas, startPos))
-			//startPos = startPos.Add(connect(UpRight, 200)(canvas, startPos))
-			//startPos = startPos.Add(connect(Left, 200)(canvas, startPos))
-			//startPos = startPos.Add(connect(Down, 200)(canvas, startPos))
-			//startPos = startPos.Add(aromaticRing(100)(canvas, startPos))
-			startPos = startPos.Add(connect(DownRight, 200)(canvas, startPos))
-			startPos = startPos.Add(chemicalText("HH_2_O")(canvas, startPos))
-			return size
-		},
+func drawingDatabase() map[string]drawCommand {
+	return map[string]drawCommand{
+		"[START]": draw().
+			move(image.Pt(0, 60)).
+			chemicalText("H_3_C").
+			connect(UpRight, 30).
+			chemicalText("S").
+			//ignore(ignoreY).
+			connect(DownRight, 30).draw,
 	}
 }
 
 func DrawProtein(p *protein.Protein) giu.Widget {
 	return giu.Child().Layout(giu.Custom(func() {
-		db := DrawingDatabase()
+		db := drawingDatabase()
 		canvas := giu.GetCanvas()
 
 		for _, a := range p.AminoAcids {
@@ -46,7 +40,8 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 
 			cursorPos := giu.GetCursorScreenPos()
 			startPos := image.Pt(cursorPos.X, cursorPos.Y)
-			cmd(canvas, startPos)
+			s := cmd(canvas, startPos)
+			giu.Dummy(float32(s.X), float32(s.Y)).Build()
 		}
 	}),
 	)
