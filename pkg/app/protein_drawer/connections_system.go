@@ -76,13 +76,23 @@ func draw() *drawCommands {
 
 func (d *drawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
 	size := image.Pt(0, 0)
+	currentPos := startPos
 	for _, cmd := range d.cmds {
-		s := cmd(c, startPos.Add(size))
+		s := cmd(c, currentPos)
 		d.offsets = append(d.offsets, s)
-		size = size.Add(s)
+
+		currentPos = currentPos.Add(s)
+
+		if currentPos.X > size.X {
+			size.X = currentPos.X
+		}
+
+		if currentPos.Y > size.Y {
+			size.Y = currentPos.Y
+		}
 	}
 
-	return size
+	return size.Sub(startPos)
 }
 
 func (d *drawCommands) connect(dir ConnectionDirection, length int) *drawCommands {
