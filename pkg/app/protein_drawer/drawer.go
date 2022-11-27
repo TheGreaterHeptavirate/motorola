@@ -15,14 +15,33 @@ import (
 )
 
 func drawingDatabase() map[string]drawCommand {
+	const standardLine = 30
 	return map[string]drawCommand{
+		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
 		"[START]": draw().
 			move(image.Pt(0, 60)).
 			chemicalText("H_3_C").
-			connect(UpRight, 30).
+			connect(UpRight, standardLine).
 			chemicalText("S").
-			//ignore(ignoreY).
-			connect(DownRight, 30).draw,
+			connect(DownRight, standardLine).
+			connect(UpRight, standardLine).
+			connect(DownRight, standardLine).
+			add(
+				draw().
+					connect(Down, standardLine).
+					chemicalText("NH_2_").draw,
+			).
+			ignore(ignoreAll).
+			connect(UpRight, standardLine).
+			add(
+				draw().
+					connect(Up, standardLine).
+					chemicalText("O").draw,
+			).
+			ignore(ignoreAll).
+			connect(DownRight, standardLine).
+			chemicalText("OH").
+			move(image.Point{}).draw,
 	}
 }
 
