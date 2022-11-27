@@ -28,7 +28,7 @@ const (
 	UpLeft
 )
 
-func (d *drawCommands) connect(dir ConnectionDirection, length int) *drawCommands {
+func (d *drawCommands) drawLine(dir ConnectionDirection, length int) *drawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		endPos := startPos
 		switch dir {

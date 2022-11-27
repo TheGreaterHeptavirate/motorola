@@ -21,7 +21,7 @@ import (
  * drawCommands _should_ self-implement drawCommand interface
  * it is factory-based type to draw chemical schemes
  *
- * connect - draw a line (angle 45°) in given direction
+ * drawLine - draw a line (angle 45°) in given direction
  * aromaticRing - draw a hexagon
  * add - add a drawCommand to the list of commands (drawCommands is a drawCommand as well ;-) )
  * move - move the cursor by given amount
