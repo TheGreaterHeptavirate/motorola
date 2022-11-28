@@ -106,11 +106,11 @@ func (d *drawCommands) chemicalText(t string, vAlignment VAlignment, halignment 
 
 		switch halignment {
 		case HAlignLeft:
-			outSize.X = int(textSize.Y)
+			outSize.X = size.X
 		case HAlignCenter:
 			// noop
 		case HAlignRight:
-			outSize.X = -int(textSize.Y)
+			outSize.X = -size.X
 		}
 
 		return outSize
