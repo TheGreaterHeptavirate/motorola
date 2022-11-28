@@ -9,6 +9,7 @@
 package protein_drawer
 
 import (
+	"fmt"
 	"github.com/AllenDang/giu"
 	"golang.org/x/image/colornames"
 	"image"
@@ -85,15 +86,20 @@ func (d *drawCommands) doubleLine(dir ConnectionDirection, length int) *drawComm
 			offset.X -= doubleLineOffset
 		case Left, Right:
 			offset.Y -= doubleLineOffset
-		case UpRight, DownRight, DownLeft, UpLeft:
-			d := doubleLineOffset * math.Sqrt2
+		case UpRight, DownLeft:
+			d := doubleLineOffset * math.Sqrt2 / 2
 			offset.Y -= int(d)
 			offset.X -= int(d)
+		case DownRight, UpLeft:
+			d := doubleLineOffset * math.Sqrt2 / 2
+			offset.Y -= int(d)
+			offset.X += int(d)
 		}
+		fmt.Println(offset)
 
 		c.AddLine(startPos.Add(offset), endPos.Add(offset), colornames.Red, thickness)
 		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), colornames.Red, thickness)
 
-		return endPos.Sub(startPos).Add(offset)
+		return endPos.Sub(startPos)
 	})
 }
