@@ -10,6 +10,152 @@
 		"Mass": 165.19
 	},
 	{
+		"Sign": "L",
+		"ShortName": "Leu",
+		"LongName": "Leucine",
+		"Codes": [
+			"UUA",
+			"UUG",
+			"CUU",
+			"CUC",
+			"CUA",
+			"CUG"
+		],
+		"Mass": 131.17
+	},
+	{
+		"Sign": "S",
+		"ShortName": "Ser",
+		"LongName": "Serine",
+		"Codes": [
+			"UCU",
+			"UCC",
+			"UCA",
+			"UCG",
+			"AGU",
+			"AGC"
+		],
+		"Mass": 105.09
+	},
+	{
+		"Sign": "T",
+		"ShortName": "Tyr",
+		"LongName": "Tyrosine",
+		"Codes": [
+			"UAU",
+			"UAC"
+		],
+		"Mass": 181.19
+	},
+	{
+		"Sign": "C",
+		"ShortName": "Cys",
+		"LongName": "Cysteine",
+		"Codes": [
+			"UGU",
+			"UGC"
+		],
+		"Mass": 121.16
+	},
+	{
+		"Sign": "W",
+		"ShortName": "Trp",
+		"LongName": "Tryptophan",
+		"Codes": [
+			"UGG"
+		],
+		"Mass": 204.23
+	},
+	{
+		"Sign": "P",
+		"ShortName": "Pro",
+		"LongName": "Proline",
+		"Codes": [
+			"CCU",
+			"CCC",
+			"CCA",
+			"CCG"
+		],
+		"Mass": 115.13
+	},
+	{
+		"Sign": "H",
+		"ShortName": "His",
+		"LongName": "Histidine",
+		"Codes": [
+			"CAU",
+			"CAC"
+		],
+		"Mass": 155.1546
+	},
+	{
+		"Sign": "Q",
+		"ShortName": "Gln",
+		"LongName": "Glutamine",
+		"Codes": [
+			"CAA",
+			"CAG"
+		],
+		"Mass": 146.14
+	},
+	{
+		"Sign": "R",
+		"ShortName": "Arg",
+		"LongName": "Arginine",
+		"Codes": [
+			"CGU",
+			"CGC",
+			"CGA",
+			"CGG",
+			"AGA",
+			"AGG"
+		],
+		"Mass": 174.2
+	},
+	{
+		"Sign": "I",
+		"ShortName": "Ile",
+		"LongName": "Isoleucine",
+		"Codes": [
+			"AUU",
+			"AUC",
+			"AUA"
+		],
+		"Mass": 131.17
+	},
+	{
+		"Sign": "T",
+		"ShortName": "Thr",
+		"LongName": "Threonine",
+		"Codes": [
+			"ACU",
+			"ACC",
+			"ACA",
+			"ACG"
+		],
+		"Mass": 119.1192
+	},
+	{
+		"Sign": "N",
+		"ShortName": "Asn",
+		"LongName": "Asparagine",
+		"Codes": [
+			"AAU",
+			"AAC"
+		],
+		"Mass": 132.12
+	},
+	{
+		"Sign": "K",
+		"ShortName": "Lys",
+		"LongName": "Lysine",
+		"Codes": [
+			"AAA",
+			"AAG"
+		],
+		"Mass": 146.19
+	},
+	{
 		"Sign": "V",
 		"ShortName": "Val",
 		"LongName": "Valine",
@@ -20,6 +166,50 @@
 			"GUG"
 		],
 		"Mass": 165.19
+	},
+	{
+		"Sign": "A",
+		"ShortName": "Ala",
+		"LongName": "Alanine",
+		"Codes": [
+			"GCU",
+			"GCC",
+			"GCA",
+			"GCG"
+		],
+		"Mass": 89.09
+	},
+	{
+		"Sign": "D",
+		"ShortName": "Asp",
+		"LongName": "Aspartic acid",
+		"Codes": [
+			"GAU",
+			"GAC"
+		],
+		"Mass": 133.1
+	},
+	{
+		"Sign": "E",
+		"ShortName": "Glu",
+		"LongName": "Glutamic acid",
+		"Codes": [
+			"GAA",
+			"GAG"
+		],
+		"Mass": 147.13
+	},
+	{
+		"Sign": "G",
+		"ShortName": "Gly",
+		"LongName": "Glycine",
+		"Codes": [
+			"GGU",
+			"GGC",
+			"GGA",
+			"GGG"
+		],
+		"Mass": 75.07
 	},
 	{
 		"Sign": "[START]",
@@ -40,29 +230,5 @@
 			"UGA"
 		],
 		"Mass": 0
-	},
-	{
-		"Sign": "C",
-		"ShortName": "Cys",
-		"LongName": "Cysteine",
-		"Codes": [
-			"UGU",
-			"UGC"
-		],
-		"Mass": 121.16
-	},
-	{
-		"Sign": "L",
-		"ShortName": "Leu",
-		"LongName": "Leucine",
-		"Codes": [
-			"UUA",
-			"UUG",
-			"CUU",
-			"CUC",
-			"CUA",
-			"CUG"
-		],
-		"Mass": 131.17
 	}
 ]

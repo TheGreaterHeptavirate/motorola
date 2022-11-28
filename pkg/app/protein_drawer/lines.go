@@ -34,6 +34,7 @@ const (
 func (d *drawCommands) drawLine(dir ConnectionDirection, length int) *drawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		endPos := startPos
+
 		switch dir {
 		case Up:
 			endPos = image.Pt(startPos.X, startPos.Y-length)
