@@ -35,6 +35,10 @@ const (
 // chemicalText draws a text but formats it as follows:
 // - string between `_`  characters is subscripted
 // it uses giu.SetFontSize to chenge font size
+//
+// conditions about returned size:
+// - if VAlignCenter - size.Y = 0
+// - if HAlignCenter - size.X = 0
 func (d *drawCommands) chemicalText(t string, vAlignment VAlignment, halignment HAlignment) *drawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		textSize := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
@@ -90,6 +94,25 @@ func (d *drawCommands) chemicalText(t string, vAlignment VAlignment, halignment 
 			}
 		}
 
-		return size
+		outSize := image.Point{}
+		switch vAlignment {
+		case VAlignTop:
+			outSize.Y = int(textSize.Y)
+		case VAlignCenter:
+			// noop
+		case VAlignBottom:
+			outSize.Y = -int(textSize.Y)
+		}
+
+		switch halignment {
+		case HAlignLeft:
+			outSize.X = int(textSize.Y)
+		case HAlignCenter:
+			// noop
+		case HAlignRight:
+			outSize.X = -int(textSize.Y)
+		}
+
+		return outSize
 	})
 }
