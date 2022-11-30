@@ -9,8 +9,8 @@
 package protein_drawer
 
 import (
-	"github.com/AllenDang/giu"
 	"image"
+
 )
 
 type drawCommand func(canvas *giu.Canvas, startPos image.Point) (size image.Point)

@@ -9,7 +9,7 @@
 // Package aminoacid represents details about aminoacids system
 package aminoacid
 
-// AminoAcids represents a list/set of AminoAcid
+// AminoAcids represents a list/set of AminoAcid.
 type AminoAcids []*AminoAcid
 
 func NewAmioAcids() *AminoAcids {
@@ -21,7 +21,7 @@ func (a *AminoAcids) Push(aminoAcid *AminoAcid) {
 	*a = append(*a, aminoAcid)
 }
 
-// AminoAcid represents statistic of a single aminoacid
+// AminoAcid represents statistic of a single aminoacid.
 type AminoAcid struct {
 	// Sing is the one-letter code from this circle-scheme
 	Sign string

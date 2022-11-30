@@ -14,7 +14,9 @@ package app
 
 import (
 	"fmt"
+
 	"github.com/AllenDang/giu"
+
 	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
@@ -40,13 +42,13 @@ func New() *App {
 	}
 }
 
-// EnforceLogLevel sets log level to loglevel
+// EnforceLogLevel sets log level to loglevel.
 func (a *App) EnforceLogLevel(loglevel logger.LogLevel) {
 	a.logLevel = loglevel
 }
 
 // Verbose sets log level to debug
-// overrides EnforceLogLevel
+// overrides EnforceLogLevel.
 func (a *App) Verbose() {
 	a.logLevel = logger.LogLevelDebug
 }

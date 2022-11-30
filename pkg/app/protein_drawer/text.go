@@ -9,11 +9,12 @@
 package protein_drawer
 
 import (
+	"image"
+	"strings"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"golang.org/x/image/colornames"
-	"image"
-	"strings"
 )
 
 type VAlignment byte
@@ -38,7 +39,7 @@ const (
 //
 // conditions about returned size:
 // - if VAlignCenter - size.Y = 0
-// - if HAlignCenter - size.X = 0
+// - if HAlignCenter - size.X = 0.
 func (d *drawCommands) chemicalText(t string, vAlignment VAlignment, halignment HAlignment) *drawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		textSize := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)

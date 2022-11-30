@@ -7,10 +7,12 @@
 package app
 
 import (
+	"strings"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
+
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
-	"strings"
 )
 
 // ReportError prints an error to the log and shows a message box in App.
@@ -27,7 +29,7 @@ func (a *App) ReportError(err error) {
 
 // WrapInputTextMultiline is a callback to wrap an input text multiline.
 // The following code comes from https://github.com/AllenDang/giu/issues/434
-// It is excluded from our license because it is not our code. ;-)
+// It is excluded from our license because it is not our code. ;-).
 func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.InputTextCallbackData) int32 {
 	switch data.EventFlag() {
 	case imgui.InputTextFlagsCallbackCharFilter:
@@ -45,7 +47,7 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 		}
 		data.MarkBufferModified()
 
-		// 1. zap all newlines that are not preceeded by a CR (which was manually entered like above)
+		// 1. zap all newlines that are not preceded by a CR (which was manually entered like above)
 		cr := false
 		for i, c := range buff {
 			if c == 10 && !cr {

@@ -10,9 +10,10 @@ package inputparser
 
 import (
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	"io"
 	"strings"
+
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 )
 
 const (
@@ -28,19 +29,19 @@ type Ribosome struct {
 	codonsRead int
 }
 
-// NewRibosome creates a new ribosome
+// NewRibosome creates a new ribosome.
 func NewRibosome(input string) *Ribosome {
 	return &Ribosome{data: input}
 }
 
-// ToRNA converts DNA to RNA
+// ToRNA converts DNA to RNA.
 func (r *Ribosome) ToRNA(codon string) string {
 	return strings.ReplaceAll(codon, thymine, uracil)
 }
 
 // SetOffset sets offset of first codon
 // it panics if offset >= codonLength
-// it also sets read-codons to 0
+// it also sets read-codons to 0.
 func (r *Ribosome) SetOffset(offset int) {
 	if offset >= CodonLength {
 		panic("offset must be less than codon length")
@@ -50,7 +51,7 @@ func (r *Ribosome) SetOffset(offset int) {
 	r.codonsRead = 0
 }
 
-// Reset resets stream to the beginning
+// Reset resets stream to the beginning.
 func (r *Ribosome) Reset() {
 	r.SetOffset(0)
 }
@@ -58,7 +59,7 @@ func (r *Ribosome) Reset() {
 // ReadCodon reads a codon from the input data.
 // As error, it returns:
 // - io.EOF if end of stream reached
-// - another error if something went wrong
+// - another error if something went wrong.
 func (r *Ribosome) ReadCodon() (string, error) {
 	startIndex := r.offset + r.codonsRead*CodonLength
 	endIndex := startIndex + CodonLength
@@ -78,7 +79,7 @@ func (r *Ribosome) ReadCodon() (string, error) {
 }
 
 // Validate validates codon
-// - it must contain only characters "ACGT" OR "ACGU"
+// - it must contain only characters "ACGT" OR "ACGU".
 func Validate(codon string) error {
 	isDNA := strings.ContainsAny(codon, thymine)
 	isRNA := strings.ContainsAny(codon, uracil)

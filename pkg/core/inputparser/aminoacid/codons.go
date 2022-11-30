@@ -11,7 +11,7 @@ package aminoacid
 // these constants describe SIGNS of commonly used codons
 // like [STOP] or [START]
 //
-// it should refer to internal/assets/database/amino_acids.json
+// it should refer to internal/assets/database/amino_acids.json.
 const (
 	StartCodon = "[START]"
 	StopCodon  = "[STOP]"

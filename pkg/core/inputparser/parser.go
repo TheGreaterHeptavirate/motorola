@@ -10,10 +10,11 @@ package inputparser
 
 import (
 	"fmt"
+	"io"
+
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
-	"io"
 )
 
 func ParseInput(input string) ([]*protein.Protein, error) {

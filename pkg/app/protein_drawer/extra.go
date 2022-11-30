@@ -9,10 +9,9 @@
 package protein_drawer
 
 import (
-	"github.com/AllenDang/giu"
-	"golang.org/x/image/colornames"
 	"image"
 	"math"
+
 )
 
 func (d *drawCommands) move(i image.Point) *drawCommands {

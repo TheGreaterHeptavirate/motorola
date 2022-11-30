@@ -14,16 +14,17 @@ package protein
 import (
 	"errors"
 	"fmt"
+
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 )
 
 // ErrInvalidProtein is returned (mostly by Validate()) whenever a protein IS NOT valid
-// see comment on Protein type
+// see comment on Protein type.
 var ErrInvalidProtein = errors.New("invalid protein")
 
 // Protein represents a set of aminoacid.AminoAcids that's first
 // element is [START] and last [STOP] and that contains NO OTHER
-// [STOP]/[START] elements
+// [STOP]/[START] elements.
 type Protein struct {
 	AminoAcids aminoacid.AminoAcids
 }
@@ -70,7 +71,7 @@ func (p *Protein) Validate() error {
 	return nil
 }
 
-// Mass returns a mass of protein in g/mol
+// Mass returns a mass of protein in g/mol.
 func (p *Protein) Mass() (mass float32) {
 	for _, a := range p.AminoAcids {
 		mass += a.Mass

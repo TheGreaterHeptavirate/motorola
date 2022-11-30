@@ -9,8 +9,8 @@
 package protein_drawer
 
 import (
-	"github.com/AllenDang/giu"
 	"image"
+
 )
 
 /*

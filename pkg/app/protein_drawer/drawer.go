@@ -9,11 +9,13 @@
 package protein_drawer
 
 import (
-	"github.com/AllenDang/giu"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 	"image"
 	"math"
+
+	"github.com/AllenDang/giu"
+
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 )
 
 func DrawProtein(p *protein.Protein) giu.Widget {

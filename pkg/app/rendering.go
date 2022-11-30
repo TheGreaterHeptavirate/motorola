@@ -11,14 +11,16 @@ package app
 import (
 	"errors"
 	"fmt"
+	"os"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
+	"github.com/sqweek/dialog"
+
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app/protein_drawer"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
-	"github.com/sqweek/dialog"
-	"os"
 )
 
 func (a *App) render() {
@@ -44,7 +46,6 @@ func (a *App) inputBar() giu.Layout {
 	return giu.Layout{
 		giu.TreeNode("Input textbox").Layout(
 			giu.Custom(func() {
-
 				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
 					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
 				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
@@ -63,7 +64,7 @@ func (a *App) inputBar() giu.Layout {
 							// this error COULD come from fact that user exited dialog
 							// in this case, don't report app's error, just return
 							if errors.Is(err, dialog.ErrCancelled) {
-								logger.Info("File loading cancelled")
+								logger.Info("File loading canceled")
 
 								return
 							}
@@ -113,7 +114,6 @@ func (a *App) proteinsPresentation() giu.Layout {
 		// 1 - białKO
 		// 2-4 - białKA
 		giu.Custom(func() {
-
 			var ending string
 			switch len(a.foundProteins) {
 			case 1:

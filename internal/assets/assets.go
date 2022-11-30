@@ -19,11 +19,11 @@ package assets
 import (
 	// there is  "_" - black-hole variable so that embed package cannot be used by reference
 	// but it is required to use go:embed directive
-	// for more details about go:embed and embed package, search for "embed go reference" in google
+	// for more details about go:embed and embed package, search for "embed go reference" in google.
 	_ "embed"
 )
 
-// AppCSS represents a CSS stylesheet for giu app
+// AppCSS represents a CSS stylesheet for giu app.
 var (
 	//go:embed stylesheet/app.css
 	AppCSS []byte
