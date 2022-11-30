@@ -12,6 +12,9 @@ import (
 	"image"
 	"math"
 
+	"golang.org/x/image/colornames"
+
+	"github.com/AllenDang/giu"
 )
 
 func (d *drawCommands) move(i image.Point) *drawCommands {

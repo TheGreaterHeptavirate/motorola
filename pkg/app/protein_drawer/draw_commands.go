@@ -11,6 +11,7 @@ package protein_drawer
 import (
 	"image"
 
+	"github.com/AllenDang/giu"
 )
 
 /*
