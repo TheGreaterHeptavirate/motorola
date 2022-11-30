@@ -17,49 +17,49 @@ var drawingDatabase = map[string]drawCommand{
 	"[START]": draw().
 		move(image.Pt(0, 60)).
 		chemicalText("H_3_C", VAlignCenter, HAlignLeft).
-		drawLine(UpRight, standardLine).
+		DrawLine(UpRight, standardLine).
 		chemicalText("S", VAlignCenter, HAlignLeft).
-		drawLine(DownRight, standardLine).
-		drawLine(UpRight, standardLine).
-		drawLine(DownRight, standardLine).
+		DrawLine(DownRight, standardLine).
+		DrawLine(UpRight, standardLine).
+		DrawLine(DownRight, standardLine).
 		add(
 			draw().
-				drawLine(Down, standardLine).
+				DrawLine(Down, standardLine).
 				chemicalText("NH_2_", VAlignTop, HAlignCenter).draw,
 		).
 		ignore(ignoreAll).
-		drawLine(UpRight, standardLine).
+		DrawLine(UpRight, standardLine).
 		add(
 			draw().
-				doubleLine(Up, standardLine).
+				DoubleLine(Up, standardLine).
 				chemicalText("O", VAlignBottom, HAlignCenter).draw,
 		).
 		ignore(ignoreAll).
-		drawLine(DownRight, standardLine).
+		DrawLine(DownRight, standardLine).
 		chemicalText("OH", VAlignCenter, HAlignLeft).
 		move(image.Point{}).draw,
 
 	"F": draw().
 		move(image.Pt(0, 80)).
 		chemicalText("H_2_N", VAlignCenter, HAlignLeft).
-		drawLine(UpRight, standardLine).
+		DrawLine(UpRight, standardLine).
 		add(
 			draw().
-				drawLine(DownRight, standardLine).
+				DrawLine(DownRight, standardLine).
 				add(
 					draw().
-						doubleLine(Down, standardLine).
+						DoubleLine(Down, standardLine).
 						chemicalText("O", VAlignTop, HAlignCenter).
 						draw,
 				).
 				ignore(ignoreAll).
-				drawLine(UpRight, standardLine).
+				DrawLine(UpRight, standardLine).
 				chemicalText("OH", VAlignBottom, HAlignLeft).
 				draw,
 		).
 		ignore(ignoreAll).
-		drawLine(Up, standardLine).
-		drawLine(UpRight, standardLine).
+		DrawLine(Up, standardLine).
+		DrawLine(UpRight, standardLine).
 		move(image.Pt(0, -20)).
 		aromaticRing(30).
 		draw,

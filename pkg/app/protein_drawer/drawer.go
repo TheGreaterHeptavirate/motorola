@@ -43,23 +43,23 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 				s = draw().
 					move(image.Pt(0, 20)).
 					// draw top bracket
-					drawLine(DownRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(DownRight, lineLen).
-					drawLine(UpRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(UpRight, lineLen).
+					DrawLine(DownRight, lineLen).
+					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(DownRight, lineLen).
+					DrawLine(UpRight, lineLen).
+					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(UpRight, lineLen).
 					//
 					move(image.Pt(-s.X/2+a/4, 2*a)).
-					drawLine(Down, 50).
+					DrawLine(Down, 50).
 					move(image.Pt(-s.X/2, 2*a)).
 					//
-					drawLine(UpRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(UpRight, lineLen).
-					drawLine(DownRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(DownRight, lineLen).
+					DrawLine(UpRight, lineLen).
+					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(UpRight, lineLen).
+					DrawLine(DownRight, lineLen).
+					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(DownRight, lineLen).
 					//
 					move(image.Pt(0, 20)).
 					draw(canvas, startPos)
