@@ -50,7 +50,7 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 				startPos := image.Pt(cursorPos.X, cursorPos.Y)
 				a := 10
 				lineLen := int(float32(a) * float32(math.Sqrt2))
-				d := draw().
+				d := Draw().
 					DrawLine(DownRight, lineLen).
 					DrawLine(Right, (vec.X/2)-2*a).
 					DrawLine(DownRight, lineLen).

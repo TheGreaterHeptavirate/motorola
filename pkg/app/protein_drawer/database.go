@@ -17,7 +17,7 @@ const standardLine = 30
 func DrawingDatabase() map[string]*DrawCommands {
 	drawingDatabase := map[string]*DrawCommands{
 		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
-		"[START]": draw().
+		"[START]": Draw().
 			ChemicalText("H_3_C", VAlignCenter, HAlignLeft).
 			DrawLine(UpRight, standardLine).
 			ChemicalText("S", VAlignCenter, HAlignLeft).
@@ -25,14 +25,14 @@ func DrawingDatabase() map[string]*DrawCommands {
 			DrawLine(UpRight, standardLine).
 			DrawLine(DownRight, standardLine).
 			AddSubcommand(
-				draw().
+				Draw().
 					DrawLine(Down, standardLine).
 					ChemicalText("NH_2_", VAlignTop, HAlignCenter),
 			).
 			Ignore(ignoreAll).
 			DrawLine(UpRight, standardLine).
 			AddSubcommand(
-				draw().
+				Draw().
 					DoubleLine(Up, standardLine).
 					ChemicalText("O", VAlignBottom, HAlignCenter),
 			).
@@ -41,18 +41,18 @@ func DrawingDatabase() map[string]*DrawCommands {
 			ChemicalText("OH", VAlignCenter, HAlignLeft).
 			Move(image.Point{}),
 
-		"F": draw().
+		"F": Draw().
 			ChemicalText("OH", VAlignCenter, HAlignRight).
 			DrawLine(DownLeft, standardLine).
 			AddSubcommand(
-				draw().
+				Draw().
 					DoubleLine(Down, standardLine).
 					ChemicalText("O", VAlignTop, HAlignCenter),
 			).
 			Ignore(ignoreAll).
 			DrawLine(UpLeft, standardLine).
 			AddSubcommand(
-				draw().
+				Draw().
 					DrawLine(DownLeft, standardLine).
 					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
 			).
@@ -62,7 +62,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 			Move(image.Pt(0, -20)).
 			AromaticRing(30),
 
-		"[STOP]": draw().
+		"[STOP]": Draw().
 			ChemicalText("STOP", VAlignCenter, HAlignLeft),
 	}
 

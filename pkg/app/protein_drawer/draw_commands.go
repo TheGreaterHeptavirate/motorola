@@ -49,7 +49,7 @@ type DrawCommands struct {
 	drawCommand
 }
 
-func draw() *DrawCommands {
+func Draw() *DrawCommands {
 	result := &DrawCommands{
 		cmds:  make([]drawCommand, 0),
 		sizes: make([]Size, 0),
@@ -60,6 +60,7 @@ func draw() *DrawCommands {
 	return result
 }
 
+// PredictSize returns expected size of drawing
 func (d *DrawCommands) PredictSize() (result Size) {
 	current := image.Pt(0, 0)
 
@@ -107,6 +108,7 @@ func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) {
 	}
 }
 
+// AddSubcommand adds another DrawingCommands into list
 func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
 	d.add(c.draw, c.PredictSize())
 
