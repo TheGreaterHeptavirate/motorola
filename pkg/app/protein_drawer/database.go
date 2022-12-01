@@ -23,21 +23,21 @@ func DrawingDatabase() map[string]*DrawCommands {
 			DrawLine(DownRight, standardLine).
 			DrawLine(UpRight, standardLine).
 			DrawLine(DownRight, standardLine).
-			//AddSubcommand(
-			//	draw().
-			//		DrawLine(Down, standardLine).
-			//		ChemicalText("NH_2_", VAlignTop, HAlignCenter),
-			//).
-			//ignore(ignoreAll).
-			//DrawLine(UpRight, standardLine).
-			//AddSubcommand(
-			//	draw().
-			//		DoubleLine(Up, standardLine).
-			//		ChemicalText("O", VAlignBottom, HAlignCenter),
-			//).
-			//ignore(ignoreAll).
-			//DrawLine(DownRight, standardLine).
-			//ChemicalText("OH", VAlignCenter, HAlignLeft).
+			AddSubcommand(
+				draw().
+					DrawLine(Down, standardLine).
+					ChemicalText("NH_2_", VAlignTop, HAlignCenter),
+			).
+			ignore(ignoreAll).
+			DrawLine(UpRight, standardLine).
+			AddSubcommand(
+				draw().
+					DoubleLine(Up, standardLine).
+					ChemicalText("O", VAlignBottom, HAlignCenter),
+			).
+			ignore(ignoreAll).
+			DrawLine(DownRight, standardLine).
+			ChemicalText("OH", VAlignCenter, HAlignLeft).
 			move(image.Point{}),
 
 		//"F": draw().

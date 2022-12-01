@@ -9,7 +9,6 @@
 package protein_drawer
 
 import (
-	"fmt"
 	"image"
 	"strings"
 
@@ -68,8 +67,6 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 	case HAlignRight:
 		outSize.X = -textSize.X
 	}
-
-	fmt.Println(outSize)
 
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		posDelta := image.Pt(0, 0)

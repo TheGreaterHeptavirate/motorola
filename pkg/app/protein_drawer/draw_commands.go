@@ -110,7 +110,8 @@ func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
 
 func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
 	min, max := c.PredictSize()
-	d.add(c.draw, max.Sub(min))
+	d.add(c.draw, max.Add(min))
+
 	return d
 }
 

@@ -37,7 +37,7 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 
 			min, max := cmd.PredictSize()
 
-			startPos = startPos.Add(image.Point{}.Sub(min))
+			startPos = startPos.Sub(min)
 
 			cmd.draw(canvas, startPos)
 
