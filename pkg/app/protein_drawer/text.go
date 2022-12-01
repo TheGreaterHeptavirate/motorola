@@ -17,30 +17,36 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+// VAlignment represents a vertical alignment of a text
 type VAlignment byte
 
 const (
+	// VAlignTop algins to tpo
 	VAlignTop VAlignment = iota
+	// VAlignCenter centers alignment (does not return Y size!
 	VAlignCenter
+	// VAlignBottom aligns to bottom
 	VAlignBottom
 )
 
+// HAlignment represents horizontal text alignment
 type HAlignment byte
 
+// Horizontal alignments
 const (
 	HAlignLeft HAlignment = iota
 	HAlignCenter
 	HAlignRight
 )
 
-// chemicalText draws a text but formats it as follows:
+// ChemicalText draws a text but formats it as follows:
 // - string between `_`  characters is subscripted
 // it uses giu.SetFontSize to chenge font size
 //
 // conditions about returned size:
 // - if VAlignCenter - size.Y = 0
 // - if HAlignCenter - size.X = 0.
-func (d *drawCommands) chemicalText(t string, vAlignment VAlignment, halignment HAlignment) *drawCommands {
+func (d *drawCommands) ChemicalText(t string, vAlignment VAlignment, halignment HAlignment) *drawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		textSize := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
 		// do alignment

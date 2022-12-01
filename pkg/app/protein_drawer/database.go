@@ -16,32 +16,32 @@ var drawingDatabase = map[string]drawCommand{
 	// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
 	"[START]": draw().
 		move(image.Pt(0, 60)).
-		chemicalText("H_3_C", VAlignCenter, HAlignLeft).
+		ChemicalText("H_3_C", VAlignCenter, HAlignLeft).
 		DrawLine(UpRight, standardLine).
-		chemicalText("S", VAlignCenter, HAlignLeft).
+		ChemicalText("S", VAlignCenter, HAlignLeft).
 		DrawLine(DownRight, standardLine).
 		DrawLine(UpRight, standardLine).
 		DrawLine(DownRight, standardLine).
 		add(
 			draw().
 				DrawLine(Down, standardLine).
-				chemicalText("NH_2_", VAlignTop, HAlignCenter).draw,
+				ChemicalText("NH_2_", VAlignTop, HAlignCenter).draw,
 		).
 		ignore(ignoreAll).
 		DrawLine(UpRight, standardLine).
 		add(
 			draw().
 				DoubleLine(Up, standardLine).
-				chemicalText("O", VAlignBottom, HAlignCenter).draw,
+				ChemicalText("O", VAlignBottom, HAlignCenter).draw,
 		).
 		ignore(ignoreAll).
 		DrawLine(DownRight, standardLine).
-		chemicalText("OH", VAlignCenter, HAlignLeft).
+		ChemicalText("OH", VAlignCenter, HAlignLeft).
 		move(image.Point{}).draw,
 
 	"F": draw().
 		move(image.Pt(0, 80)).
-		chemicalText("H_2_N", VAlignCenter, HAlignLeft).
+		ChemicalText("H_2_N", VAlignCenter, HAlignLeft).
 		DrawLine(UpRight, standardLine).
 		add(
 			draw().
@@ -49,12 +49,12 @@ var drawingDatabase = map[string]drawCommand{
 				add(
 					draw().
 						DoubleLine(Down, standardLine).
-						chemicalText("O", VAlignTop, HAlignCenter).
+						ChemicalText("O", VAlignTop, HAlignCenter).
 						draw,
 				).
 				ignore(ignoreAll).
 				DrawLine(UpRight, standardLine).
-				chemicalText("OH", VAlignBottom, HAlignLeft).
+				ChemicalText("OH", VAlignBottom, HAlignLeft).
 				draw,
 		).
 		ignore(ignoreAll).
@@ -65,7 +65,7 @@ var drawingDatabase = map[string]drawCommand{
 		draw,
 
 	"[STOP]": draw().
-		chemicalText("STOP", VAlignCenter, HAlignLeft).draw,
+		ChemicalText("STOP", VAlignCenter, HAlignLeft).draw,
 }
 
 func DrawingDatabase() map[string]drawCommand {
