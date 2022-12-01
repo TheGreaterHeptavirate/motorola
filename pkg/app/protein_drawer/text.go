@@ -49,23 +49,26 @@ const (
 func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment HAlignment) *DrawCommands {
 	ts := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
 	textSize := image.Pt(int(ts.X), int(ts.Y))
-	outSize := image.Point{}
+	outSize := size{}
+
 	switch vAlignment {
 	case VAlignTop:
-		outSize.Y = int(textSize.Y)
+		outSize.max.Y = textSize.Y
 	case VAlignCenter:
-		// noop
+		outSize.min.Y = -int(textSize.Y) / 2
+		outSize.max.Y = int(textSize.Y) / 2
 	case VAlignBottom:
-		outSize.Y = -int(textSize.Y)
+		outSize.min.Y = -textSize.Y
 	}
 
 	switch halignment {
 	case HAlignLeft:
-		outSize.X = textSize.X
+		outSize.max.X = textSize.X
 	case HAlignCenter:
-		// noop
+		outSize.min.X = -textSize.X / 2
+		outSize.max.X = int(textSize.X) / 2
 	case HAlignRight:
-		outSize.X = -textSize.X
+		outSize.min.X = -textSize.X
 	}
 
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
@@ -125,5 +128,5 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 				subscriptFont.Pop()
 			}
 		}
-	}, fromLinear(outSize)) // TODO
+	}, outSize)
 }

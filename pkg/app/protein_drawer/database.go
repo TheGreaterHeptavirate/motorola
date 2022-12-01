@@ -47,9 +47,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 			AddSubcommand(
 				draw().
 					DoubleLine(Down, standardLine).
-					ChemicalText("O", VAlignTop, HAlignCenter).
-					// need dummy for now
-					move(image.Pt(0, 5)),
+					ChemicalText("O", VAlignTop, HAlignCenter),
 			).
 			ignore(ignoreAll).
 			DrawLine(UpLeft, standardLine).
