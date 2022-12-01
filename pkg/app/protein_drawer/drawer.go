@@ -35,45 +35,42 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 
 			startPos := image.Pt(cursorPos.X, cursorPos.Y)
 
-			min, max := cmd.PredictSize()
+			drawingSize := cmd.PredictSize()
 
-			startPos = startPos.Sub(min)
+			startPos = startPos.Sub(drawingSize.min)
 
 			cmd.draw(canvas, startPos)
 
-			s := max.Sub(min)
+			vec := drawingSize.Vector()
 
-			giu.Dummy(float32(s.X), float32(s.Y)).Build()
+			giu.Dummy(float32(vec.X), float32(vec.Y)).Build()
 
 			if a.Sign != aminoacid.StopCodon {
 				cursorPos := giu.GetCursorScreenPos()
 				startPos := image.Pt(cursorPos.X, cursorPos.Y)
 				a := 10
 				lineLen := int(float32(a) * float32(math.Sqrt2))
-				s = draw().
-					move(image.Pt(0, 20)).
-					// draw top bracket
+				d := draw().
 					DrawLine(DownRight, lineLen).
-					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(Right, (vec.X/2)-2*a).
 					DrawLine(DownRight, lineLen).
 					DrawLine(UpRight, lineLen).
-					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(Right, (vec.X/2)-2*a).
 					DrawLine(UpRight, lineLen).
 					//
-					move(image.Pt(-s.X/2+a/4, 2*a)).
+					move(image.Pt(-vec.X/2+a/4, 2*a)).
 					DrawLine(Down, 50).
-					move(image.Pt(-s.X/2, 2*a)).
+					move(image.Pt(-vec.X/2, 2*a)).
 					//
 					DrawLine(UpRight, lineLen).
-					DrawLine(Right, (s.X/2)-2*a).
+					DrawLine(Right, (vec.X/2)-2*a).
 					DrawLine(UpRight, lineLen).
 					DrawLine(DownRight, lineLen).
-					DrawLine(Right, (s.X/2)-2*a).
-					DrawLine(DownRight, lineLen).
-					//
-					move(image.Pt(0, 20)).
-					draw(canvas, startPos)
-				giu.Dummy(float32(s.X), float32(s.Y)).Build()
+					DrawLine(Right, (vec.X/2)-2*a).
+					DrawLine(DownRight, lineLen)
+				dummy := d.PredictSize().Vector()
+				d.draw(canvas, startPos)
+				giu.Dummy(float32(dummy.X), float32(dummy.Y)).Build()
 			}
 		}
 	}),

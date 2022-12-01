@@ -18,14 +18,15 @@ import (
 )
 
 func (d *DrawCommands) move(i image.Point) *DrawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		return i
-	}, i)
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
+		// noop
+	}, fromLinear(i))
 }
 
 func (d *DrawCommands) ignore(i ignore) *DrawCommands {
 	delta := image.Pt(0, 0)
-	last := d.sizes[len(d.sizes)-1]
+	lastSize := d.sizes[len(d.sizes)-1]
+	last := lastSize.Delta()
 
 	switch i {
 	case ignoreAll:
@@ -36,13 +37,11 @@ func (d *DrawCommands) ignore(i ignore) *DrawCommands {
 		delta = image.Pt(0, -last.Y)
 	}
 
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		return delta
-	}, delta)
+	return d.move(delta)
 }
 
 func (d *DrawCommands) aromaticRing(size int) *DrawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) image.Point {
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		// draw a hexagon using AddLine.
 		// size is width and height of the hexagon
 		// startPos is the top left corner of the square containing the hexagon
@@ -57,7 +56,5 @@ func (d *DrawCommands) aromaticRing(size int) *DrawCommands {
 			c.AddLine(start, end, colornames.Red, thickness)
 			start = end
 		}
-
-		return image.Pt(size, size)
-	}, image.Pt(size, size))
+	}, fromLinear(image.Pt(size, size)))
 }

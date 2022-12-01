@@ -68,7 +68,9 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 		outSize.X = -textSize.X
 	}
 
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
+		size := image.Point{}
+
 		posDelta := image.Pt(0, 0)
 		// do alignment
 		switch vAlignment {
@@ -123,7 +125,5 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 				subscriptFont.Pop()
 			}
 		}
-
-		return outSize
-	}, outSize)
+	}, fromLinear(outSize)) // TODO
 }

@@ -44,7 +44,7 @@ const (
 type DrawCommands struct {
 	cmds []drawCommand
 
-	sizes []image.Point
+	sizes []size
 
 	drawCommand
 }
@@ -52,7 +52,7 @@ type DrawCommands struct {
 func draw() *DrawCommands {
 	result := &DrawCommands{
 		cmds:  make([]drawCommand, 0),
-		sizes: make([]image.Point, 0),
+		sizes: make([]size, 0),
 	}
 
 	result.drawCommand = result.draw
@@ -60,41 +60,42 @@ func draw() *DrawCommands {
 	return result
 }
 
-func (d *DrawCommands) PredictSize() (minimal, maximal image.Point) {
+func (d *DrawCommands) PredictSize() (result size) {
 	current := image.Pt(0, 0)
-	minimal, maximal = image.Pt(0, 0), image.Pt(0, 0)
 
 	for _, s := range d.sizes {
-		current = current.Add(s)
+		current = current.Add(s.max).Add(s.min)
 
-		if current.X < minimal.X {
-			minimal.X = current.X
+		if current.X < result.min.X {
+			result.min.X = current.X
 		}
 
-		if current.Y < minimal.Y {
-			minimal.Y = current.Y
+		if current.Y < result.min.Y {
+			result.min.Y = current.Y
 		}
 
-		if current.X > maximal.X {
-			maximal.X = current.X
+		if current.X > result.max.X {
+			result.max.X = current.X
 		}
 
-		if current.Y > maximal.Y {
-			maximal.Y = current.Y
+		if current.Y > result.max.Y {
+			result.max.Y = current.Y
 		}
 	}
 
-	return minimal, maximal
+	return result
 }
 
-func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
+func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) {
 	size := image.Pt(0, 0)
 	currentPos := startPos
 
-	for _, cmd := range d.cmds {
-		s := cmd(c, currentPos)
+	for i, cmd := range d.cmds {
+		cmd(c, currentPos)
 
-		currentPos = currentPos.Add(s)
+		s := d.sizes[i]
+
+		currentPos = currentPos.Add(s.max.Add(s.min))
 
 		if currentPos.X > size.X {
 			size.X = currentPos.X
@@ -104,19 +105,17 @@ func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
 			size.Y = currentPos.Y
 		}
 	}
-
-	return size.Sub(startPos)
 }
 
 func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
-	min, max := c.PredictSize()
-	d.add(c.draw, max.Add(min))
+	d.add(c.draw, c.PredictSize())
 
 	return d
 }
 
-func (d *DrawCommands) add(cmd drawCommand, size image.Point) *DrawCommands {
+func (d *DrawCommands) add(cmd drawCommand, s size) *DrawCommands {
 	d.cmds = append(d.cmds, cmd)
-	d.sizes = append(d.sizes, size)
+	d.sizes = append(d.sizes, s)
+
 	return d
 }

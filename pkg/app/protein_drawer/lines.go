@@ -38,19 +38,17 @@ const (
 // DrawLine draws a line with a specified direction and length.
 func (d *DrawCommands) DrawLine(dir LineDirection, length int) *DrawCommands {
 	lineSize := calcLineVector(dir, length)
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		endPos := startPos.Add(lineSize)
 
 		c.AddLine(startPos, endPos, colornames.Red, thickness)
-
-		return image.Pt(endPos.X-startPos.X, endPos.Y-startPos.Y)
-	}, lineSize)
+	}, fromLinear(lineSize))
 }
 
 // DoubleLine draws a double line.
 func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
 	lineSize := calcLineVector(dir, length)
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		var offset image.Point
 		switch dir {
 		case Up, Down:
@@ -71,9 +69,7 @@ func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
 
 		c.AddLine(startPos.Add(offset), endPos.Add(offset), colornames.Red, thickness)
 		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), colornames.Red, thickness)
-
-		return endPos.Sub(startPos)
-	}, lineSize)
+	}, fromLinear(lineSize))
 }
 
 func calcLineVector(dir LineDirection, length int) image.Point {
