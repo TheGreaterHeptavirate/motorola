@@ -8,7 +8,9 @@
 
 package protein_drawer
 
-import "image"
+import (
+	"image"
+)
 
 const standardLine = 30
 
@@ -16,7 +18,6 @@ func DrawingDatabase() map[string]*DrawCommands {
 	drawingDatabase := map[string]*DrawCommands{
 		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
 		"[START]": draw().
-			//move(image.Pt(0, 60)).
 			ChemicalText("H_3_C", VAlignCenter, HAlignLeft).
 			DrawLine(UpRight, standardLine).
 			ChemicalText("S", VAlignCenter, HAlignLeft).
@@ -40,30 +41,31 @@ func DrawingDatabase() map[string]*DrawCommands {
 			ChemicalText("OH", VAlignCenter, HAlignLeft).
 			move(image.Point{}),
 
-		//"F": draw().
-		//move(image.Pt(0, 80)).
-		//ChemicalText("H_2_N", VAlignCenter, HAlignLeft).
-		//DrawLine(UpRight, standardLine).
-		//AddSubcommand(
-		//	draw().
-		//		DrawLine(DownRight, standardLine).
-		//		AddSubcommand(
-		//			draw().
-		//				DoubleLine(Down, standardLine).
-		//				ChemicalText("O", VAlignTop, HAlignCenter),
-		//		).
-		//		ignore(ignoreAll).
-		//		DrawLine(UpRight, standardLine).
-		//		ChemicalText("OH", VAlignBottom, HAlignLeft),
-		//).
-		//ignore(ignoreAll).
-		//DrawLine(Up, standardLine).
-		//DrawLine(UpRight, standardLine).
-		//move(image.Pt(0, -20)).
-		//aromaticRing(30),
-		//
-		//"[STOP]": draw().
-		//	ChemicalText("STOP", VAlignCenter, HAlignLeft),
+		"F": draw().
+			ChemicalText("OH", VAlignCenter, HAlignRight).
+			DrawLine(DownLeft, standardLine).
+			AddSubcommand(
+				draw().
+					DoubleLine(Down, standardLine).
+					ChemicalText("O", VAlignTop, HAlignCenter).
+					// need dummy for now
+					move(image.Pt(0, 5)),
+			).
+			ignore(ignoreAll).
+			DrawLine(UpLeft, standardLine).
+			AddSubcommand(
+				draw().
+					DrawLine(DownLeft, standardLine).
+					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
+			).
+			ignore(ignoreAll).
+			DrawLine(Up, standardLine).
+			DrawLine(UpRight, standardLine).
+			move(image.Pt(0, -20)).
+			aromaticRing(30),
+
+		"[STOP]": draw().
+			ChemicalText("STOP", VAlignCenter, HAlignLeft),
 	}
 
 	return drawingDatabase
