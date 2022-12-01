@@ -17,29 +17,31 @@ import (
 	"github.com/AllenDang/giu"
 )
 
-func (d *drawCommands) move(i image.Point) *drawCommands {
+func (d *DrawCommands) move(i image.Point) *DrawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		return i
-	})
+	}, i)
 }
 
-func (d *drawCommands) ignore(i ignore) *drawCommands {
+func (d *DrawCommands) ignore(i ignore) *DrawCommands {
+	delta := image.Pt(0, 0)
+	last := d.sizes[len(d.sizes)-1]
+
+	switch i {
+	case ignoreAll:
+		delta = image.Pt(0, 0).Sub(last)
+	case ignoreX:
+		delta = image.Pt(-last.X, 0)
+	case ignoreY:
+		delta = image.Pt(0, -last.Y)
+	}
+
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		last := d.offsets[len(d.offsets)-1]
-		switch i {
-		case ignoreAll:
-			return image.Pt(0, 0).Sub(last)
-		case ignoreX:
-			return image.Pt(-last.X, 0)
-		case ignoreY:
-			return image.Pt(0, -last.Y)
-		}
-
-		return image.Pt(0, 0)
-	})
+		return delta
+	}, delta)
 }
 
-func (d *drawCommands) aromaticRing(size int) *drawCommands {
+func (d *DrawCommands) aromaticRing(size int) *DrawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) image.Point {
 		// draw a hexagon using AddLine.
 		// size is width and height of the hexagon
@@ -57,5 +59,5 @@ func (d *drawCommands) aromaticRing(size int) *drawCommands {
 		}
 
 		return image.Pt(size, size)
-	})
+	}, image.Pt(size, size))
 }

@@ -40,16 +40,19 @@ const (
 	ignoreY
 )
 
-type drawCommands struct {
+// DrawCommands represents a list of draw commands
+type DrawCommands struct {
 	cmds []drawCommand
+
+	sizes []image.Point
+
 	drawCommand
-	offsets []image.Point
 }
 
-func draw() *drawCommands {
-	result := &drawCommands{
-		cmds:    make([]drawCommand, 0),
-		offsets: make([]image.Point, 0),
+func draw() *DrawCommands {
+	result := &DrawCommands{
+		cmds:  make([]drawCommand, 0),
+		sizes: make([]image.Point, 0),
 	}
 
 	result.drawCommand = result.draw
@@ -57,12 +60,39 @@ func draw() *drawCommands {
 	return result
 }
 
-func (d *drawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
+func (d *DrawCommands) PredictSize() (minimal, maximal image.Point) {
+	current := image.Pt(0, 0)
+	minimal, maximal = image.Pt(0, 0), image.Pt(0, 0)
+
+	for _, s := range d.sizes {
+		current = current.Add(s)
+
+		if current.X < minimal.X {
+			minimal.X = current.X
+		}
+
+		if current.Y < minimal.Y {
+			minimal.Y = current.Y
+		}
+
+		if current.X > maximal.X {
+			maximal.X = current.X
+		}
+
+		if current.Y > maximal.Y {
+			maximal.Y = current.Y
+		}
+	}
+
+	return minimal, maximal
+}
+
+func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
 	size := image.Pt(0, 0)
 	currentPos := startPos
+
 	for _, cmd := range d.cmds {
 		s := cmd(c, currentPos)
-		d.offsets = append(d.offsets, s)
 
 		currentPos = currentPos.Add(s)
 
@@ -78,7 +108,14 @@ func (d *drawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
 	return size.Sub(startPos)
 }
 
-func (d *drawCommands) add(cmd drawCommand) *drawCommands {
+func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
+	min, max := c.PredictSize()
+	d.add(c.draw, max.Sub(min))
+	return d
+}
+
+func (d *DrawCommands) add(cmd drawCommand, size image.Point) *DrawCommands {
 	d.cmds = append(d.cmds, cmd)
+	d.sizes = append(d.sizes, size)
 	return d
 }

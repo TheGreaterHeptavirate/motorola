@@ -27,12 +27,22 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 			cmd, exists := db[a.Sign]
 			if !exists {
 				giu.Labelf("Aminoacid %v cannot be drawn", a).Build()
+
 				continue
 			}
 
 			cursorPos := giu.GetCursorScreenPos()
+
 			startPos := image.Pt(cursorPos.X, cursorPos.Y)
-			s := cmd(canvas, startPos)
+
+			min, max := cmd.PredictSize()
+
+			startPos = startPos.Add(image.Point{}.Sub(min))
+
+			cmd.draw(canvas, startPos)
+
+			s := max.Sub(min)
+
 			giu.Dummy(float32(s.X), float32(s.Y)).Build()
 
 			if a.Sign != aminoacid.StopCodon {

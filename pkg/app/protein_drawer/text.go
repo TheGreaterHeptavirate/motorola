@@ -9,6 +9,7 @@
 package protein_drawer
 
 import (
+	"fmt"
 	"image"
 	"strings"
 
@@ -46,27 +47,52 @@ const (
 // conditions about returned size:
 // - if VAlignCenter - size.Y = 0
 // - if HAlignCenter - size.X = 0.
-func (d *drawCommands) ChemicalText(t string, vAlignment VAlignment, halignment HAlignment) *drawCommands {
+func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment HAlignment) *DrawCommands {
+	ts := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
+	textSize := image.Pt(int(ts.X), int(ts.Y))
+	outSize := image.Point{}
+	switch vAlignment {
+	case VAlignTop:
+		outSize.Y = int(textSize.Y)
+	case VAlignCenter:
+		// noop
+	case VAlignBottom:
+		outSize.Y = -int(textSize.Y)
+	}
+
+	switch halignment {
+	case HAlignLeft:
+		outSize.X = textSize.X
+	case HAlignCenter:
+		// noop
+	case HAlignRight:
+		outSize.X = -textSize.X
+	}
+
+	fmt.Println(outSize)
+
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		textSize := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
+		posDelta := image.Pt(0, 0)
 		// do alignment
 		switch vAlignment {
 		case VAlignTop:
 			// noop
 		case VAlignCenter:
-			startPos.Y -= int(textSize.Y) / 2
+			posDelta.Y -= int(textSize.Y) / 2
 		case VAlignBottom:
-			startPos.Y -= int(textSize.Y)
+			posDelta.Y -= int(textSize.Y)
 		}
 
 		switch halignment {
 		case HAlignLeft:
 			// noop
 		case HAlignCenter:
-			startPos.X -= int(textSize.X / 2)
+			posDelta.X -= int(textSize.X / 2)
 		case HAlignRight:
-			startPos.X -= int(textSize.X)
+			posDelta.X -= int(textSize.X)
 		}
+
+		startPos = startPos.Add(posDelta)
 
 		isSubscript := false
 
@@ -101,25 +127,6 @@ func (d *drawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 			}
 		}
 
-		outSize := image.Point{}
-		switch vAlignment {
-		case VAlignTop:
-			outSize.Y = int(textSize.Y)
-		case VAlignCenter:
-			// noop
-		case VAlignBottom:
-			outSize.Y = -int(textSize.Y)
-		}
-
-		switch halignment {
-		case HAlignLeft:
-			outSize.X = size.X
-		case HAlignCenter:
-			// noop
-		case HAlignRight:
-			outSize.X = -size.X
-		}
-
 		return outSize
-	})
+	}, outSize)
 }

@@ -36,18 +36,20 @@ const (
 )
 
 // DrawLine draws a line with a specified direction and length.
-func (d *drawCommands) DrawLine(dir LineDirection, length int) *drawCommands {
+func (d *DrawCommands) DrawLine(dir LineDirection, length int) *DrawCommands {
+	lineSize := calcLineVector(dir, length)
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		endPos := startPos.Add(calcLineVector(dir, length))
+		endPos := startPos.Add(lineSize)
 
 		c.AddLine(startPos, endPos, colornames.Red, thickness)
 
 		return image.Pt(endPos.X-startPos.X, endPos.Y-startPos.Y)
-	})
+	}, lineSize)
 }
 
 // DoubleLine draws a double line.
-func (d *drawCommands) DoubleLine(dir LineDirection, length int) *drawCommands {
+func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
+	lineSize := calcLineVector(dir, length)
 	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
 		var offset image.Point
 		switch dir {
@@ -65,13 +67,13 @@ func (d *drawCommands) DoubleLine(dir LineDirection, length int) *drawCommands {
 			offset.X += int(d)
 		}
 
-		endPos := startPos.Add(calcLineVector(dir, length))
+		endPos := startPos.Add(lineSize)
 
 		c.AddLine(startPos.Add(offset), endPos.Add(offset), colornames.Red, thickness)
 		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), colornames.Red, thickness)
 
 		return endPos.Sub(startPos)
-	})
+	}, lineSize)
 }
 
 func calcLineVector(dir LineDirection, length int) image.Point {
