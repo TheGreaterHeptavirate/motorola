@@ -8,66 +8,63 @@
 
 package protein_drawer
 
-import "image"
+import (
+	"image"
+)
 
 const standardLine = 30
 
-var drawingDatabase = map[string]drawCommand{
-	// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
-	"[START]": draw().
-		move(image.Pt(0, 60)).
-		chemicalText("H_3_C", VAlignCenter, HAlignLeft).
-		drawLine(UpRight, standardLine).
-		chemicalText("S", VAlignCenter, HAlignLeft).
-		drawLine(DownRight, standardLine).
-		drawLine(UpRight, standardLine).
-		drawLine(DownRight, standardLine).
-		add(
-			draw().
-				drawLine(Down, standardLine).
-				chemicalText("NH_2_", VAlignTop, HAlignCenter).draw,
-		).
-		ignore(ignoreAll).
-		drawLine(UpRight, standardLine).
-		add(
-			draw().
-				doubleLine(Up, standardLine).
-				chemicalText("O", VAlignBottom, HAlignCenter).draw,
-		).
-		ignore(ignoreAll).
-		drawLine(DownRight, standardLine).
-		chemicalText("OH", VAlignCenter, HAlignLeft).
-		move(image.Point{}).draw,
+func DrawingDatabase() map[string]*DrawCommands {
+	drawingDatabase := map[string]*DrawCommands{
+		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
+		"[START]": Draw().
+			ChemicalText("H_3_C", VAlignCenter, HAlignLeft).
+			DrawLine(UpRight, standardLine).
+			ChemicalText("S", VAlignCenter, HAlignLeft).
+			DrawLine(DownRight, standardLine).
+			DrawLine(UpRight, standardLine).
+			DrawLine(DownRight, standardLine).
+			AddSubcommand(
+				Draw().
+					DrawLine(Down, standardLine).
+					ChemicalText("NH_2_", VAlignTop, HAlignCenter),
+			).
+			Ignore(ignoreAll).
+			DrawLine(UpRight, standardLine).
+			AddSubcommand(
+				Draw().
+					DoubleLine(Up, standardLine).
+					ChemicalText("O", VAlignBottom, HAlignCenter),
+			).
+			Ignore(ignoreAll).
+			DrawLine(DownRight, standardLine).
+			ChemicalText("OH", VAlignCenter, HAlignLeft).
+			Move(image.Point{}),
 
-	"F": draw().
-		move(image.Pt(0, 80)).
-		chemicalText("H_2_N", VAlignCenter, HAlignLeft).
-		drawLine(UpRight, standardLine).
-		add(
-			draw().
-				drawLine(DownRight, standardLine).
-				add(
-					draw().
-						doubleLine(Down, standardLine).
-						chemicalText("O", VAlignTop, HAlignCenter).
-						draw,
-				).
-				ignore(ignoreAll).
-				drawLine(UpRight, standardLine).
-				chemicalText("OH", VAlignBottom, HAlignLeft).
-				draw,
-		).
-		ignore(ignoreAll).
-		drawLine(Up, standardLine).
-		drawLine(UpRight, standardLine).
-		move(image.Pt(0, -20)).
-		aromaticRing(30).
-		draw,
+		"F": Draw().
+			ChemicalText("OH", VAlignCenter, HAlignRight).
+			DrawLine(DownLeft, standardLine).
+			AddSubcommand(
+				Draw().
+					DoubleLine(Down, standardLine).
+					ChemicalText("O", VAlignTop, HAlignCenter),
+			).
+			Ignore(ignoreAll).
+			DrawLine(UpLeft, standardLine).
+			AddSubcommand(
+				Draw().
+					DrawLine(DownLeft, standardLine).
+					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
+			).
+			Ignore(ignoreAll).
+			DrawLine(Up, standardLine).
+			DrawLine(UpRight, standardLine).
+			Move(image.Pt(0, -20)).
+			AromaticRing(30),
 
-	"[STOP]": draw().
-		chemicalText("STOP", VAlignCenter, HAlignLeft).draw,
-}
+		"[STOP]": Draw().
+			ChemicalText("STOP", VAlignCenter, HAlignLeft),
+	}
 
-func DrawingDatabase() map[string]drawCommand {
 	return drawingDatabase
 }

@@ -17,30 +17,34 @@ import (
 	"github.com/AllenDang/giu"
 )
 
-func (d *drawCommands) move(i image.Point) *drawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		return i
-	})
+// Move moves the cursor by i
+func (d *DrawCommands) Move(i image.Point) *DrawCommands {
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
+		// noop
+	}, FromLinear(i))
 }
 
-func (d *drawCommands) ignore(i ignore) *drawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		last := d.offsets[len(d.offsets)-1]
-		switch i {
-		case ignoreAll:
-			return image.Pt(0, 0).Sub(last)
-		case ignoreX:
-			return image.Pt(-last.X, 0)
-		case ignoreY:
-			return image.Pt(0, -last.Y)
-		}
+// Ignore allows you to ignore cursor movement of the latest action
+func (d *DrawCommands) Ignore(i ignore) *DrawCommands {
+	delta := image.Pt(0, 0)
+	lastSize := d.sizes[len(d.sizes)-1]
+	last := lastSize.Delta()
 
-		return image.Pt(0, 0)
-	})
+	switch i {
+	case ignoreAll:
+		delta = image.Pt(0, 0).Sub(last)
+	case ignoreX:
+		delta = image.Pt(-last.X, 0)
+	case ignoreY:
+		delta = image.Pt(0, -last.Y)
+	}
+
+	return d.Move(delta)
 }
 
-func (d *drawCommands) aromaticRing(size int) *drawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) image.Point {
+// AromaticRing draws an aromatic ring scheme
+func (d *DrawCommands) AromaticRing(size int) *DrawCommands {
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		// draw a hexagon using AddLine.
 		// size is width and height of the hexagon
 		// startPos is the top left corner of the square containing the hexagon
@@ -55,7 +59,5 @@ func (d *drawCommands) aromaticRing(size int) *drawCommands {
 			c.AddLine(start, end, colornames.Red, thickness)
 			start = end
 		}
-
-		return image.Pt(size, size)
-	})
+	}, FromLinear(image.Pt(size, size)))
 }

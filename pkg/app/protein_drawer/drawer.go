@@ -27,43 +27,50 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 			cmd, exists := db[a.Sign]
 			if !exists {
 				giu.Labelf("Aminoacid %v cannot be drawn", a).Build()
+
 				continue
 			}
 
 			cursorPos := giu.GetCursorScreenPos()
+
 			startPos := image.Pt(cursorPos.X, cursorPos.Y)
-			s := cmd(canvas, startPos)
-			giu.Dummy(float32(s.X), float32(s.Y)).Build()
+
+			drawingSize := cmd.PredictSize()
+
+			startPos = startPos.Sub(drawingSize.min)
+
+			cmd.draw(canvas, startPos)
+
+			vec := drawingSize.Vector()
+
+			giu.Dummy(float32(vec.X), float32(vec.Y)).Build()
 
 			if a.Sign != aminoacid.StopCodon {
 				cursorPos := giu.GetCursorScreenPos()
 				startPos := image.Pt(cursorPos.X, cursorPos.Y)
 				a := 10
 				lineLen := int(float32(a) * float32(math.Sqrt2))
-				s = draw().
-					move(image.Pt(0, 20)).
-					// draw top bracket
-					drawLine(DownRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(DownRight, lineLen).
-					drawLine(UpRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(UpRight, lineLen).
+				d := Draw().
+					DrawLine(DownRight, lineLen).
+					DrawLine(Right, (vec.X/2)-2*a).
+					DrawLine(DownRight, lineLen).
+					DrawLine(UpRight, lineLen).
+					DrawLine(Right, (vec.X/2)-2*a).
+					DrawLine(UpRight, lineLen).
 					//
-					move(image.Pt(-s.X/2+a/4, 2*a)).
-					drawLine(Down, 50).
-					move(image.Pt(-s.X/2, 2*a)).
+					Move(image.Pt(-vec.X/2+a/4, 2*a)).
+					DrawLine(Down, 50).
+					Move(image.Pt(-vec.X/2, 2*a)).
 					//
-					drawLine(UpRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(UpRight, lineLen).
-					drawLine(DownRight, lineLen).
-					drawLine(Right, (s.X/2)-2*a).
-					drawLine(DownRight, lineLen).
-					//
-					move(image.Pt(0, 20)).
-					draw(canvas, startPos)
-				giu.Dummy(float32(s.X), float32(s.Y)).Build()
+					DrawLine(UpRight, lineLen).
+					DrawLine(Right, (vec.X/2)-2*a).
+					DrawLine(UpRight, lineLen).
+					DrawLine(DownRight, lineLen).
+					DrawLine(Right, (vec.X/2)-2*a).
+					DrawLine(DownRight, lineLen)
+				dummy := d.PredictSize().Vector()
+				d.draw(canvas, startPos)
+				giu.Dummy(float32(dummy.X), float32(dummy.Y)).Build()
 			}
 		}
 	}),

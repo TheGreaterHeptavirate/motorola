@@ -10,6 +10,7 @@ package protein_drawer
 
 import (
 	"image"
+	"log"
 	"math"
 
 	"golang.org/x/image/colornames"
@@ -19,10 +20,12 @@ import (
 
 const doubleLineOffset = 3
 
-type ConnectionDirection byte
+// LineDirection represents a direction of a line to be drawn.
+type LineDirection byte
 
+// line directions:
 const (
-	Up ConnectionDirection = iota
+	Up LineDirection = iota
 	UpRight
 	Right
 	DownRight
@@ -32,56 +35,22 @@ const (
 	UpLeft
 )
 
-func (d *drawCommands) drawLine(dir ConnectionDirection, length int) *drawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		endPos := startPos
+// DrawLine draws a line with a specified direction and length.
+func (d *DrawCommands) DrawLine(dir LineDirection, length int) *DrawCommands {
+	lineSize := calcLineVector(dir, length)
 
-		switch dir {
-		case Up:
-			endPos = image.Pt(startPos.X, startPos.Y-length)
-		case UpRight:
-			endPos = image.Pt(startPos.X+int(float32(length)/math.Sqrt2), startPos.Y-int(float32(length)/math.Sqrt2))
-		case Right:
-			endPos = image.Pt(startPos.X+length, startPos.Y)
-		case DownRight:
-			endPos = image.Pt(startPos.X+int(float32(length)/math.Sqrt2), startPos.Y+int(float32(length)/math.Sqrt2))
-		case Down:
-			endPos = image.Pt(startPos.X, startPos.Y+length)
-		case DownLeft:
-			endPos = image.Pt(startPos.X-int(float32(length)/math.Sqrt2), startPos.Y+int(float32(length)/math.Sqrt2))
-		case Left:
-			endPos = image.Pt(startPos.X-length, startPos.Y)
-		case UpLeft:
-			endPos = image.Pt(startPos.X-int(float32(length)/math.Sqrt2), startPos.Y-int(float32(length)/math.Sqrt2))
-		}
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
+		endPos := startPos.Add(lineSize)
 
 		c.AddLine(startPos, endPos, colornames.Red, thickness)
-		return image.Pt(endPos.X-startPos.X, endPos.Y-startPos.Y)
-	})
+	}, FromLinear(lineSize))
 }
 
-func (d *drawCommands) doubleLine(dir ConnectionDirection, length int) *drawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) (size image.Point) {
-		endPos := startPos
-		switch dir {
-		case Up:
-			endPos = image.Pt(startPos.X, startPos.Y-length)
-		case UpRight:
-			endPos = image.Pt(startPos.X+int(float32(length)/math.Sqrt2), startPos.Y-int(float32(length)/math.Sqrt2))
-		case Right:
-			endPos = image.Pt(startPos.X+length, startPos.Y)
-		case DownRight:
-			endPos = image.Pt(startPos.X+int(float32(length)/math.Sqrt2), startPos.Y+int(float32(length)/math.Sqrt2))
-		case Down:
-			endPos = image.Pt(startPos.X, startPos.Y+length)
-		case DownLeft:
-			endPos = image.Pt(startPos.X-int(float32(length)/math.Sqrt2), startPos.Y+int(float32(length)/math.Sqrt2))
-		case Left:
-			endPos = image.Pt(startPos.X-length, startPos.Y)
-		case UpLeft:
-			endPos = image.Pt(startPos.X-int(float32(length)/math.Sqrt2), startPos.Y-int(float32(length)/math.Sqrt2))
-		}
+// DoubleLine draws a double line.
+func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
+	lineSize := calcLineVector(dir, length)
 
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		var offset image.Point
 		switch dir {
 		case Up, Down:
@@ -98,9 +67,36 @@ func (d *drawCommands) doubleLine(dir ConnectionDirection, length int) *drawComm
 			offset.X += int(d)
 		}
 
+		endPos := startPos.Add(lineSize)
+
 		c.AddLine(startPos.Add(offset), endPos.Add(offset), colornames.Red, thickness)
 		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), colornames.Red, thickness)
+	}, FromLinear(lineSize))
+}
 
-		return endPos.Sub(startPos)
-	})
+func calcLineVector(dir LineDirection, length int) image.Point {
+	a := int(float32(length) / math.Sqrt2)
+
+	switch dir {
+	case Up:
+		return image.Pt(0, -length)
+	case UpRight:
+		return image.Pt(a, -a)
+	case Right:
+		return image.Pt(length, 0)
+	case DownRight:
+		return image.Pt(a, a)
+	case Down:
+		return image.Pt(0, length)
+	case DownLeft:
+		return image.Pt(-a, a)
+	case Left:
+		return image.Pt(-length, 0)
+	case UpLeft:
+		return image.Pt(-a, -a)
+	}
+
+	log.Panicf("invalid directoin %v", dir)
+
+	return image.Point{}
 }

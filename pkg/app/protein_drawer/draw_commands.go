@@ -40,16 +40,19 @@ const (
 	ignoreY
 )
 
-type drawCommands struct {
+// DrawCommands represents a list of draw commands
+type DrawCommands struct {
 	cmds []drawCommand
+
+	sizes []Size
+
 	drawCommand
-	offsets []image.Point
 }
 
-func draw() *drawCommands {
-	result := &drawCommands{
-		cmds:    make([]drawCommand, 0),
-		offsets: make([]image.Point, 0),
+func Draw() *DrawCommands {
+	result := &DrawCommands{
+		cmds:  make([]drawCommand, 0),
+		sizes: make([]Size, 0),
 	}
 
 	result.drawCommand = result.draw
@@ -57,14 +60,43 @@ func draw() *drawCommands {
 	return result
 }
 
-func (d *drawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
+// PredictSize returns expected size of drawing
+func (d *DrawCommands) PredictSize() (result Size) {
+	current := image.Pt(0, 0)
+
+	for _, s := range d.sizes {
+		current = current.Add(s.max).Add(s.min)
+
+		if current.X < result.min.X {
+			result.min.X = current.X
+		}
+
+		if current.Y < result.min.Y {
+			result.min.Y = current.Y
+		}
+
+		if current.X > result.max.X {
+			result.max.X = current.X
+		}
+
+		if current.Y > result.max.Y {
+			result.max.Y = current.Y
+		}
+	}
+
+	return result
+}
+
+func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) {
 	size := image.Pt(0, 0)
 	currentPos := startPos
-	for _, cmd := range d.cmds {
-		s := cmd(c, currentPos)
-		d.offsets = append(d.offsets, s)
 
-		currentPos = currentPos.Add(s)
+	for i, cmd := range d.cmds {
+		cmd(c, currentPos)
+
+		s := d.sizes[i]
+
+		currentPos = currentPos.Add(s.max.Add(s.min))
 
 		if currentPos.X > size.X {
 			size.X = currentPos.X
@@ -74,11 +106,18 @@ func (d *drawCommands) draw(c *giu.Canvas, startPos image.Point) image.Point {
 			size.Y = currentPos.Y
 		}
 	}
-
-	return size.Sub(startPos)
 }
 
-func (d *drawCommands) add(cmd drawCommand) *drawCommands {
+// AddSubcommand adds another DrawingCommands into list
+func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
+	d.add(c.draw, c.PredictSize())
+
+	return d
+}
+
+func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 	d.cmds = append(d.cmds, cmd)
+	d.sizes = append(d.sizes, s)
+
 	return d
 }

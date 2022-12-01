@@ -14,4 +14,4 @@ import (
 	"github.com/AllenDang/giu"
 )
 
-type drawCommand func(canvas *giu.Canvas, startPos image.Point) (size image.Point)
+type drawCommand func(canvas *giu.Canvas, startPos image.Point)
