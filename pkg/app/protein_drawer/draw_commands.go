@@ -46,9 +46,12 @@ type DrawCommands struct {
 
 	sizes []Size
 
+	continueHere image.Point
+
 	drawCommand
 }
 
+// Draw creates an instance of DrawCommands
 func Draw() *DrawCommands {
 	result := &DrawCommands{
 		cmds:  make([]drawCommand, 0),
@@ -96,7 +99,7 @@ func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) {
 
 		s := d.sizes[i]
 
-		currentPos = currentPos.Add(s.max.Add(s.min))
+		currentPos = currentPos.Add(s.Delta())
 
 		if currentPos.X > size.X {
 			size.X = currentPos.X
@@ -120,4 +123,16 @@ func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 	d.sizes = append(d.sizes, s)
 
 	return d
+}
+
+func (d *DrawCommands) ContinueHere() *DrawCommands {
+	for _, s := range d.sizes {
+		d.continueHere = d.continueHere.Add(s.Delta())
+	}
+
+	return d
+}
+
+func (d *DrawCommands) ContinueHerePoint() image.Point {
+	return d.continueHere
 }

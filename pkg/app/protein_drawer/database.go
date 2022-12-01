@@ -30,6 +30,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 					ChemicalText("NH_2_", VAlignTop, HAlignCenter),
 			).
 			Ignore(ignoreAll).
+			ContinueHere().
 			DrawLine(UpRight, standardLine).
 			AddSubcommand(
 				Draw().
@@ -57,6 +58,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
 			).
 			Ignore(ignoreAll).
+			ContinueHere().
 			DrawLine(Up, standardLine).
 			DrawLine(UpRight, standardLine).
 			Move(image.Pt(0, -20)).

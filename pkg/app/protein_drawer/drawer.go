@@ -9,12 +9,11 @@
 package protein_drawer
 
 import (
-	"image"
-	"math"
-
+	"fmt"
 	"github.com/AllenDang/giu"
+	"golang.org/x/image/colornames"
+	"image"
 
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 )
 
@@ -22,6 +21,8 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 	return giu.Child().Layout(giu.Custom(func() {
 		db := DrawingDatabase()
 		canvas := giu.GetCanvas()
+
+		lastContinue := image.Point{}
 
 		for _, a := range p.AminoAcids {
 			cmd, exists := db[a.Sign]
@@ -39,39 +40,47 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 
 			startPos = startPos.Sub(drawingSize.min)
 
+			currentContinuationPoint := startPos.Add(cmd.ContinueHerePoint())
+			if lastContinue != image.Pt(0, 0) && currentContinuationPoint != startPos {
+				fmt.Println("drawing")
+				canvas.AddLine(lastContinue, currentContinuationPoint, colornames.Blue, thickness)
+			}
+
+			lastContinue = startPos.Add(cmd.ContinueHerePoint())
+
 			cmd.draw(canvas, startPos)
 
 			vec := drawingSize.Vector()
 
 			giu.Dummy(float32(vec.X), float32(vec.Y)).Build()
 
-			if a.Sign != aminoacid.StopCodon {
-				cursorPos := giu.GetCursorScreenPos()
-				startPos := image.Pt(cursorPos.X, cursorPos.Y)
-				a := 10
-				lineLen := int(float32(a) * float32(math.Sqrt2))
-				d := Draw().
-					DrawLine(DownRight, lineLen).
-					DrawLine(Right, (vec.X/2)-2*a).
-					DrawLine(DownRight, lineLen).
-					DrawLine(UpRight, lineLen).
-					DrawLine(Right, (vec.X/2)-2*a).
-					DrawLine(UpRight, lineLen).
-					//
-					Move(image.Pt(-vec.X/2+a/4, 2*a)).
-					DrawLine(Down, 50).
-					Move(image.Pt(-vec.X/2, 2*a)).
-					//
-					DrawLine(UpRight, lineLen).
-					DrawLine(Right, (vec.X/2)-2*a).
-					DrawLine(UpRight, lineLen).
-					DrawLine(DownRight, lineLen).
-					DrawLine(Right, (vec.X/2)-2*a).
-					DrawLine(DownRight, lineLen)
-				dummy := d.PredictSize().Vector()
-				d.draw(canvas, startPos)
-				giu.Dummy(float32(dummy.X), float32(dummy.Y)).Build()
-			}
+			//if a.Sign != aminoacid.StopCodon {
+			//	cursorPos := giu.GetCursorScreenPos()
+			//	startPos := image.Pt(cursorPos.X, cursorPos.Y)
+			//	a := 10
+			//	lineLen := int(float32(a) * float32(math.Sqrt2))
+			//	d := Draw().
+			//		DrawLine(DownRight, lineLen).
+			//		DrawLine(Right, (vec.X/2)-2*a).
+			//		DrawLine(DownRight, lineLen).
+			//		DrawLine(UpRight, lineLen).
+			//		DrawLine(Right, (vec.X/2)-2*a).
+			//		DrawLine(UpRight, lineLen).
+
+			//Move(image.Pt(-vec.X/2+a/4, 2*a)).
+			//DrawLine(Down, 50).
+			//Move(image.Pt(-vec.X/2, 2*a)).
+
+			//DrawLine(UpRight, lineLen).
+			//DrawLine(Right, (vec.X/2)-2*a).
+			//DrawLine(UpRight, lineLen).
+			//DrawLine(DownRight, lineLen).
+			//DrawLine(Right, (vec.X/2)-2*a).
+			//DrawLine(DownRight, lineLen)
+			//dummy := d.PredictSize().Vector()
+			//d.draw(canvas, startPos)
+			//giu.Dummy(float32(dummy.X), float32(dummy.Y)).Build()
+			//}
 		}
 	}),
 	)
