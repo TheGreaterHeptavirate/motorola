@@ -44,7 +44,7 @@ const (
 type DrawCommands struct {
 	cmds []drawCommand
 
-	sizes []size
+	sizes []Size
 
 	drawCommand
 }
@@ -52,7 +52,7 @@ type DrawCommands struct {
 func draw() *DrawCommands {
 	result := &DrawCommands{
 		cmds:  make([]drawCommand, 0),
-		sizes: make([]size, 0),
+		sizes: make([]Size, 0),
 	}
 
 	result.drawCommand = result.draw
@@ -60,7 +60,7 @@ func draw() *DrawCommands {
 	return result
 }
 
-func (d *DrawCommands) PredictSize() (result size) {
+func (d *DrawCommands) PredictSize() (result Size) {
 	current := image.Pt(0, 0)
 
 	for _, s := range d.sizes {
@@ -113,7 +113,7 @@ func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
 	return d
 }
 
-func (d *DrawCommands) add(cmd drawCommand, s size) *DrawCommands {
+func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 	d.cmds = append(d.cmds, cmd)
 	d.sizes = append(d.sizes, s)
 

@@ -29,17 +29,17 @@ func DrawingDatabase() map[string]*DrawCommands {
 					DrawLine(Down, standardLine).
 					ChemicalText("NH_2_", VAlignTop, HAlignCenter),
 			).
-			ignore(ignoreAll).
+			Ignore(ignoreAll).
 			DrawLine(UpRight, standardLine).
 			AddSubcommand(
 				draw().
 					DoubleLine(Up, standardLine).
 					ChemicalText("O", VAlignBottom, HAlignCenter),
 			).
-			ignore(ignoreAll).
+			Ignore(ignoreAll).
 			DrawLine(DownRight, standardLine).
 			ChemicalText("OH", VAlignCenter, HAlignLeft).
-			move(image.Point{}),
+			Move(image.Point{}),
 
 		"F": draw().
 			ChemicalText("OH", VAlignCenter, HAlignRight).
@@ -49,18 +49,18 @@ func DrawingDatabase() map[string]*DrawCommands {
 					DoubleLine(Down, standardLine).
 					ChemicalText("O", VAlignTop, HAlignCenter),
 			).
-			ignore(ignoreAll).
+			Ignore(ignoreAll).
 			DrawLine(UpLeft, standardLine).
 			AddSubcommand(
 				draw().
 					DrawLine(DownLeft, standardLine).
 					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
 			).
-			ignore(ignoreAll).
+			Ignore(ignoreAll).
 			DrawLine(Up, standardLine).
 			DrawLine(UpRight, standardLine).
-			move(image.Pt(0, -20)).
-			aromaticRing(30),
+			Move(image.Pt(0, -20)).
+			AromaticRing(30),
 
 		"[STOP]": draw().
 			ChemicalText("STOP", VAlignCenter, HAlignLeft),

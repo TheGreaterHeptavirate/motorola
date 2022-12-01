@@ -10,16 +10,16 @@ package protein_drawer
 
 import "image"
 
-// size represents multi-dimensional size
+// Size represents multidimensional Size
 // it is like image.Rectangle
-// min is a minimal size, construction can have, and max is a maximal size
-type size struct {
+// min is a minimal Size, construction can have, and max is a maximal Size
+type Size struct {
 	min, max image.Point
 }
 
-// fromLinear allows to convert a construction, that could be enclosed in a Rectangle
-// with min=(0,0) max=s to a size struct
-func fromLinear(s image.Point) (result size) {
+// FromLinear allows to convert a construction, that could be enclosed in a Rectangle
+// with min=(0,0) max=s to a Size struct
+func FromLinear(s image.Point) (result Size) {
 	if s.X > 0 {
 		result.max.X = s.X
 	} else {
@@ -35,10 +35,12 @@ func fromLinear(s image.Point) (result size) {
 	return result
 }
 
-func (s size) Vector() image.Point {
+// Vector returns size as a vector
+func (s Size) Vector() image.Point {
 	return s.max.Sub(s.min)
 }
 
-func (s size) Delta() image.Point {
+// Delta returns delta between max and min
+func (s Size) Delta() image.Point {
 	return s.max.Add(s.min)
 }

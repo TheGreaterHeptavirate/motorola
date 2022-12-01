@@ -17,22 +17,24 @@ import (
 	"golang.org/x/image/colornames"
 )
 
-// VAlignment represents a vertical alignment of a text
+const subscriptFontSize = 10
+
+// VAlignment represents a vertical alignment of a text.
 type VAlignment byte
 
 const (
-	// VAlignTop algins to tpo
+	// VAlignTop algins to tpo.
 	VAlignTop VAlignment = iota
 	// VAlignCenter centers alignment (does not return Y size!
 	VAlignCenter
-	// VAlignBottom aligns to bottom
+	// VAlignBottom aligns to bottom.
 	VAlignBottom
 )
 
-// HAlignment represents horizontal text alignment
+// HAlignment represents horizontal text alignment.
 type HAlignment byte
 
-// Horizontal alignments
+// Horizontal alignments.
 const (
 	HAlignLeft HAlignment = iota
 	HAlignCenter
@@ -46,17 +48,21 @@ const (
 // conditions about returned size:
 // - if VAlignCenter - size.Y = 0
 // - if HAlignCenter - size.X = 0.
+//
+//nolint:gocyclo // will fix later
 func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment HAlignment) *DrawCommands {
 	ts := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
 	textSize := image.Pt(int(ts.X), int(ts.Y))
-	outSize := size{}
+	outSize := Size{}
 
 	switch vAlignment {
 	case VAlignTop:
 		outSize.max.Y = textSize.Y
 	case VAlignCenter:
-		outSize.min.Y = -int(textSize.Y) / 2
-		outSize.max.Y = int(textSize.Y) / 2
+		//nolint:gomnd // half of height to minimal and half to maximal size
+		outSize.min.Y = -textSize.Y / 2
+		//nolint:gomnd // half of height to minimal and half to maximal size
+		outSize.max.Y = textSize.Y / 2
 	case VAlignBottom:
 		outSize.min.Y = -textSize.Y
 	}
@@ -66,7 +72,7 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 		outSize.max.X = textSize.X
 	case HAlignCenter:
 		outSize.min.X = -textSize.X / 2
-		outSize.max.X = int(textSize.X) / 2
+		outSize.max.X = textSize.X / 2
 	case HAlignRight:
 		outSize.min.X = -textSize.X
 	}
@@ -80,29 +86,30 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 		case VAlignTop:
 			// noop
 		case VAlignCenter:
-			posDelta.Y -= int(textSize.Y) / 2
+			posDelta.Y -= textSize.Y / 2
 		case VAlignBottom:
-			posDelta.Y -= int(textSize.Y)
+			posDelta.Y -= textSize.Y
 		}
 
 		switch halignment {
 		case HAlignLeft:
 			// noop
 		case HAlignCenter:
-			posDelta.X -= int(textSize.X / 2)
+			posDelta.X -= textSize.X / 2
 		case HAlignRight:
-			posDelta.X -= int(textSize.X)
+			posDelta.X -= textSize.X
 		}
 
 		startPos = startPos.Add(posDelta)
 
 		isSubscript := false
 
-		subscriptFont := giu.Style().SetFontSize(10)
+		subscriptFont := giu.Style().SetFontSize(subscriptFontSize)
 
 		for _, r := range t {
 			if r == '_' {
 				isSubscript = !isSubscript
+
 				continue
 			}
 
@@ -118,6 +125,7 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 			w, h := s.X, s.Y
 
 			if isSubscript {
+				//nolint:gomnd // move cursor half of line down when drawing subscript
 				p = p.Add(image.Pt(0, int(h/2)))
 			}
 

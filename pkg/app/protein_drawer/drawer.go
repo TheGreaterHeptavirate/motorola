@@ -58,9 +58,9 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 					DrawLine(Right, (vec.X/2)-2*a).
 					DrawLine(UpRight, lineLen).
 					//
-					move(image.Pt(-vec.X/2+a/4, 2*a)).
+					Move(image.Pt(-vec.X/2+a/4, 2*a)).
 					DrawLine(Down, 50).
-					move(image.Pt(-vec.X/2, 2*a)).
+					Move(image.Pt(-vec.X/2, 2*a)).
 					//
 					DrawLine(UpRight, lineLen).
 					DrawLine(Right, (vec.X/2)-2*a).
