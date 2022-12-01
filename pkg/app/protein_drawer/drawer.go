@@ -9,7 +9,6 @@
 package protein_drawer
 
 import (
-	"fmt"
 	"github.com/AllenDang/giu"
 	"golang.org/x/image/colornames"
 	"image"
@@ -42,8 +41,17 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 
 			currentContinuationPoint := startPos.Add(cmd.ContinueHerePoint())
 			if lastContinue != image.Pt(0, 0) && currentContinuationPoint != startPos {
-				fmt.Println("drawing")
-				canvas.AddLine(lastContinue, currentContinuationPoint, colornames.Blue, thickness)
+				//canvas.AddLine(lastContinue, currentContinuationPoint, colornames.Blue, thickness)
+				canvas.AddBezierCubic(
+					lastContinue,
+					// TODO
+					image.Pt(20, lastContinue.Y),
+					image.Pt(20, currentContinuationPoint.Y),
+					currentContinuationPoint,
+					colornames.Blue,
+					thickness,
+					20,
+				)
 			}
 
 			lastContinue = startPos.Add(cmd.ContinueHerePoint())
