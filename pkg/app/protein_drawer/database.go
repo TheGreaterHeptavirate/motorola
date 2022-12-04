@@ -18,74 +18,27 @@ func DrawingDatabase() map[string]*DrawCommands {
 	drawingDatabase := map[string]*DrawCommands{
 		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
 		"[START]": Draw().
-			ChemicalText("H_3_C", VAlignCenter, HAlignLeft).
+			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
+			DrawLine(DownRight, standardLine).
 			ChemicalText("S", VAlignCenter, HAlignLeft).
-			DrawLine(DownRight, standardLine).
 			DrawLine(UpRight, standardLine).
-			DrawLine(DownRight, standardLine).
-			AddSubcommand(
-				Draw().
-					DrawLine(Down, standardLine).
-					ChemicalText("NH_2_", VAlignTop, HAlignCenter),
-			).
-			Ignore(ignoreAll).
-			ContinueHere().
-			DrawLine(UpRight, standardLine).
-			AddSubcommand(
-				Draw().
-					DoubleLine(Up, standardLine).
-					ChemicalText("O", VAlignBottom, HAlignCenter),
-			).
-			Ignore(ignoreAll).
-			DrawLine(DownRight, standardLine).
-			ChemicalText("OH", VAlignCenter, HAlignLeft).
-			Move(image.Point{}),
+			ChemicalText("C_3_H", VAlignCenter, HAlignLeft),
 
+		// https://en.wikipedia.org/wiki/Phenylalanine#/media/File:L-Phenylalanin_-_L-Phenylalanine.svg
 		"F": Draw().
-			ChemicalText("OH", VAlignCenter, HAlignRight).
-			DrawLine(DownLeft, standardLine).
-			AddSubcommand(
-				Draw().
-					DoubleLine(Down, standardLine).
-					ChemicalText("O", VAlignTop, HAlignCenter),
-			).
-			Ignore(ignoreAll).
-			DrawLine(UpLeft, standardLine).
-			AddSubcommand(
-				Draw().
-					DrawLine(DownLeft, standardLine).
-					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
-			).
-			Ignore(ignoreAll).
-			ContinueHere().
-			DrawLine(Up, standardLine).
+			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			Move(image.Pt(0, -20)).
 			AromaticRing(30),
 
+		// https://en.wikipedia.org/wiki/Leucine#/media/File:L-Leucine.svg
 		"L": Draw().
-			ChemicalText("OH", VAlignCenter, HAlignRight).
-			DrawLine(DownLeft, standardLine).
-			AddSubcommand(
-				Draw().
-					DoubleLine(Down, standardLine).
-					ChemicalText("O", VAlignTop, HAlignCenter),
-			).
-			Ignore(ignoreAll).
-			DrawLine(UpLeft, standardLine).
-			AddSubcommand(
-				Draw().
-					DrawLine(DownLeft, standardLine).
-					ChemicalText("H_2_N", VAlignCenter, HAlignRight),
-			).
-			Ignore(ignoreAll).
-			ContinueHere().
-			DrawLine(Up, standardLine).
+			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			DrawLine(Up, standardLine).
 			Ignore(ignoreAll).
-			DrawLine(UpRight, standardLine),
+			DrawLine(DownRight, standardLine),
 
 		"[STOP]": Draw().
 			ChemicalText("STOP", VAlignCenter, HAlignLeft),

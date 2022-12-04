@@ -10,7 +10,6 @@ package protein_drawer
 
 import (
 	"github.com/AllenDang/giu"
-	"golang.org/x/image/colornames"
 	"image"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
@@ -20,76 +19,36 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 	return giu.Child().Layout(giu.Custom(func() {
 		db := DrawingDatabase()
 		canvas := giu.GetCanvas()
-
-		lastContinue := image.Point{}
+		result := Draw().ChemicalText("H", VAlignTop, HAlignCenter)
 
 		for _, a := range p.AminoAcids {
+			result.DrawLine(Down, standardLine).ChemicalText("N", VAlignTop, HAlignCenter).AddSubcommand(
+				Draw().DrawLine(Left, standardLine).ChemicalText("H", VAlignCenter, HAlignRight),
+			).Ignore(ignoreAll).
+				DrawLine(DownRight, standardLine)
+
 			cmd, exists := db[a.Sign]
 			if !exists {
-				giu.Labelf("Aminoacid %v cannot be drawn", a).Build()
-
-				continue
+				result.ChemicalText("Not found!", VAlignCenter, HAlignLeft)
+			} else {
+				result.AddSubcommand(cmd)
 			}
 
-			cursorPos := giu.GetCursorScreenPos()
-
-			startPos := image.Pt(cursorPos.X, cursorPos.Y)
-
-			drawingSize := cmd.PredictSize()
-
-			startPos = startPos.Sub(drawingSize.min)
-
-			currentContinuationPoint := startPos.Add(cmd.ContinueHerePoint())
-			if lastContinue != image.Pt(0, 0) && currentContinuationPoint != startPos {
-				//canvas.AddLine(lastContinue, currentContinuationPoint, colornames.Blue, thickness)
-				canvas.AddBezierCubic(
-					lastContinue,
-					// TODO
-					image.Pt(20, lastContinue.Y),
-					image.Pt(20, currentContinuationPoint.Y),
-					currentContinuationPoint,
-					colornames.Blue,
-					thickness,
-					20,
-				)
-			}
-
-			lastContinue = startPos.Add(cmd.ContinueHerePoint())
-
-			cmd.draw(canvas, startPos)
-
-			vec := drawingSize.Vector()
-
-			giu.Dummy(float32(vec.X), float32(vec.Y)).Build()
-
-			//if a.Sign != aminoacid.StopCodon {
-			//	cursorPos := giu.GetCursorScreenPos()
-			//	startPos := image.Pt(cursorPos.X, cursorPos.Y)
-			//	a := 10
-			//	lineLen := int(float32(a) * float32(math.Sqrt2))
-			//	d := Draw().
-			//		DrawLine(DownRight, lineLen).
-			//		DrawLine(Right, (vec.X/2)-2*a).
-			//		DrawLine(DownRight, lineLen).
-			//		DrawLine(UpRight, lineLen).
-			//		DrawLine(Right, (vec.X/2)-2*a).
-			//		DrawLine(UpRight, lineLen).
-
-			//Move(image.Pt(-vec.X/2+a/4, 2*a)).
-			//DrawLine(Down, 50).
-			//Move(image.Pt(-vec.X/2, 2*a)).
-
-			//DrawLine(UpRight, lineLen).
-			//DrawLine(Right, (vec.X/2)-2*a).
-			//DrawLine(UpRight, lineLen).
-			//DrawLine(DownRight, lineLen).
-			//DrawLine(Right, (vec.X/2)-2*a).
-			//DrawLine(DownRight, lineLen)
-			//dummy := d.PredictSize().Vector()
-			//d.draw(canvas, startPos)
-			//giu.Dummy(float32(dummy.X), float32(dummy.Y)).Build()
-			//}
+			result.Ignore(ignoreAll).
+				DrawLine(DownLeft, standardLine).
+				AddSubcommand(
+					Draw().DoubleLine(Left, standardLine).
+						ChemicalText("O", VAlignCenter, HAlignRight),
+				).Ignore(ignoreAll)
 		}
+
+		cursorPos := giu.GetCursorScreenPos()
+		startPos := image.Pt(cursorPos.X, cursorPos.Y)
+		drawingSize := result.PredictSize()
+		startPos = startPos.Sub(drawingSize.min)
+		result.draw(canvas, startPos)
+		vec := drawingSize.Vector()
+		giu.Dummy(float32(vec.X), float32(vec.Y)).Build()
 	}),
 	)
 }
