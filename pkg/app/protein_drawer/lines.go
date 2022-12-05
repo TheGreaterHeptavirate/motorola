@@ -10,7 +10,6 @@ package protein_drawer
 
 import (
 	"image"
-	"log"
 	"math"
 
 	"github.com/AllenDang/giu"
@@ -18,12 +17,30 @@ import (
 
 const doubleLineOffset = 3
 
+const maxAngle = 360
+
+// Angle represents an degree angle
+type Angle uint16
+
+// Normalized returns an angle between 0-360
+func (a Angle) Normalized() Angle {
+	b := maxAngle
+
+	return a % Angle(b)
+}
+
+// Radians returns radian value of degree angle
+func (a Angle) Radians() float64 {
+	return 2 * math.Pi * float64(a.Normalized()) / 360
+}
+
 // LineDirection represents a direction of a line to be drawn.
-type LineDirection byte
+// it wraps Angle and exposes the most common values: 0, 45, 90, 135 e.t.c.
+type LineDirection Angle
 
 // line directions:
 const (
-	Up LineDirection = iota
+	Up LineDirection = 45 * iota
 	UpRight
 	Right
 	DownRight
@@ -35,18 +52,12 @@ const (
 
 // DrawLine draws a line with a specified direction and length.
 func (d *DrawCommands) DrawLine(dir LineDirection, length int) *DrawCommands {
-	lineSize := calcLineVector(dir, length)
-
-	return d.add(func(c *giu.Canvas, startPos image.Point) {
-		endPos := startPos.Add(lineSize)
-
-		c.AddLine(startPos, endPos, d.currentColor, thickness)
-	}, FromLinear(lineSize))
+	return d.DrawLineAngle(Angle(dir), length)
 }
 
 // DoubleLine draws a double line.
 func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
-	lineSize := calcLineVector(dir, length)
+	lineSize := calcLineVector(Angle(dir), length)
 
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		var offset image.Point
@@ -72,29 +83,22 @@ func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
 	}, FromLinear(lineSize))
 }
 
-func calcLineVector(dir LineDirection, length int) image.Point {
-	a := int(float32(length) / math.Sqrt2)
+// DrawLineAngle draws a line from the given angle.
+//
+//	angle means the angle between the perpendicular line an expected vector.
+func (d *DrawCommands) DrawLineAngle(a Angle, length int) *DrawCommands {
+	lineSize := calcLineVector(a, length)
 
-	switch dir {
-	case Up:
-		return image.Pt(0, -length)
-	case UpRight:
-		return image.Pt(a, -a)
-	case Right:
-		return image.Pt(length, 0)
-	case DownRight:
-		return image.Pt(a, a)
-	case Down:
-		return image.Pt(0, length)
-	case DownLeft:
-		return image.Pt(-a, a)
-	case Left:
-		return image.Pt(-length, 0)
-	case UpLeft:
-		return image.Pt(-a, -a)
+	return d.add(func(c *giu.Canvas, startPos image.Point) {
+		endPos := startPos.Add(lineSize)
+
+		c.AddLine(startPos, endPos, d.currentColor, thickness)
+	}, FromLinear(lineSize))
+}
+
+func calcLineVector(dir Angle, length int) image.Point {
+	return image.Point{
+		X: int(float64(length) * math.Sin(dir.Radians())),
+		Y: -int(float64(length) * math.Cos(dir.Radians())),
 	}
-
-	log.Panicf("invalid directoin %v", dir)
-
-	return image.Point{}
 }
