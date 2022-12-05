@@ -10,7 +10,6 @@ package protein_drawer
 
 import (
 	"golang.org/x/image/colornames"
-	"image"
 )
 
 var (
@@ -40,7 +39,6 @@ func DrawingDatabase() map[string]*DrawCommands {
 		"F": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
-			Move(image.Pt(0, -20)).
 			AromaticRing(30),
 
 		// https://en.wikipedia.org/wiki/Leucine#/media/File:L-Leucine.svg

@@ -9,10 +9,8 @@
 package protein_drawer
 
 import (
-	"image"
-	"math"
-
 	"github.com/AllenDang/giu"
+	"image"
 )
 
 // Move moves the cursor by i
@@ -47,25 +45,17 @@ func (d *DrawCommands) Ignore(i Ignore) *DrawCommands {
 }
 
 // AromaticRing draws an aromatic ring scheme
-func (d *DrawCommands) AromaticRing(size int) *DrawCommands {
-	return d.add(func(c *giu.Canvas, startPos image.Point) {
-		// draw a hexagon using AddLine.
-		// size is width and height of the hexagon
-		// startPos is the top left corner of the square containing the hexagon
-		//  is drawn in the middle of the square
-		side := size / 2
-		start := startPos.Add(image.Pt(size/2, 0))
-		for alpha := 30; alpha <= 360; alpha += 60 {
-			end := start.Add(image.Pt(
-				int(math.Cos(float64(alpha)*math.Pi/180)*float64(side)),
-				int(math.Sin(float64(alpha)*math.Pi/180)*float64(side)),
-			))
+func (d *DrawCommands) AromaticRing(side int) *DrawCommands {
+	// draw a hexagon using AddLine.
+	// size is width and height of the hexagon
+	// startPos is the top left corner of the square containing the hexagon
+	//  is drawn in the middle of the square
+	result := Draw(d.currentColor)
+	for alpha := Angle(0); alpha <= 360; alpha += 60 {
+		result.DrawLineAngle(alpha, side)
+	}
 
-			c.AddLine(start, end, d.currentColor, thickness)
-
-			start = end
-		}
-	}, FromLinear(image.Pt(size, size)))
+	return d.AddSubcommand(result)
 }
 
 type Ignore byte
