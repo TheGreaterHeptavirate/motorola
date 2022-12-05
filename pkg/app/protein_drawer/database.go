@@ -37,7 +37,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			DrawLine(Up, standardLine).
-			Ignore(ignoreAll).
+			Ignore(IgnoreAll).
 			DrawLine(DownRight, standardLine),
 
 		"[STOP]": Draw().

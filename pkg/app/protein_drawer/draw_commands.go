@@ -26,19 +26,11 @@ import (
  * aromaticRing - draw a hexagon
  * add - add a drawCommand to the list of commands (drawCommands is a drawCommand as well ;-) )
  * move - move the cursor by given amount
- * ignore - ignores last offset (x/Y or both)
+ * Ignore - ignores last offset (x/Y or both)
  * chemicalText - draws a text with chemical format (e.g. 2H_2_O should be drawn correctly)
  */
 
 const thickness = 3
-
-type ignore byte
-
-const (
-	ignoreAll ignore = iota
-	ignoreX
-	ignoreY
-)
 
 // DrawCommands represents a list of draw commands
 type DrawCommands struct {

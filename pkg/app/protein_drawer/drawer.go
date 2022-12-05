@@ -24,7 +24,7 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 		for _, a := range p.AminoAcids {
 			result.DrawLine(Down, standardLine).ChemicalText("N", VAlignTop, HAlignCenter).AddSubcommand(
 				Draw().DrawLine(Left, standardLine).ChemicalText("H", VAlignCenter, HAlignRight),
-			).Ignore(ignoreAll).
+			).Ignore(IgnoreAll).
 				DrawLine(DownRight, standardLine)
 
 			cmd, exists := db[a.Sign]
@@ -34,12 +34,12 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 				result.AddSubcommand(cmd)
 			}
 
-			result.Ignore(ignoreAll).
+			result.Ignore(IgnoreAll).
 				DrawLine(DownLeft, standardLine).
 				AddSubcommand(
 					Draw().DoubleLine(Left, standardLine).
 						ChemicalText("O", VAlignCenter, HAlignRight),
-				).Ignore(ignoreAll)
+				).Ignore(IgnoreAll)
 		}
 
 		cursorPos := giu.GetCursorScreenPos()

@@ -24,19 +24,25 @@ func (d *DrawCommands) Move(i image.Point) *DrawCommands {
 	}, FromLinear(i))
 }
 
-// Ignore allows you to ignore cursor movement of the latest action
-func (d *DrawCommands) Ignore(i ignore) *DrawCommands {
+// Ignore allows you to Ignore cursor movement of the latest action
+func (d *DrawCommands) Ignore(i Ignore) *DrawCommands {
 	delta := image.Pt(0, 0)
 	lastSize := d.sizes[len(d.sizes)-1]
-	last := lastSize.Delta()
 
-	switch i {
-	case ignoreAll:
-		delta = image.Pt(0, 0).Sub(last)
-	case ignoreX:
-		delta = image.Pt(-last.X, 0)
-	case ignoreY:
-		delta = image.Pt(0, -last.Y)
+	if i&IgnoreXMax == IgnoreXMax {
+		delta.X -= lastSize.max.X
+	}
+
+	if i&IgnoreXMin == IgnoreXMin {
+		delta.X -= lastSize.min.X
+	}
+
+	if i&IgnoreYMax == IgnoreYMax {
+		delta.Y -= lastSize.max.Y
+	}
+
+	if i&IgnoreYMin == IgnoreYMin {
+		delta.Y -= lastSize.min.Y
 	}
 
 	return d.Move(delta)
@@ -61,3 +67,16 @@ func (d *DrawCommands) AromaticRing(size int) *DrawCommands {
 		}
 	}, FromLinear(image.Pt(size, size)))
 }
+
+type Ignore byte
+
+const (
+	IgnoreYMin Ignore = 1 << iota
+	IgnoreYMax
+	IgnoreXMin
+	IgnoreXMax
+
+	IgnoreY   = IgnoreYMin | IgnoreYMax
+	IgnoreX   = IgnoreXMin | IgnoreXMax
+	IgnoreAll = IgnoreX | IgnoreY
+)
