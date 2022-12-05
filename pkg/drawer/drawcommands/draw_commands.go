@@ -6,7 +6,7 @@
  * ONLY to personal, non-commercial use.
  */
 
-package protein_drawer
+package drawcommands
 
 import (
 	"image"
@@ -50,7 +50,7 @@ func Draw(col color.Color) *DrawCommands {
 		currentColor: col,
 	}
 
-	result.drawCommand = result.draw
+	result.drawCommand = result.Draw
 
 	return result
 }
@@ -82,7 +82,9 @@ func (d *DrawCommands) PredictSize() (result Size) {
 	return result
 }
 
-func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) {
+// Draw implements drawCommand inetface
+// it draws written drawCommands on given canvas starting on startPos.
+func (d *DrawCommands) Draw(c *giu.Canvas, startPos image.Point) {
 	size := image.Pt(0, 0)
 	currentPos := startPos
 
@@ -105,7 +107,7 @@ func (d *DrawCommands) draw(c *giu.Canvas, startPos image.Point) {
 
 // AddSubcommand adds another DrawingCommands into list
 func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
-	d.add(c.draw, c.PredictSize())
+	d.add(c.Draw, c.PredictSize())
 
 	return d
 }

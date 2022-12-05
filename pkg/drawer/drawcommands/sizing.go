@@ -6,7 +6,7 @@
  * ONLY to personal, non-commercial use.
  */
 
-package protein_drawer
+package drawcommands
 
 import "image"
 
@@ -43,4 +43,12 @@ func (s Size) Vector() image.Point {
 // Delta returns delta between max and min
 func (s Size) Delta() image.Point {
 	return s.max.Add(s.min)
+}
+
+func (s Size) Min() image.Point {
+	return s.min
+}
+
+func (s Size) Max() image.Point {
+	return s.max
 }

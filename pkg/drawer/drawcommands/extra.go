@@ -6,7 +6,7 @@
  * ONLY to personal, non-commercial use.
  */
 
-package protein_drawer
+package drawcommands
 
 import (
 	"github.com/AllenDang/giu"
