@@ -45,14 +45,14 @@ func (d *DrawCommands) Ignore(i Ignore) *DrawCommands {
 }
 
 // AromaticRing draws an aromatic ring scheme
-func (d *DrawCommands) AromaticRing(side int) *DrawCommands {
+func (d *DrawCommands) AromaticRing(side int, rotation Angle) *DrawCommands {
 	// draw a hexagon using AddLine.
 	// size is width and height of the hexagon
 	// startPos is the top left corner of the square containing the hexagon
 	//  is drawn in the middle of the square
 	result := Draw(d.currentColor)
 	for alpha := Angle(0); alpha <= 360; alpha += 60 {
-		result.DrawLineAngle(alpha, side)
+		result.DrawLineAngle(rotation+alpha, side)
 	}
 
 	return d.AddSubcommand(result)

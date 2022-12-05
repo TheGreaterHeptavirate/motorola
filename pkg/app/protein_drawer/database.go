@@ -39,7 +39,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 		"F": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
-			AromaticRing(30),
+			AromaticRing(standardLine, 0),
 
 		// https://en.wikipedia.org/wiki/Leucine#/media/File:L-Leucine.svg
 		"L": Draw(ComponentsColor).
@@ -63,16 +63,19 @@ func DrawingDatabase() map[string]*DrawCommands {
 
 		// https://en.wikipedia.org/wiki/Tryptophan#/media/File:L-Tryptophan_-_L-Tryptophan.svg
 		// TODO:
-		//"W": Draw().
-		//	DrawLine(Right, standardLine).
-		//	DrawLine(DownRight, standardLine).
-		//	DrawLine(UpRight, standardLine).
-		//	DoubleLine(Down, standardLine).
-		//	DrawLine(DownRight, standardLine).
-		//	ChemicalText("NH", VAlignCenter, HAlignLeft).
-		//	DrawLine(Up, standardLine).
-		//	Move(image.Pt(0, -20)).
-		//	AromaticRing(30),
+		"W": Draw(ComponentsColor).
+			DrawLine(Right, standardLine).
+			DrawLine(DownRight, standardLine).
+			DrawLine(UpRight, standardLine).
+			DoubleLine(Down, standardLine).
+			DrawLineAngle(180-360/5, standardLine).
+			ChemicalText("NH", VAlignTop, HAlignCenter).
+			Ignore(IgnoreAll).
+			DrawLineAngle(180-2*360/5, standardLine).
+			AromaticRing(standardLine, 180-3*360/5).
+			Ignore(IgnoreAll).
+			Move(CalcLineVector(180-3*360/5, standardLine)).
+			DrawLineAngle(180-4*360/5, standardLine),
 
 		"[STOP]": Draw(ComponentsColor).
 			ChemicalText("STOP", VAlignCenter, HAlignLeft),

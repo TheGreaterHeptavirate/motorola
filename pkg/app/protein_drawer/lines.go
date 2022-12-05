@@ -20,13 +20,18 @@ const doubleLineOffset = 3
 const maxAngle = 360
 
 // Angle represents an degree angle
-type Angle uint16
+type Angle int16
 
 // Normalized returns an angle between 0-360
 func (a Angle) Normalized() Angle {
 	b := maxAngle
 
-	return a % Angle(b)
+	n := a % Angle(b)
+	if n < 0 {
+		n += maxAngle
+	}
+
+	return n
 }
 
 // Radians returns radian value of degree angle
@@ -57,7 +62,7 @@ func (d *DrawCommands) DrawLine(dir LineDirection, length int) *DrawCommands {
 
 // DoubleLine draws a double line.
 func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
-	lineSize := calcLineVector(Angle(dir), length)
+	lineSize := CalcLineVector(Angle(dir), length)
 
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		var offset image.Point
@@ -87,7 +92,7 @@ func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
 //
 //	angle means the angle between the perpendicular line an expected vector.
 func (d *DrawCommands) DrawLineAngle(a Angle, length int) *DrawCommands {
-	lineSize := calcLineVector(a, length)
+	lineSize := CalcLineVector(a, length)
 
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		endPos := startPos.Add(lineSize)
@@ -96,7 +101,7 @@ func (d *DrawCommands) DrawLineAngle(a Angle, length int) *DrawCommands {
 	}, FromLinear(lineSize))
 }
 
-func calcLineVector(dir Angle, length int) image.Point {
+func CalcLineVector(dir Angle, length int) image.Point {
 	return image.Point{
 		X: int(float64(length) * math.Sin(dir.Radians())),
 		Y: -int(float64(length) * math.Cos(dir.Radians())),
