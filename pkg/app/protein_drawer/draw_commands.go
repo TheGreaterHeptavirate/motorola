@@ -38,8 +38,6 @@ type DrawCommands struct {
 
 	sizes []Size
 
-	continueHere image.Point
-
 	drawCommand
 }
 
@@ -115,16 +113,4 @@ func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 	d.sizes = append(d.sizes, s)
 
 	return d
-}
-
-func (d *DrawCommands) ContinueHere() *DrawCommands {
-	for _, s := range d.sizes {
-		d.continueHere = d.continueHere.Add(s.Delta())
-	}
-
-	return d
-}
-
-func (d *DrawCommands) ContinueHerePoint() image.Point {
-	return d.continueHere
 }
