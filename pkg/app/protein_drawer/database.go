@@ -14,6 +14,11 @@ import (
 
 const standardLine = 30
 
+// DrawingDatabase returns a database of protein's drawings
+//
+// NOTE: DO NOT call this method before GIU initialization - it will crash your app!
+//
+//	reason: ChemicalText calls giu.CalcTextSize
 func DrawingDatabase() map[string]*DrawCommands {
 	drawingDatabase := map[string]*DrawCommands{
 		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
@@ -39,6 +44,31 @@ func DrawingDatabase() map[string]*DrawCommands {
 			DrawLine(Up, standardLine).
 			Ignore(IgnoreAll).
 			DrawLine(DownRight, standardLine),
+
+		// https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/L-Serin_-_L-Serine.svg/1280px-L-Serin_-_L-Serine.svg.png
+		"S": Draw().
+			DrawLine(Right, standardLine).
+			DrawLine(UpRight, standardLine).
+			ChemicalText("HO", VAlignCenter, HAlignLeft),
+
+		// https://en.wikipedia.org//wiki/Cysteine#/media/File:L-Cystein_-_L-Cysteine.svg
+		"C": Draw().
+			DrawLine(Right, standardLine).
+			DrawLine(UpRight, standardLine).
+			ChemicalText("HS", VAlignCenter, HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Tryptophan#/media/File:L-Tryptophan_-_L-Tryptophan.svg
+		// TODO:
+		//"W": Draw().
+		//	DrawLine(Right, standardLine).
+		//	DrawLine(DownRight, standardLine).
+		//	DrawLine(UpRight, standardLine).
+		//	DoubleLine(Down, standardLine).
+		//	DrawLine(DownRight, standardLine).
+		//	ChemicalText("NH", VAlignCenter, HAlignLeft).
+		//	DrawLine(Up, standardLine).
+		//	Move(image.Pt(0, -20)).
+		//	AromaticRing(30),
 
 		"[STOP]": Draw().
 			ChemicalText("STOP", VAlignCenter, HAlignLeft),
