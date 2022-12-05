@@ -9,7 +9,6 @@
 package protein_drawer
 
 import (
-	"golang.org/x/image/colornames"
 	"image"
 	"image/color"
 
@@ -44,11 +43,11 @@ type DrawCommands struct {
 }
 
 // Draw creates an instance of DrawCommands
-func Draw() *DrawCommands {
+func Draw(col color.Color) *DrawCommands {
 	result := &DrawCommands{
 		cmds:         make([]drawCommand, 0),
 		sizes:        make([]Size, 0),
-		currentColor: colornames.Red,
+		currentColor: col,
 	}
 
 	result.drawCommand = result.draw

@@ -9,7 +9,13 @@
 package protein_drawer
 
 import (
+	"golang.org/x/image/colornames"
 	"image"
+)
+
+var (
+	ComponentsColor = colornames.Blue
+	BondColor       = colornames.Blueviolet
 )
 
 const standardLine = 30
@@ -22,7 +28,7 @@ const standardLine = 30
 func DrawingDatabase() map[string]*DrawCommands {
 	drawingDatabase := map[string]*DrawCommands{
 		// https://pl.wikipedia.org/wiki/Metionina#/media/Plik:L-Methionin_-_L-Methionine.svg
-		"[START]": Draw().
+		"[START]": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			DrawLine(DownRight, standardLine).
@@ -31,14 +37,14 @@ func DrawingDatabase() map[string]*DrawCommands {
 			ChemicalText("C_3_H", VAlignCenter, HAlignLeft),
 
 		// https://en.wikipedia.org/wiki/Phenylalanine#/media/File:L-Phenylalanin_-_L-Phenylalanine.svg
-		"F": Draw().
+		"F": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			Move(image.Pt(0, -20)).
 			AromaticRing(30),
 
 		// https://en.wikipedia.org/wiki/Leucine#/media/File:L-Leucine.svg
-		"L": Draw().
+		"L": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			DrawLine(Up, standardLine).
@@ -46,13 +52,13 @@ func DrawingDatabase() map[string]*DrawCommands {
 			DrawLine(DownRight, standardLine),
 
 		// https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/L-Serin_-_L-Serine.svg/1280px-L-Serin_-_L-Serine.svg.png
-		"S": Draw().
+		"S": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			ChemicalText("HO", VAlignCenter, HAlignLeft),
 
 		// https://en.wikipedia.org//wiki/Cysteine#/media/File:L-Cystein_-_L-Cysteine.svg
-		"C": Draw().
+		"C": Draw(ComponentsColor).
 			DrawLine(Right, standardLine).
 			DrawLine(UpRight, standardLine).
 			ChemicalText("HS", VAlignCenter, HAlignLeft),
@@ -70,7 +76,7 @@ func DrawingDatabase() map[string]*DrawCommands {
 		//	Move(image.Pt(0, -20)).
 		//	AromaticRing(30),
 
-		"[STOP]": Draw().
+		"[STOP]": Draw(ComponentsColor).
 			ChemicalText("STOP", VAlignCenter, HAlignLeft),
 	}
 
