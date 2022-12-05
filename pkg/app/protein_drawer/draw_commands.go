@@ -114,3 +114,8 @@ func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 
 	return d
 }
+
+// Last returns size of last element
+func (d *DrawCommands) Last() Size {
+	return d.sizes[len(d.sizes)-1]
+}
