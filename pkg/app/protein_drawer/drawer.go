@@ -22,8 +22,10 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 		result := Draw().ChemicalText("H", VAlignTop, HAlignCenter)
 
 		for _, a := range p.AminoAcids {
-			result.DrawLine(Down, standardLine).ChemicalText("N", VAlignTop, HAlignCenter).AddSubcommand(
-				Draw().DrawLine(Left, standardLine).ChemicalText("H", VAlignCenter, HAlignRight),
+			result.DrawLine(Down, standardLine).ChemicalText("N", VAlignTop, HAlignCenter)
+			l := result.Last()
+			result.AddSubcommand(
+				Draw().Move(image.Pt(l.min.X, -l.max.Y/2)).DrawLine(Left, standardLine).ChemicalText("H", VAlignCenter, HAlignRight),
 			).Ignore(IgnoreAll).
 				DrawLine(DownRight, standardLine)
 
