@@ -12,8 +12,6 @@ import (
 	"image"
 	"math"
 
-	"golang.org/x/image/colornames"
-
 	"github.com/AllenDang/giu"
 )
 
@@ -62,7 +60,9 @@ func (d *DrawCommands) AromaticRing(size int) *DrawCommands {
 				int(math.Cos(float64(alpha)*math.Pi/180)*float64(side)),
 				int(math.Sin(float64(alpha)*math.Pi/180)*float64(side)),
 			))
-			c.AddLine(start, end, colornames.Red, thickness)
+
+			c.AddLine(start, end, d.currentColor, thickness)
+
 			start = end
 		}
 	}, FromLinear(image.Pt(size, size)))

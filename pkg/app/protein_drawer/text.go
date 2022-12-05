@@ -14,7 +14,6 @@ import (
 
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
-	"golang.org/x/image/colornames"
 )
 
 const subscriptFontSize = 10
@@ -129,7 +128,7 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 				p = p.Add(image.Pt(0, int(h/2)))
 			}
 
-			c.AddText(p, colornames.Red, string(r))
+			c.AddText(p, d.currentColor, string(r))
 			size = size.Add(image.Pt(int(w), 0))
 
 			if isSubscript {

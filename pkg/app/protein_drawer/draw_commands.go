@@ -9,7 +9,9 @@
 package protein_drawer
 
 import (
+	"golang.org/x/image/colornames"
 	"image"
+	"image/color"
 
 	"github.com/AllenDang/giu"
 )
@@ -34,9 +36,9 @@ const thickness = 3
 
 // DrawCommands represents a list of draw commands
 type DrawCommands struct {
-	cmds []drawCommand
-
-	sizes []Size
+	cmds         []drawCommand
+	sizes        []Size
+	currentColor color.Color
 
 	drawCommand
 }
@@ -44,8 +46,9 @@ type DrawCommands struct {
 // Draw creates an instance of DrawCommands
 func Draw() *DrawCommands {
 	result := &DrawCommands{
-		cmds:  make([]drawCommand, 0),
-		sizes: make([]Size, 0),
+		cmds:         make([]drawCommand, 0),
+		sizes:        make([]Size, 0),
+		currentColor: colornames.Red,
 	}
 
 	result.drawCommand = result.draw
@@ -118,4 +121,10 @@ func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 // Last returns size of last element
 func (d *DrawCommands) Last() Size {
 	return d.sizes[len(d.sizes)-1]
+}
+
+// SetColor set color of drawing
+func (d *DrawCommands) SetColor(c color.Color) *DrawCommands {
+	d.currentColor = c
+	return d
 }

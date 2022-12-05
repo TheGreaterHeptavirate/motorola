@@ -13,8 +13,6 @@ import (
 	"log"
 	"math"
 
-	"golang.org/x/image/colornames"
-
 	"github.com/AllenDang/giu"
 )
 
@@ -42,7 +40,7 @@ func (d *DrawCommands) DrawLine(dir LineDirection, length int) *DrawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		endPos := startPos.Add(lineSize)
 
-		c.AddLine(startPos, endPos, colornames.Red, thickness)
+		c.AddLine(startPos, endPos, d.currentColor, thickness)
 	}, FromLinear(lineSize))
 }
 
@@ -69,8 +67,8 @@ func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
 
 		endPos := startPos.Add(lineSize)
 
-		c.AddLine(startPos.Add(offset), endPos.Add(offset), colornames.Red, thickness)
-		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), colornames.Red, thickness)
+		c.AddLine(startPos.Add(offset), endPos.Add(offset), d.currentColor, thickness)
+		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), d.currentColor, thickness)
 	}, FromLinear(lineSize))
 }
 
