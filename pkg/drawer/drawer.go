@@ -9,6 +9,7 @@
 package drawer
 
 import (
+	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/db"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/drawcommands"
 	"image"
 
@@ -21,24 +22,24 @@ import (
 // of given protein.
 func DrawProtein(p *protein.Protein) giu.Widget {
 	return giu.Child().Layout(giu.Custom(func() {
-		db := DrawingDatabase()
+		database := db.DrawingDatabase()
 		canvas := giu.GetCanvas()
-		result := drawcommands.Draw(BondColor).
+		result := drawcommands.Draw(db.BondColor).
 			ChemicalText("H", drawcommands.VAlignTop, drawcommands.HAlignCenter)
 
 		for _, a := range p.AminoAcids {
-			result.DrawLine(drawcommands.Down, standardLine).ChemicalText("N", drawcommands.VAlignTop, drawcommands.HAlignCenter)
+			result.DrawLine(drawcommands.Down, db.StandardLine).ChemicalText("N", drawcommands.VAlignTop, drawcommands.HAlignCenter)
 			l := result.Last()
 			result.AddSubcommand(
-				drawcommands.Draw(BondColor).
+				drawcommands.Draw(db.BondColor).
 					Move(image.Pt(l.Min().X, -l.Max().Y/2)).
-					DrawLine(drawcommands.Left, standardLine).
+					DrawLine(drawcommands.Left, db.StandardLine).
 					ChemicalText("H", drawcommands.VAlignCenter, drawcommands.HAlignRight),
 			).Ignore(drawcommands.IgnoreAll).
-				DrawLine(drawcommands.DownRight, standardLine).
-				SetColor(ComponentsColor)
+				DrawLine(drawcommands.DownRight, db.StandardLine).
+				SetColor(db.ComponentsColor)
 
-			cmd, exists := db[a.Sign]
+			cmd, exists := database[a.Sign]
 			if !exists {
 				result.ChemicalText("Not found!", drawcommands.VAlignCenter, drawcommands.HAlignLeft)
 			} else {
@@ -46,11 +47,11 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 			}
 
 			result.
-				SetColor(BondColor).
+				SetColor(db.BondColor).
 				Ignore(drawcommands.IgnoreAll).
-				DrawLine(drawcommands.DownLeft, standardLine).
+				DrawLine(drawcommands.DownLeft, db.StandardLine).
 				AddSubcommand(
-					drawcommands.Draw(BondColor).DoubleLine(drawcommands.Left, standardLine).
+					drawcommands.Draw(db.BondColor).DoubleLine(drawcommands.Left, db.StandardLine).
 						ChemicalText("O", drawcommands.VAlignCenter, drawcommands.HAlignRight),
 				).Ignore(drawcommands.IgnoreAll)
 		}
