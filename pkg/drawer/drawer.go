@@ -6,16 +6,18 @@
  * ONLY to personal, non-commercial use.
  */
 
+// Package drawer provides an api for drawing
+// proteins.
 package drawer
 
 import (
-	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/db"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/drawcommands"
 	"image"
 
 	"github.com/AllenDang/giu"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/db"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/drawcommands"
 )
 
 // DrawProtein returns a giu.ChildWidget with a chemical structural drawing
