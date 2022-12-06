@@ -70,15 +70,18 @@ func (d *DrawCommands) DoubleLine(dir LineDirection, length int) *DrawCommands {
 // DoubleLineAngle draws a double line in the given angle.
 func (d *DrawCommands) DoubleLineAngle(dir Angle, length int) *DrawCommands {
 	lineSize := CalcLineVector(dir, length)
+	offset := CalcLineVector(dir-90, doubleLineOffset)
+
+	size := FromLinear(lineSize)
+	size.min = size.min.Sub(offset)
+	size.max = size.max.Add(offset)
 
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
-		offset := CalcLineVector(dir-90, doubleLineOffset)
-
 		endPos := startPos.Add(lineSize)
 
 		c.AddLine(startPos.Add(offset), endPos.Add(offset), d.currentColor, thickness)
 		c.AddLine(startPos.Sub(offset), endPos.Sub(offset), d.currentColor, thickness)
-	}, FromLinear(lineSize))
+	}, size)
 }
 
 // DrawLineAngle draws a line from the given angle.
