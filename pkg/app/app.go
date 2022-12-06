@@ -27,6 +27,7 @@ const (
 	appResolutionX, appResolutionY = 800, 600
 )
 
+// App represents a GUI application.
 type App struct {
 	inputString   string
 	foundProteins []*protein.Protein
@@ -35,6 +36,7 @@ type App struct {
 	logLevel logger.LogLevel
 }
 
+// New creates a new App instance.
 func New() *App {
 	return &App{
 		inputString: "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
@@ -53,6 +55,8 @@ func (a *App) Verbose() {
 	a.logLevel = logger.LogLevelDebug
 }
 
+// Run starts main loop.
+// It holds goroutine until app running.
 func (a *App) Run() error {
 	logger.Info("Welcome to Motorola project!")
 
@@ -61,10 +65,12 @@ func (a *App) Run() error {
 
 	// create master window
 	logger.Debug("Creating master window...")
+
 	a.window = giu.NewMasterWindow(appTitle, appResolutionX, appResolutionY, 0)
 
 	// add stylesheet
 	logger.Debug("Adding main stylesheet...")
+
 	if err := giu.ParseCSSStyleSheet(assets.AppCSS); err != nil {
 		return fmt.Errorf("error parsing CSS stylesheet: %w", err)
 	}

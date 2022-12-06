@@ -11,16 +11,18 @@ package app
 import (
 	"errors"
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
 	"os"
+	"path/filepath"
 
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
+
 	"github.com/sqweek/dialog"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
 )
 
 func (a *App) render() {
@@ -41,15 +43,18 @@ func (a *App) menuBar() *giu.MenuBarWidget {
 }
 
 func (a *App) inputBar() giu.Layout {
-	var availableW float32
-	var spacingW float32
+	var (
+		availableW float32
+		spacingW   float32
+	)
+
 	return giu.Layout{
 		giu.TreeNode("Input textbox").Layout(
 			giu.Custom(func() {
 				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
 					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
 				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
-					return WrapInputtextMultiline(widget, c)
+					return WrapInputTextMultiline(widget, c)
 				}).Build()
 			}),
 			giu.Custom(func() {
@@ -59,7 +64,7 @@ func (a *App) inputBar() giu.Layout {
 					giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
 						logger.Info("Loading file to input textbox...")
 
-						filepath, err := dialog.File().Load()
+						path, err := dialog.File().Load()
 						if err != nil {
 							// this error COULD come from fact that user exited dialog
 							// in this case, don't report app's error, just return
@@ -74,9 +79,9 @@ func (a *App) inputBar() giu.Layout {
 							return
 						}
 
-						logger.Debugf("Path to file to load: %s", filepath)
+						logger.Debugf("Path to file to load: %s", path)
 
-						data, err := os.ReadFile(filepath)
+						data, err := os.ReadFile(filepath.Clean(path))
 						if err != nil {
 							a.ReportError(err)
 
@@ -143,7 +148,7 @@ func (a *App) proteinsPresentation() giu.Layout {
 	}
 }
 
-func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
+func (a *App) presentProtein(inputProtein *protein.Protein) giu.Layout {
 	return giu.Layout{
 		giu.TreeNode("Zapis aminokwasowy").Layout(
 			giu.Custom(func() {
@@ -151,7 +156,7 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 				availableW, _ := giu.GetAvailableRegion()
 				baseW := availableW
 				itemSpacingW, _ := giu.GetItemSpacing()
-				for _, v := range protein.AminoAcids {
+				for _, v := range inputProtein.AminoAcids {
 					textW, _ := giu.CalcTextSize(v.Sign)
 					availableW -= textW + itemSpacingW
 					if availableW > 0 {
@@ -166,8 +171,8 @@ func (a *App) presentProtein(protein *protein.Protein) giu.Layout {
 			}),
 		),
 		giu.TreeNode("Statystyki").Layout(
-			giu.Labelf("Masa: %v", protein.Mass()),
+			giu.Labelf("Masa: %v", inputProtein.Mass()),
 		),
-		drawer.DrawProtein(protein),
+		drawer.DrawProtein(inputProtein),
 	}
 }

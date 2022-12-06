@@ -16,7 +16,7 @@ import (
 )
 
 // ReportError prints an error to the log and shows a message box in App.
-// this ReportError method could be used ONLY inside of giu's main loop!
+// this ReportError method could be used ONLY inside of git's main loop!
 func (a *App) ReportError(err error) {
 	text := "Unknown exception occurred!"
 	if err != nil {
@@ -30,7 +30,9 @@ func (a *App) ReportError(err error) {
 // WrapInputTextMultiline is a callback to wrap an input text multiline.
 // The following code comes from https://github.com/AllenDang/giu/issues/434
 // It is excluded from our license because it is not our code. ;-).
-func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.InputTextCallbackData) int32 {
+//
+//nolint:gocognit // no need to check for complexity here.
+func WrapInputTextMultiline(widget *giu.InputTextMultilineWidget, data imgui.InputTextCallbackData) int32 {
 	switch data.EventFlag() {
 	case imgui.InputTextFlagsCallbackCharFilter:
 		c := data.EventChar()
@@ -42,9 +44,11 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 		// 0. turn every pivot byte sequence into \r\n
 		buff := data.Buffer()
 		buff2 := []byte(strings.ReplaceAll(string(buff), "\u07FF", "\r\n"))
+
 		for i := range buff {
 			buff[i] = buff2[i]
 		}
+
 		data.MarkBufferModified()
 
 		// 1. zap all newlines that are not preceded by a CR (which was manually entered like above)
@@ -52,6 +56,7 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 		for i, c := range buff {
 			if c == 10 && !cr {
 				buff[i] = 32
+
 				data.MarkBufferModified()
 			} else {
 				if c == 13 {
@@ -65,28 +70,34 @@ func WrapInputtextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 		nl := 0
 		spc := 0
 		w := giu.GetWidgetWidth(widget)
+
 		for i, c := range buff {
 			if c == 10 {
 				nl = i
 			}
+
 			if c == 32 {
 				spc = i
 			}
+
 			if TextWidth(string(buff[nl:i])) > w {
 				if spc > 0 {
 					buff[spc] = 10
 				} else {
 					data.InsertBytes(len(buff)-1, []byte{10})
 				}
+
 				data.MarkBufferModified()
 			}
 		}
 	}
+
 	return 0
 }
 
 // TextWidth returns the width of the given text.
 func TextWidth(s string) float32 {
 	w, _ := giu.CalcTextSize(s)
+
 	return w
 }
