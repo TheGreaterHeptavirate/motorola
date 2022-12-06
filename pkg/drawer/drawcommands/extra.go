@@ -56,7 +56,11 @@ func (d *DrawCommands) AromaticRing(side int, rotation Angle) *DrawCommands {
 		result.DrawLineAngle(rotation+alpha, side)
 	}
 
-	return d.AddSubcommand(result)
+	const circleSegments = 20
+
+	return d.add(func(c *giu.Canvas, s image.Point) {
+		c.AddCircle(s.Add(CalcLineVector(rotation+60, side)), float32(side)*0.65, d.currentColor, circleSegments, thickness)
+	}, Size{}).AddSubcommand(result)
 }
 
 // Ignore is a bitmask for ignoring cursor movement.
