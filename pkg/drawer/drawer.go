@@ -11,6 +11,7 @@
 package drawer
 
 import (
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	"image"
 
 	"github.com/AllenDang/giu"
@@ -30,6 +31,10 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 			ChemicalText("H", drawcommands.VAlignTop, drawcommands.HAlignCenter)
 
 		for _, a := range p.AminoAcids {
+			if a.Sign == aminoacid.StopCodon {
+				continue
+			}
+
 			result.DrawLine(drawcommands.Down, db.StandardLine).ChemicalText("N", drawcommands.VAlignTop, drawcommands.HAlignCenter)
 			l := result.Last()
 			result.AddSubcommand(
@@ -57,6 +62,9 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 						ChemicalText("O", drawcommands.VAlignCenter, drawcommands.HAlignRight),
 				).Ignore(drawcommands.IgnoreAll)
 		}
+
+		result.DrawLine(drawcommands.Down, db.StandardLine).
+			ChemicalText("H", drawcommands.VAlignTop, drawcommands.HAlignCenter)
 
 		cursorPos := giu.GetCursorScreenPos()
 		startPos := image.Pt(cursorPos.X, cursorPos.Y)
