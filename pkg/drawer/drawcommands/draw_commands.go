@@ -33,7 +33,7 @@ import (
 
 const thickness = 3
 
-// DrawCommands represents a list of draw commands
+// DrawCommands represents a list of draw commands.
 type DrawCommands struct {
 	cmds         []drawCommand
 	sizes        []Size
@@ -42,7 +42,7 @@ type DrawCommands struct {
 	drawCommand
 }
 
-// Draw creates an instance of DrawCommands
+// Draw creates an instance of DrawCommands.
 func Draw(col color.Color) *DrawCommands {
 	result := &DrawCommands{
 		cmds:         make([]drawCommand, 0),
@@ -55,7 +55,7 @@ func Draw(col color.Color) *DrawCommands {
 	return result
 }
 
-// PredictSize returns expected size of drawing
+// PredictSize returns expected size of drawing.
 func (d *DrawCommands) PredictSize() (result Size) {
 	current := image.Pt(0, 0)
 
@@ -105,7 +105,7 @@ func (d *DrawCommands) Draw(c *giu.Canvas, startPos image.Point) {
 	}
 }
 
-// AddSubcommand adds another DrawingCommands into list
+// AddSubcommand adds another DrawingCommands into list.
 func (d *DrawCommands) AddSubcommand(c *DrawCommands) *DrawCommands {
 	d.add(c.Draw, c.PredictSize())
 
@@ -119,13 +119,14 @@ func (d *DrawCommands) add(cmd drawCommand, s Size) *DrawCommands {
 	return d
 }
 
-// Last returns size of last element
+// Last returns size of last element.
 func (d *DrawCommands) Last() Size {
 	return d.sizes[len(d.sizes)-1]
 }
 
-// SetColor set color of drawing
+// SetColor set color of drawing.
 func (d *DrawCommands) SetColor(c color.Color) *DrawCommands {
 	d.currentColor = c
+
 	return d
 }

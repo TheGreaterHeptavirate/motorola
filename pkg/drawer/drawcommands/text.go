@@ -22,7 +22,7 @@ const subscriptFontSize = 10
 type VAlignment byte
 
 const (
-	// VAlignTop algins to tpo.
+	// VAlignTop aligns to tpo.
 	VAlignTop VAlignment = iota
 	// VAlignCenter centers alignment (does not return Y size!
 	VAlignCenter
@@ -41,15 +41,15 @@ const (
 )
 
 // ChemicalText draws a text but formats it as follows:
-// - string between `_`  characters is subscripted
-// it uses giu.SetFontSize to chenge font size
+// - string between `_`  characters is subscript
+// it uses giu.SetFontSize to change font size
 //
 // conditions about returned size:
 // - if VAlignCenter - size.Y = 0
 // - if HAlignCenter - size.X = 0.
 //
 //nolint:gocyclo // will fix later
-func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment HAlignment) *DrawCommands {
+func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, hAlignment HAlignment) *DrawCommands {
 	ts := imgui.CalcTextSize(strings.ReplaceAll(t, "_", ""), true, 0)
 	textSize := image.Pt(int(ts.X), int(ts.Y))
 	outSize := Size{}
@@ -58,15 +58,13 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 	case VAlignTop:
 		outSize.max.Y = textSize.Y
 	case VAlignCenter:
-		//nolint:gomnd // half of height to minimal and half to maximal size
 		outSize.min.Y = -textSize.Y / 2
-		//nolint:gomnd // half of height to minimal and half to maximal size
 		outSize.max.Y = textSize.Y / 2
 	case VAlignBottom:
 		outSize.min.Y = -textSize.Y
 	}
 
-	switch halignment {
+	switch hAlignment {
 	case HAlignLeft:
 		outSize.max.X = textSize.X
 	case HAlignCenter:
@@ -90,7 +88,7 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 			posDelta.Y -= textSize.Y
 		}
 
-		switch halignment {
+		switch hAlignment {
 		case HAlignLeft:
 			// noop
 		case HAlignCenter:
@@ -124,7 +122,6 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, halignment 
 			w, h := s.X, s.Y
 
 			if isSubscript {
-				//nolint:gomnd // move cursor half of line down when drawing subscript
 				p = p.Add(image.Pt(0, int(h/2)))
 			}
 

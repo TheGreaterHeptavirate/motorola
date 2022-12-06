@@ -9,18 +9,19 @@
 package drawcommands
 
 import (
-	"github.com/AllenDang/giu"
 	"image"
+
+	"github.com/AllenDang/giu"
 )
 
-// Move moves the cursor by i
+// Move moves the cursor by i.
 func (d *DrawCommands) Move(i image.Point) *DrawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		// noop
 	}, FromLinear(i))
 }
 
-// Ignore allows you to Ignore cursor movement of the latest action
+// Ignore allows you to Ignore cursor movement of the latest action.
 func (d *DrawCommands) Ignore(i Ignore) *DrawCommands {
 	delta := image.Pt(0, 0)
 	lastSize := d.sizes[len(d.sizes)-1]
@@ -44,7 +45,7 @@ func (d *DrawCommands) Ignore(i Ignore) *DrawCommands {
 	return d.Move(delta)
 }
 
-// AromaticRing draws an aromatic ring scheme
+// AromaticRing draws an aromatic ring scheme.
 func (d *DrawCommands) AromaticRing(side int, rotation Angle) *DrawCommands {
 	// draw a hexagon using AddLine.
 	// size is width and height of the hexagon
@@ -58,8 +59,12 @@ func (d *DrawCommands) AromaticRing(side int, rotation Angle) *DrawCommands {
 	return d.AddSubcommand(result)
 }
 
+// Ignore is a bitmask for ignoring cursor movement.
+//
+// see (*DrawCommands).Ignore.
 type Ignore byte
 
+// Ignore flags.
 const (
 	IgnoreYMin Ignore = 1 << iota
 	IgnoreYMax

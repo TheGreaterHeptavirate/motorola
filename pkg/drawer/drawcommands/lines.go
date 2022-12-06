@@ -19,10 +19,12 @@ const doubleLineOffset = 3
 
 const maxAngle = 360
 
-// Angle represents an degree angle
+// Angle represents an degree angle.
 type Angle int16
 
-// Normalized returns an angle between 0-360
+// Normalized returns an angle between 0-360.
+// There is no "programming" reasons for using this,
+// but it makes debugging easier (it is more human-readable to see angle 120, than 840).
 func (a Angle) Normalized() Angle {
 	b := maxAngle
 
@@ -34,7 +36,7 @@ func (a Angle) Normalized() Angle {
 	return n
 }
 
-// Radians returns radian value of degree angle
+// Radians returns radian value of degree angle.
 func (a Angle) Radians() float64 {
 	return 2 * math.Pi * float64(a.Normalized()) / 360
 }
@@ -43,7 +45,7 @@ func (a Angle) Radians() float64 {
 // it wraps Angle and exposes the most common values: 0, 45, 90, 135 e.t.c.
 type LineDirection Angle
 
-// line directions:
+// line directions.
 const (
 	Up LineDirection = 45 * iota
 	UpRight
@@ -101,6 +103,8 @@ func (d *DrawCommands) DrawLineAngle(a Angle, length int) *DrawCommands {
 	}, FromLinear(lineSize))
 }
 
+// CalcLineVector returns a Vector (image.Point) of a line with
+// a given angle and length.
 func CalcLineVector(dir Angle, length int) image.Point {
 	return image.Point{
 		X: int(float64(length) * math.Sin(dir.Radians())),
