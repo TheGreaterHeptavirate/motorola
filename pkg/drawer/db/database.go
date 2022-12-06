@@ -81,12 +81,27 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			Move(drawcommands.CalcLineVector(180-3*360/5, StandardLine)).
 			DrawLineAngle(180-4*360/5, StandardLine),
 
-		//https://en.wikipedia.org/wiki/Proline#/media/File:Prolin_-_Proline.svg
+		// https://en.wikipedia.org/wiki/Proline#/media/File:Prolin_-_Proline.svg
 		"P": drawcommands.Draw(ComponentsColor).
 			DrawLineAngle(180-45-65, StandardLine).
 			DrawLineAngle(180-45-2*65, StandardLine).
 			DrawLineAngle(180-45-3*65, StandardLine).
 			DrawLineAngle(180-45-4*65, StandardLine),
+
+		// https://en.wikipedia.org/wiki/Histidine#/media/File:L-Histidine_physiological.svg
+		// TODO: check if we really can do it thi sway
+		"H": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			DoubleLineAngle(180-20, StandardLine).
+			ChemicalText("HN", drawcommands.VAlignTop, drawcommands.HAlignRight).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLineAngle(180-20-72, StandardLine).
+			DrawLineAngle(180-20-2*72, StandardLine).
+			ChemicalText("N", drawcommands.VAlignCenter, drawcommands.HAlignLeft).
+			Ignore(drawcommands.IgnoreAll).
+			DoubleLineAngle(180-20-3*72, StandardLine).
+			DrawLineAngle(180-20-4*72, StandardLine),
 
 		"[STOP]": drawcommands.Draw(ComponentsColor).
 			ChemicalText("STOP", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
