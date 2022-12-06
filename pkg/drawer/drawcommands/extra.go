@@ -14,7 +14,7 @@ import (
 	"github.com/AllenDang/giu"
 )
 
-// Move moves the cursor by i.
+// Move moves the cursor by "i".
 func (d *DrawCommands) Move(i image.Point) *DrawCommands {
 	return d.add(func(c *giu.Canvas, startPos image.Point) {
 		// noop
@@ -64,6 +64,8 @@ func (d *DrawCommands) AromaticRing(side int, rotation Angle) *DrawCommands {
 }
 
 // Ignore is a bitmask for ignoring cursor movement.
+// Most of them is already declared, but you can define
+// one yourself just by using bitwise operators.
 //
 // see (*DrawCommands).Ignore.
 type Ignore byte
