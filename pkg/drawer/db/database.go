@@ -67,7 +67,6 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			ChemicalText("HS", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
 
 		// https://en.wikipedia.org/wiki/Tryptophan#/media/File:L-Tryptophan_-_L-Tryptophan.svg
-		// TODO:
 		"W": drawcommands.Draw(ComponentsColor).
 			DrawLine(drawcommands.Right, StandardLine).
 			DrawLine(drawcommands.DownRight, StandardLine).
@@ -81,6 +80,13 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			Ignore(drawcommands.IgnoreAll).
 			Move(drawcommands.CalcLineVector(180-3*360/5, StandardLine)).
 			DrawLineAngle(180-4*360/5, StandardLine),
+
+		//https://en.wikipedia.org/wiki/Proline#/media/File:Prolin_-_Proline.svg
+		"P": drawcommands.Draw(ComponentsColor).
+			DrawLineAngle(180-45-65, StandardLine).
+			DrawLineAngle(180-45-2*65, StandardLine).
+			DrawLineAngle(180-45-3*65, StandardLine).
+			DrawLineAngle(180-45-4*65, StandardLine),
 
 		"[STOP]": drawcommands.Draw(ComponentsColor).
 			ChemicalText("STOP", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
