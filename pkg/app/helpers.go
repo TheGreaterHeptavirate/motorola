@@ -81,11 +81,13 @@ func WrapInputTextMultiline(widget *giu.InputTextMultilineWidget, data imgui.Inp
 			}
 
 			if TextWidth(string(buff[nl:i])) > w {
-				if spc > 0 {
+				if spc > nl {
 					buff[spc] = 10
 				} else {
 					data.InsertBytes(len(buff)-1, []byte{10})
 				}
+
+				nl = i
 
 				data.MarkBufferModified()
 			}
