@@ -98,7 +98,7 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			Ignore(drawcommands.IgnoreAll).
 			DrawLineAngle(180-20-72, StandardLine).
 			DrawLineAngle(180-20-2*72, StandardLine).
-			ChemicalText("N", drawcommands.VAlignCenter, drawcommands.HAlignLeft).
+			ChemicalText("N", drawcommands.VAlignBottom, drawcommands.HAlignLeft).
 			Ignore(drawcommands.IgnoreAll).
 			DoubleLineAngle(180-20-3*72, StandardLine).
 			DrawLineAngle(180-20-4*72, StandardLine),
