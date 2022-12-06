@@ -97,6 +97,8 @@ func (a *App) inputBar() giu.Layout {
 						a.inputString = ""
 					}),
 					giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
+						logger.Debugf("Parsing data: %v", a.inputString)
+
 						d, err := inputparser.ParseInput(a.inputString)
 						if err != nil {
 							a.ReportError(err)
@@ -104,6 +106,7 @@ func (a *App) inputBar() giu.Layout {
 							return
 						}
 
+						logger.Debugf("%v proteins found", len(d))
 						a.foundProteins = d
 					}),
 				).Build()
