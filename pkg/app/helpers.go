@@ -7,6 +7,7 @@
 package app
 
 import (
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"strings"
 
 	"github.com/AllenDang/giu"
@@ -102,4 +103,19 @@ func TextWidth(s string) float32 {
 	w, _ := giu.CalcTextSize(s)
 
 	return w
+}
+
+func ValidateCodonsString(s string) (result string, err error) {
+	err = inputparser.Validate(s)
+
+	for _, c := range s {
+		switch c {
+		case 'A', 'a', 'C', 'c', 'G', 'g', 'U', 'u':
+			result += string(c)
+		case 'T', 't':
+			result += "U"
+		}
+	}
+
+	return strings.ToUpper(result), err
 }
