@@ -105,6 +105,9 @@ func TextWidth(s string) float32 {
 	return w
 }
 
+// ValidateCodonsString returns a valid copy of given string.
+// it removes or redundand characters and replaces t with u.
+// it returns error that would be returned by inputparser.Validate.
 func ValidateCodonsString(s string) (result string, err error) {
 	err = inputparser.Validate(s)
 
@@ -118,4 +121,24 @@ func ValidateCodonsString(s string) (result string, err error) {
 	}
 
 	return strings.ToUpper(result), err
+}
+
+// GetPresentableCodonsString returns a nice-looking string grouped
+// in codons (like AAA CAC AUG)
+// it arbitrary calls ValidateCodonsString and refuses all the errors.
+func GetPresentableCodonsString(s string, offset int) (result string) {
+	s, _ = ValidateCodonsString(s)
+	offset %= 3
+
+	for i := offset; i < len(s); i += 3 {
+		if len(s) <= i+3 {
+			result += s[i:]
+
+			break
+		}
+
+		result += s[i:i+3] + " "
+	}
+
+	return strings.TrimSuffix(result, " ")
 }

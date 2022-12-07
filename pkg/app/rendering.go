@@ -11,13 +11,11 @@ package app
 import (
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
-
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
-
 	"github.com/sqweek/dialog"
+	"os"
+	"path/filepath"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
@@ -57,10 +55,8 @@ func (a *App) inputBar() giu.Layout {
 					if c.EventFlag() == imgui.InputTextFlagsCallbackAlways {
 						// we don't care about errors - just want to clean-up string
 						buff := c.Buffer()
-						s, _ := ValidateCodonsString(string(buff) + string(c.EventChar()))
-						fmt.Printf("buff: %s; s: %s\n", buff, s)
+						s := GetPresentableCodonsString(string(buff)+string(c.EventChar()), 0)
 						if len(buff) > len(s) {
-							fmt.Println("del")
 							c.DeleteBytes(len(s), len(buff)-len(s))
 						}
 
@@ -70,9 +66,9 @@ func (a *App) inputBar() giu.Layout {
 							buff[i] = s[i]
 						}
 
-						if len(buff) < len(s) {
-							fmt.Println("ins")
-							c.InsertBytes(len(buff), []byte(s[len(s)-len(buff):]))
+						if len(c.Buffer()) < len(s) {
+							stringToAdd := s[len(c.Buffer()):]
+							c.InsertBytes(len(buff)-1, []byte(stringToAdd))
 						}
 
 						c.MarkBufferModified()
