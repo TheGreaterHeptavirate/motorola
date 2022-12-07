@@ -11,11 +11,13 @@ package app
 import (
 	"errors"
 	"fmt"
-	"github.com/AllenDang/giu"
-	"github.com/AllenDang/imgui-go"
-	"github.com/sqweek/dialog"
 	"os"
 	"path/filepath"
+
+	"github.com/AllenDang/giu"
+	"github.com/AllenDang/imgui-go"
+
+	"github.com/sqweek/dialog"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
@@ -56,7 +58,7 @@ func (a *App) inputBar() giu.Layout {
 						// we don't care about errors - just want to clean-up string
 						buff := c.Buffer()
 						s := GetPresentableCodonsString(string(buff)+string(c.EventChar()), 0)
-						if len(buff) > len(s) {
+						if len(c.Buffer()) > len(s) {
 							c.DeleteBytes(len(s), len(buff)-len(s))
 						}
 
@@ -68,7 +70,7 @@ func (a *App) inputBar() giu.Layout {
 
 						if len(c.Buffer()) < len(s) {
 							stringToAdd := s[len(c.Buffer()):]
-							c.InsertBytes(len(buff)-1, []byte(stringToAdd))
+							c.InsertBytes(len(buff), []byte(stringToAdd))
 						}
 
 						c.MarkBufferModified()
@@ -119,7 +121,11 @@ func (a *App) inputBar() giu.Layout {
 					giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
 						logger.Debugf("Parsing data: %v", a.inputString)
 
-						d, err := inputparser.ParseInput(a.inputString)
+						validString, _ := ValidateCodonsString(a.inputString)
+
+						logger.Debugf("Input string validated: %v", validString)
+
+						d, err := inputparser.ParseInput(validString)
 						if err != nil {
 							a.ReportError(err)
 
