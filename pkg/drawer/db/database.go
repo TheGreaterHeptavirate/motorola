@@ -102,6 +102,37 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			Ignore(drawcommands.IgnoreAll).
 			DoubleLineAngle(180-20-3*72, StandardLine).
 			DrawLineAngle(180-20-4*72, StandardLine),
+
+		// 	https://en.wikipedia.org/wiki/Glutamine#/media/File:L-Glutamin_-_L-Glutamine.svg
+		"Q": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			AddSubcommand(
+				drawcommands.Draw(ComponentsColor).
+					DoubleLine(drawcommands.Down, StandardLine).
+					ChemicalText("O", drawcommands.VAlignTop, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			ChemicalText("H_2_N", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Arginine#/media/File:Arginin_-_Arginine.svg
+		"R": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			ChemicalText("NH", drawcommands.VAlignCenter, drawcommands.HAlignLeft).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			AddSubcommand(
+				drawcommands.Draw(ComponentsColor).
+					DoubleLine(drawcommands.Down, StandardLine).
+					ChemicalText("NH", drawcommands.VAlignTop, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			ChemicalText("H_2_N", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
 	}
 
 	return drawingDatabase
