@@ -9,6 +9,7 @@
 package inputparser
 
 import (
+	"errors"
 	"fmt"
 	"io"
 
@@ -17,8 +18,11 @@ import (
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 )
 
+// ParseInput takes a string as an argument and returns list of
+// proteins found in that string. It may return an error.
 func ParseInput(input string) ([]*protein.Protein, error) {
 	logger.Debugf("Parsing input string: %s", input)
+
 	result := make([]*protein.Protein, 0)
 
 	aminoAcids, err := StringToAminoAcids(input)
@@ -31,6 +35,7 @@ func ParseInput(input string) ([]*protein.Protein, error) {
 			isReading = false
 			start     = 0
 		)
+
 		for i, aminoAcid := range *aminoAcids {
 			switch aminoAcid.Sign {
 			case aminoacid.StartCodon:
@@ -39,6 +44,7 @@ func ParseInput(input string) ([]*protein.Protein, error) {
 			case aminoacid.StopCodon:
 				if isReading {
 					isReading = false
+
 					newProtein, err := protein.NewProtein((*aminoAcids)[start : i+1])
 					if err != nil {
 						return nil, fmt.Errorf("unable to create new protein (should not happen): %w", err)
@@ -53,6 +59,7 @@ func ParseInput(input string) ([]*protein.Protein, error) {
 	return result, nil
 }
 
+// StringToAminoAcids converts given string into a list of aminoacids.
 func StringToAminoAcids(input string) ([]*aminoacid.AminoAcids, error) {
 	result := make([]*aminoacid.AminoAcids, 0)
 	ribosome := NewRibosome(input)
@@ -66,13 +73,17 @@ func StringToAminoAcids(input string) ([]*aminoacid.AminoAcids, error) {
 	// read codons
 	for offset := 0; offset < CodonLength; offset++ {
 		logger.Debugf("Reading codons for offset: %d", offset)
-		a := aminoacid.NewAmioAcids()
+
+		a := aminoacid.NewAminoAcids()
+
 		ribosome.SetOffset(offset)
+
 		for {
 			codon, err := ribosome.ReadCodon()
 			if err != nil {
-				if err == io.EOF {
+				if errors.Is(err, io.EOF) {
 					logger.Debug("received EOF, breaking")
+
 					break
 				}
 
