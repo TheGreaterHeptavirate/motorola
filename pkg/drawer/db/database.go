@@ -173,6 +173,55 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			Ignore(drawcommands.IgnoreAll).
 			DoubleLine(drawcommands.DownRight, StandardLine).
 			ChemicalText("O", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Lysine#/media/File:L-Lysin_-_L-Lysine.svg
+		"K": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			ChemicalText("NH_2_", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Valine
+		// TODO!!!
+		"V": drawcommands.Draw(ComponentsColor).ChemicalText("TODO!", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Alanine#/media/File:L-Alanin_-_L-Alanine.svg
+		"A": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			ChemicalText("CH_3_", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Aspartic_acid#/media/File:L-Asparagins%C3%A4ure_-_L-Aspartic_acid.svg
+		"D": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			AddSubcommand(
+				drawcommands.Draw(ComponentsColor).
+					DrawLine(drawcommands.Up, StandardLine).
+					ChemicalText("OH", drawcommands.VAlignBottom, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DoubleLine(drawcommands.DownRight, StandardLine).
+			ChemicalText("O", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		//https://en.wikipedia.org/wiki/Glutamic_acid#/media/File:L-Glutamins%C3%A4ure_-_L-Glutamic_acid.svg
+		"E": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			AddSubcommand(
+				drawcommands.Draw(ComponentsColor).
+					DoubleLine(drawcommands.Up, StandardLine).
+					ChemicalText("O", drawcommands.VAlignBottom, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			ChemicalText("OH", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Glycine#/media/File:Glycine-2D-skeletal.png
+		// (that's it - its just single peptide bond ;-O )
+		"G": drawcommands.Draw(ComponentsColor),
 	}
 
 	return drawingDatabase
