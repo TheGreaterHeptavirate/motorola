@@ -133,6 +133,46 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			Ignore(drawcommands.IgnoreAll).
 			DrawLine(drawcommands.UpRight, StandardLine).
 			ChemicalText("H_2_N", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Isoleucine#/media/File:L-Isoleucin_-_L-Isoleucine.svg
+		"I": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			AddSubcommand(
+				// TODO: verify (this bond seems strange
+				drawcommands.Draw(ComponentsColor).
+					DrawLine(drawcommands.Up, StandardLine).
+					ChemicalText("CH_3_", drawcommands.VAlignBottom, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			ChemicalText("CH_3_", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Threonine#/media/File:L-Threonin_-_L-Threonine.svg
+		"T": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			AddSubcommand(
+				// TODO: verify (this bond seems strange
+				drawcommands.Draw(ComponentsColor).
+					DrawLine(drawcommands.Up, StandardLine).
+					ChemicalText("OH", drawcommands.VAlignBottom, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLine(drawcommands.DownRight, StandardLine).
+			ChemicalText("CH_3_", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+
+		// https://en.wikipedia.org/wiki/Asparagine#/media/File:L-Asparagin_-_L-Asparagine.svg
+		"N": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			AddSubcommand(
+				drawcommands.Draw(ComponentsColor).
+					DrawLine(drawcommands.Up, StandardLine).
+					ChemicalText("NH_2_", drawcommands.VAlignBottom, drawcommands.HAlignCenter),
+			).
+			Ignore(drawcommands.IgnoreAll).
+			DoubleLine(drawcommands.DownRight, StandardLine).
+			ChemicalText("O", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
 	}
 
 	return drawingDatabase
