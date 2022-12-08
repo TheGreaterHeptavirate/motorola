@@ -54,27 +54,7 @@ func (a *App) inputBar() giu.Layout {
 				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
 					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
 				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
-					if c.EventFlag() == imgui.InputTextFlagsCallbackAlways {
-						// we don't care about errors - just want to clean-up string
-						buff := c.Buffer()
-						s := GetPresentableCodonsString(string(buff)+string(c.EventChar()), 0)
-						if len(c.Buffer()) > len(s) {
-							c.DeleteBytes(len(s), len(buff)-len(s))
-						}
-
-						buff = c.Buffer()
-
-						for i := range buff {
-							buff[i] = s[i]
-						}
-
-						if len(c.Buffer()) < len(s) {
-							stringToAdd := s[len(c.Buffer()):]
-							c.InsertBytes(len(buff), []byte(stringToAdd))
-						}
-
-						c.MarkBufferModified()
-					}
+					splitInputTextIntoCodons(&c)
 
 					return WrapInputTextMultiline(widget, c)
 				}).Build()

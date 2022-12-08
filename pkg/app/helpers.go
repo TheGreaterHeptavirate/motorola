@@ -142,3 +142,30 @@ func GetPresentableCodonsString(s string, offset int) (result string) {
 
 	return strings.TrimSuffix(result, " ")
 }
+
+func splitInputTextIntoCodons(c *imgui.InputTextCallbackData) {
+	if c.EventFlag() != imgui.InputTextFlagsCallbackAlways {
+		return
+	}
+
+	// we don't care about errors - just want to clean-up string
+	buff := c.Buffer()
+	s := GetPresentableCodonsString(string(buff)+string(c.EventChar()), 0)
+
+	if len(c.Buffer()) > len(s) {
+		c.DeleteBytes(len(s), len(buff)-len(s))
+	}
+
+	buff = c.Buffer()
+
+	for i := range buff {
+		buff[i] = s[i]
+	}
+
+	if len(c.Buffer()) < len(s) {
+		stringToAdd := s[len(c.Buffer()):]
+		c.InsertBytes(len(buff), []byte(stringToAdd))
+	}
+
+	c.MarkBufferModified()
+}
