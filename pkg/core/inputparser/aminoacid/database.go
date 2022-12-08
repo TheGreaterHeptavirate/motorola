@@ -39,6 +39,7 @@ func GetDatabase() (*Database, error) {
 	return &Database{&aminoAcids}, nil
 }
 
+// GetFromCodon returns the AminoAcid from the given codon.
 func (d *Database) GetFromCodon(code string) *AminoAcid {
 	for _, a := range *d.aminoAcids {
 		// check if code is in the list of codes
