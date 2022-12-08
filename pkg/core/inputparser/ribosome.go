@@ -9,22 +9,24 @@
 package inputparser
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"strings"
-
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 )
 
 const (
+	// CodonLength represents default codon's size.
 	CodonLength                                 = 3
 	adenine, cytosine, guanine, thymine, uracil = "A", "C", "G", "T", "U"
 )
 
+// ErrInvalidCodon is returned if InputParser finds some unexpected string.
+var ErrInvalidCodon = errors.New("invalid codon")
+
 // Ribosome is responsible for reading codons from input data stream.
 type Ribosome struct {
 	data       string
-	database   *aminoacid.AminoAcids
 	offset     int
 	codonsRead int
 }
@@ -83,14 +85,15 @@ func (r *Ribosome) ReadCodon() (string, error) {
 func Validate(codon string) error {
 	isDNA := strings.ContainsAny(codon, thymine)
 	isRNA := strings.ContainsAny(codon, uracil)
+
 	if isRNA && isDNA {
-		return fmt.Errorf("codon %s contains both thymine and uracil", codon)
+		return fmt.Errorf("codon %s contains both thymine and uracil: %w", codon, ErrInvalidCodon)
 	}
 
 	// check if contains something else than ACGT or ACGU
 	for _, c := range codon {
 		if !strings.ContainsAny(string(c), adenine+cytosine+guanine+thymine+uracil) {
-			return fmt.Errorf("codon %s contains invalid character %s", codon, string(c))
+			return fmt.Errorf("codon %s contains invalid character %s: %w", codon, string(c), ErrInvalidCodon)
 		}
 	}
 

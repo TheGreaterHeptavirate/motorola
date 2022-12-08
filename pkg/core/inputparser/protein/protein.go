@@ -37,6 +37,7 @@ func NewProtein(a aminoacid.AminoAcids) (*Protein, error) {
 	if err := result.Validate(); err != nil {
 		return nil, fmt.Errorf("checking protein: %w", err)
 	}
+
 	return &Protein{
 		AminoAcids: a,
 	}, nil
