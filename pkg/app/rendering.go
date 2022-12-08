@@ -54,6 +54,8 @@ func (a *App) inputBar() giu.Layout {
 				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
 					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
 				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
+					splitInputTextIntoCodons(&c)
+
 					return WrapInputTextMultiline(widget, c)
 				}).Build()
 			}),
@@ -99,7 +101,11 @@ func (a *App) inputBar() giu.Layout {
 					giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
 						logger.Debugf("Parsing data: %v", a.inputString)
 
-						d, err := inputparser.ParseInput(a.inputString)
+						validString, _ := ValidateCodonsString(a.inputString)
+
+						logger.Debugf("Input string validated: %v", validString)
+
+						d, err := inputparser.ParseInput(validString)
 						if err != nil {
 							a.ReportError(err)
 
