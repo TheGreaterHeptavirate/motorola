@@ -64,7 +64,7 @@ func DrawProtein(p *protein.Protein) giu.Widget {
 		}
 
 		result.DrawLine(drawcommands.Down, db.StandardLine).
-			ChemicalText("H", drawcommands.VAlignTop, drawcommands.HAlignCenter)
+			ChemicalText("OH", drawcommands.VAlignTop, drawcommands.HAlignCenter)
 
 		cursorPos := giu.GetCursorScreenPos()
 		startPos := image.Pt(cursorPos.X, cursorPos.Y)
