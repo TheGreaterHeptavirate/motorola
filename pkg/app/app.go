@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	appTitle                       = "Motorola"
+	appTitle                       = "Białkomat"
 	appResolutionX, appResolutionY = 800, 600
 )
 
@@ -58,7 +58,7 @@ func (a *App) Verbose() {
 // Run starts main loop.
 // It holds goroutine until app running.
 func (a *App) Run() error {
-	logger.Info("Welcome to Motorola project!")
+	logger.Infof("Welcome to %s project!", appTitle)
 
 	logger.Infof("Setting log level to %s", a.logLevel)
 	logger.SetLevel(a.logLevel)
