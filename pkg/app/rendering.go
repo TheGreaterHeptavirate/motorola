@@ -127,6 +127,8 @@ litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 `,
 						)
 					}
+
+					a.inputString = GetPresentableCodonsString(a.inputString, 0)
 				}),
 				giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
 					logger.Debug("Clearing input textbox...")
