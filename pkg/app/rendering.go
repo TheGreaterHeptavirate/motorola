@@ -72,6 +72,8 @@ func (a *App) inputBar() giu.Layout {
 				Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).
 				Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
 			widget.Callback(func(c imgui.InputTextCallbackData) int32 {
+				// we can't do that in OnChange because that method is called only when
+				// user leaves input text field.
 				splitInputTextIntoCodons(&c)
 
 				return WrapInputTextMultiline(widget, c)
@@ -109,6 +111,17 @@ func (a *App) inputBar() giu.Layout {
 					logger.Debug("File loaded successfully!")
 
 					a.inputString = string(data)
+
+					a.inputString, err = ValidateCodonsString(a.inputString)
+					if err != nil {
+						giu.Msgbox(
+							"UWAGA! Plik może zawierać nieprawidłowe dane!",
+							`Plik zawiera nieobsługiwane znaki.
+Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
+litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
+`,
+						)
+					}
 				}),
 				giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
 					logger.Debug("Clearing input textbox...")
