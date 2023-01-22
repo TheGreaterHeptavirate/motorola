@@ -56,6 +56,11 @@ func (a *App) render() {
 		)
 	case ProteinsView:
 		a.toolbox()
+
+		if len(a.foundProteins) == 0 {
+			return
+		}
+
 		a.proteinNotation()
 		a.proteinStats()
 		a.proteinDrawing()
