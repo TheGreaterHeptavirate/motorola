@@ -11,6 +11,7 @@ package app
 import (
 	"errors"
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 
@@ -21,145 +22,181 @@ import (
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
 )
 
-func (a *App) render() {
-	giu.SingleWindowWithMenuBar().Layout(
-		giu.PrepareMsgbox(),
-		a.menuBar(),
-		a.inputBar(),
-		a.proteinsPresentation(),
-	)
-}
+const (
+	inputFieldProcentageHeight                             = 85
+	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 250, 250
+	statsWindowW, statsWindowH                             = 250, 300
+	proteinDrawingW, proteinDrawingH                       = 500, 300
+)
 
-func (a *App) menuBar() *giu.MenuBarWidget {
-	return giu.MenuBar().Layout(
-		giu.Menu("Plik").Layout(
-			giu.MenuItem("Zamknij"),
-		),
-	)
+// ViewMode represents currently displayed view
+type ViewMode byte
+
+// View modes
+const (
+	LoadView ViewMode = iota
+	ProteinsView
+)
+
+func (a *App) render() {
+	giu.PrepareMsgbox().Build()
+
+	switch a.viewMode {
+	case LoadView:
+		giu.SingleWindow().Layout(
+			a.inputBar(),
+		)
+	case ProteinsView:
+		a.toolbox()
+		a.proteinNotation()
+		a.proteinStats()
+		a.proteinDrawing()
+	}
 }
 
 func (a *App) inputBar() giu.Layout {
-	var (
-		availableW float32
-		spacingW   float32
-	)
-
 	return giu.Layout{
-		giu.TreeNode("Input textbox").Layout(
-			giu.Custom(func() {
-				widget := giu.InputTextMultiline(&a.inputString).Size(-1, 0).
-					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
-				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
-					splitInputTextIntoCodons(&c)
-
-					return WrapInputTextMultiline(widget, c)
-				}).Build()
-			}),
-			giu.Custom(func() {
-				availableW, _ = giu.GetAvailableRegion()
-				spacingW, _ = giu.GetItemSpacing()
-				giu.Row(
-					giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
-						logger.Info("Loading file to input textbox...")
-
-						path, err := dialog.File().Load()
-						if err != nil {
-							// this error COULD come from fact that user exited dialog
-							// in this case, don't report app's error, just return
-							if errors.Is(err, dialog.ErrCancelled) {
-								logger.Info("File loading canceled")
-
-								return
-							}
-
-							a.ReportError(err)
-
-							return
-						}
-
-						logger.Debugf("Path to file to load: %s", path)
-
-						data, err := os.ReadFile(filepath.Clean(path))
-						if err != nil {
-							a.ReportError(err)
-
-							return
-						}
-
-						logger.Debug("File loaded successfully!")
-
-						a.inputString = string(data)
-					}),
-					giu.Button("Czyść").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
-						logger.Debug("Clearing input textbox...")
-						a.inputString = ""
-					}),
-					giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, 0).OnClick(func() {
-						logger.Debugf("Parsing data: %v", a.inputString)
-
-						validString, _ := ValidateCodonsString(a.inputString)
-
-						logger.Debugf("Input string validated: %v", validString)
-
-						d, err := inputparser.ParseInput(validString)
-						if err != nil {
-							a.ReportError(err)
-
-							return
-						}
-
-						logger.Debugf("%v proteins found", len(d))
-						a.foundProteins = d
-					}),
-				).Build()
-			}),
-		),
-	}
-}
-
-func (a *App) proteinsPresentation() giu.Layout {
-	return giu.Layout{
-		// here I'm going to do a small trick for spelling:
-		// 0, 5+ - białEK
-		// 1 - białKO
-		// 2-4 - białKA
 		giu.Custom(func() {
-			var ending string
-			switch len(a.foundProteins) {
-			case 1:
-				ending = "ko"
-			case 2, 3, 4:
-				ending = "ka"
-			default:
-				ending = "ek"
-			}
+			availableW, availableH := giu.GetAvailableRegion()
+			spacingW, spacingH := giu.GetItemSpacing()
 
-			giu.Labelf("Znaleziono %d biał%s", len(a.foundProteins), ending).Build()
-		}),
-		giu.Condition(
-			len(a.foundProteins) > 0,
-			giu.Layout{
-				giu.Custom(func() {
-					tabs := make([]*giu.TabItemWidget, 0)
-					for i, p := range a.foundProteins {
-						tabs = append(tabs, giu.TabItemf("Białko %d", i).Layout(a.presentProtein(p)))
+			widget := giu.InputTextMultiline(&a.inputString).
+				Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).
+				Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
+			widget.Callback(func(c imgui.InputTextCallbackData) int32 {
+				splitInputTextIntoCodons(&c)
+
+				return WrapInputTextMultiline(widget, c)
+			}).Build()
+
+			buttonH := (availableH*.01*(100-inputFieldProcentageHeight) - spacingH)
+			giu.Row(
+				giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+					logger.Info("Loading file to input textbox...")
+
+					path, err := dialog.File().Load()
+					if err != nil {
+						// this error COULD come from fact that user exited dialog
+						// in this case, don't report app's error, just return
+						if errors.Is(err, dialog.ErrCancelled) {
+							logger.Info("File loading canceled")
+
+							return
+						}
+
+						a.ReportError(err)
+
+						return
 					}
 
-					giu.TabBar().TabItems(tabs...).Build()
+					logger.Debugf("Path to file to load: %s", path)
+
+					data, err := os.ReadFile(filepath.Clean(path))
+					if err != nil {
+						a.ReportError(err)
+
+						return
+					}
+
+					logger.Debug("File loaded successfully!")
+
+					a.inputString = string(data)
 				}),
-			},
-			giu.Layout{},
-		),
+				giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+					logger.Debug("Clearing input textbox...")
+					a.inputString = ""
+				}),
+				giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+					logger.Debugf("Parsing data: %v", a.inputString)
+
+					validString, _ := ValidateCodonsString(a.inputString)
+
+					logger.Debugf("Input string validated: %v", validString)
+
+					d, err := inputparser.ParseInput(validString)
+					if err != nil {
+						a.ReportError(err)
+
+						return
+					}
+
+					logger.Debugf("%v proteins found", len(d))
+					a.foundProteins = d
+					a.viewMode = ProteinsView
+				}),
+			).Build()
+		}),
 	}
 }
 
-func (a *App) presentProtein(inputProtein *protein.Protein) giu.Layout {
-	return giu.Layout{
-		giu.TreeNode("Zapis aminokwasowy").Layout(
+func (a *App) toolbox() {
+	windowW, windowH := a.window.GetSize()
+
+	if int32(len(a.foundProteins)) <= a.currentProtein {
+		a.currentProtein = 0
+	}
+
+	giu.Window("Toolbox").
+		Flags(
+			giu.WindowFlagsNoCollapse|
+				giu.WindowFlagsNoResize|
+				giu.WindowFlagsNoMove,
+		).Pos(0, 0).
+		Size(float32(windowW)*toolboxProcentageWidth, float32(windowH)).
+		Layout(
+			//here I'm going to do a small trick for spelling:
+			//0, 5+ - białEK
+			//		1 - białKO
+			//		2-4 - białKA
+			giu.Custom(func() {
+				var ending string
+				switch len(a.foundProteins) {
+				case 1:
+					ending = "ko"
+				case 2, 3, 4:
+					ending = "ka"
+				default:
+					ending = "ek"
+				}
+
+				giu.Labelf("Znaleziono %d biał%s", len(a.foundProteins), ending).Build()
+			}),
+			giu.Label("Znalezione białka:"),
+			//proteins list
+			giu.Custom(func() {
+				buttons := make([]giu.Widget, len(a.foundProteins))
+				for i := range a.foundProteins {
+					// closure xD
+					i := i
+					buttons[i] = giu.RadioButton(
+						//TODO: name
+						fmt.Sprintf("Białko %d", i),
+						a.currentProtein == int32(i),
+					).OnChange(func() {
+						a.currentProtein = int32(i)
+					})
+				}
+
+				giu.Layout(buttons).Build()
+			}),
+			giu.Separator(),
+			giu.Button("Wróć").OnClick(func() {
+				a.viewMode = LoadView
+			}),
+		)
+}
+
+func (a *App) proteinNotation() {
+	inputProtein := a.foundProteins[a.currentProtein]
+	windowX, _ := a.window.GetSize()
+
+	giu.Window("Zapis aminokwasowy białka").
+		Size(proteinNotationWindowSizeX, proteinNotationWindowSizeY).
+		Pos(toolboxProcentageWidth*float32(windowX), 0).
+		Layout(
 			giu.Custom(func() {
 				giu.Label("").Build()
 				availableW, _ := giu.GetAvailableRegion()
@@ -178,10 +215,27 @@ func (a *App) presentProtein(inputProtein *protein.Protein) giu.Layout {
 					giu.Tooltip(fmt.Sprintf("%s (%s)\nMass: %v", v.LongName, v.ShortName, v.Mass)).Build()
 				}
 			}),
-		),
-		giu.TreeNode("Statystyki").Layout(
+		)
+}
+
+func (a *App) proteinStats() {
+	inputProtein := a.foundProteins[a.currentProtein]
+	windowW, _ := a.window.GetSize()
+	giu.Window("Statystyki").
+		Size(statsWindowW, statsWindowH).
+		Pos(toolboxProcentageWidth*float32(windowW)+proteinNotationWindowSizeX, 0).
+		Layout(
 			giu.Labelf("Masa: %v", inputProtein.Mass()),
-		),
-		drawer.DrawProtein(inputProtein),
-	}
+		)
+}
+
+func (a *App) proteinDrawing() {
+	inputProtein := a.foundProteins[a.currentProtein]
+	windowW, _ := a.window.GetSize()
+	giu.Window("Rysunek").
+		Size(proteinDrawingW, proteinDrawingH).
+		Pos(toolboxProcentageWidth*float32(windowW), float32(math.Max(statsWindowH, proteinNotationWindowSizeY))).
+		Layout(
+			drawer.DrawProtein(inputProtein),
+		)
 }

@@ -25,12 +25,18 @@ import (
 const (
 	appTitle                       = "Białkomat"
 	appResolutionX, appResolutionY = 800, 600
+
+	toolboxProcentageWidth = 0.2
 )
 
 // App represents a GUI application.
 type App struct {
-	inputString   string
-	foundProteins []*protein.Protein
+	viewMode ViewMode
+
+	inputString string
+
+	foundProteins  []*protein.Protein
+	currentProtein int32
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel
