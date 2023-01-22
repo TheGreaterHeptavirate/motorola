@@ -32,7 +32,7 @@ const (
 	proteinDrawingW, proteinDrawingH                       = 500, 300
 	// TODO: team name
 	projectInfo = `
-Białkomat to projekt tworzony przez [Dróżynę XXXX](https://github.com/TheGreaterHeptavirate) w ramac
+Białkomat to projekt tworzony przez [Dróżynę GigaCHADS](https://github.com/TheGreaterHeptavirate) w ramac
 [Motorola Science Cup 2022](https://www.science-cup.pl/).
 `
 )
