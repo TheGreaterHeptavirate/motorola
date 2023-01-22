@@ -30,6 +30,11 @@ const (
 	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 250, 250
 	statsWindowW, statsWindowH                             = 250, 300
 	proteinDrawingW, proteinDrawingH                       = 500, 300
+	// TODO: team name
+	projectInfo = `
+Białkomat to projekt tworzony przez [Dróżynę XXXX](https://github.com/TheGreaterHeptavirate) w ramac
+[Motorola Science Cup 2022](https://www.science-cup.pl/).
+`
 )
 
 // ViewMode represents currently displayed view
@@ -134,6 +139,7 @@ func (a *App) inputBar() giu.Layout {
 
 func (a *App) toolbox() {
 	windowW, windowH := a.window.GetSize()
+	aboutUs := projectInfo
 
 	if int32(len(a.foundProteins)) <= a.currentProtein {
 		a.currentProtein = 0
@@ -186,6 +192,15 @@ func (a *App) toolbox() {
 			giu.Button("Wróć").OnClick(func() {
 				a.viewMode = LoadView
 			}),
+			giu.Button("O Nas").OnClick(func() {
+				giu.OpenPopup("O Nas")
+			}),
+			giu.Custom(func() {
+				imgui.SetNextWindowSizeV(imgui.Vec2{X: 300, Y: 200}, imgui.ConditionAppearing)
+			}),
+			giu.Popup("O Nas").Layout(
+				giu.Markdown(&aboutUs),
+			),
 		)
 }
 
