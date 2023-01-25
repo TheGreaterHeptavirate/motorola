@@ -17,9 +17,10 @@ import (
 )
 
 type Animation interface {
-	Advance() (shouldContinue bool)
+	Advance(procentageDelta float32) (shouldContinue bool)
 	Start(duration time.Duration, fps int)
 	Reset()
+	Init()
 	giu.Widget
 }
 
@@ -29,6 +30,7 @@ type transitionState struct {
 	elapsed       time.Duration
 	duration      time.Duration
 	customData    any
+	shouldInit    bool
 }
 
 func (s *transitionState) Dispose() {
@@ -51,7 +53,9 @@ func (t *animationWidget) GetState() *transitionState {
 }
 
 func (t *animationWidget) newState() *transitionState {
-	return &transitionState{}
+	return &transitionState{
+		shouldInit: true,
+	}
 }
 
 type animationWidget struct {
@@ -61,12 +65,14 @@ type animationWidget struct {
 }
 
 func newAnimation(a Animation, renderer1, renderer2 func(this Animation)) *animationWidget {
-	return &animationWidget{
+	result := &animationWidget{
 		id:        giu.GenAutoID("Animation"),
 		renderer1: renderer1,
 		renderer2: renderer2,
 		Animation: a,
 	}
+
+	return result
 }
 
 func (t *animationWidget) Start(duration time.Duration, fps int) {
@@ -91,10 +97,13 @@ func (t *animationWidget) Start(duration time.Duration, fps int) {
 				return
 			}
 
-			if !t.Advance() {
+			procentDelta := float32(state.elapsed) / float32(state.duration)
+
+			if !t.Advance(procentDelta) {
 				return
 			}
 
+			giu.Update()
 			state.elapsed += tickDuration
 		}
 	}()

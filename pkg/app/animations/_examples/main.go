@@ -5,6 +5,7 @@ import (
 
 	"github.com/AllenDang/giu"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	"golang.org/x/image/colornames"
 )
 
 func loop() {
@@ -12,9 +13,12 @@ func loop() {
 		func(this animations.Animation) {
 			giu.Window("window1").Layout(
 				giu.Label("I'm a window 1"),
-				giu.Button("start transition").OnClick(func() {
-					this.Start(time.Second, 60)
-				}),
+				animations.HoverColorAnimation(
+					giu.Button("start transition").OnClick(func() {
+						this.Start(time.Second, 60)
+					}),
+					60, time.Second, colornames.Red,
+				),
 			)
 		},
 		func(this animations.Animation) {

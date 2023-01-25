@@ -11,7 +11,6 @@ package animations
 import (
 	"time"
 
-	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
@@ -30,17 +29,14 @@ func (t *TransitionWidget) Start(d time.Duration, fps int) {
 	t.a.Start(d, fps)
 }
 
-func (t *TransitionWidget) Advance() bool {
+func (t *TransitionWidget) Advance(procentDelta float32) bool {
 	state := t.a.GetState()
-	procentDelta := float32(state.elapsed) / float32(state.duration)
 	// it means the current layou is layout1, so increasing procentage
 	if state.currentLayout {
 		t.a.SetCustomData(procentDelta)
 	} else {
 		t.a.SetCustomData(1 - procentDelta)
 	}
-
-	giu.Update()
 
 	return true
 }
@@ -52,6 +48,10 @@ func (t *TransitionWidget) Reset() {
 	} else {
 		t.a.SetCustomData(float32(1))
 	}
+}
+
+func (t *TransitionWidget) Init() {
+	// noop
 }
 
 func (t *TransitionWidget) Build() {
