@@ -19,15 +19,16 @@ import (
 type Animation interface {
 	Advance() (shouldContinue bool)
 	Start(duration time.Duration, fps int)
+	Reset()
 	giu.Widget
 }
 
 type transitionState struct {
-	isRunning              bool
-	currentLayout          bool
-	layout1ProcentageAlpha float32
-	elapsed                time.Duration
-	duration               time.Duration
+	isRunning     bool
+	currentLayout bool
+	elapsed       time.Duration
+	duration      time.Duration
+	customData    any
 }
 
 func (s *transitionState) Dispose() {
@@ -56,17 +57,20 @@ func (t *animationWidget) newState() *transitionState {
 type animationWidget struct {
 	id                   string
 	renderer1, renderer2 func(this Animation)
+	Animation
 }
 
-func newAnimation(renderer1, renderer2 func(this Animation)) *animationWidget {
+func newAnimation(a Animation, renderer1, renderer2 func(this Animation)) *animationWidget {
 	return &animationWidget{
 		id:        giu.GenAutoID("Animation"),
 		renderer1: renderer1,
 		renderer2: renderer2,
+		Animation: a,
 	}
 }
 
 func (t *animationWidget) Start(duration time.Duration, fps int) {
+	t.Animation.Reset()
 	state := t.GetState()
 
 	if state.isRunning {
@@ -96,19 +100,12 @@ func (t *animationWidget) Start(duration time.Duration, fps int) {
 	}()
 }
 
-func (t *animationWidget) Advance() (shouldCOntinue bool) {
-	state := t.GetState()
-	procentDelta := float32(state.elapsed) / float32(state.duration)
-	// it means the current layou is layout1, so increasing procentage
-	if state.currentLayout {
-		state.layout1ProcentageAlpha = procentDelta
-	} else {
-		state.layout1ProcentageAlpha = 1 - procentDelta
-	}
+func (t *animationWidget) GetCustomData() any {
+	return t.GetState().customData
+}
 
-	giu.Update()
-
-	return true
+func (t *animationWidget) SetCustomData(d any) {
+	t.GetState().customData = d
 }
 
 func (t *animationWidget) BuildNormal(a Animation) (proceeded bool) {
