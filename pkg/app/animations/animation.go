@@ -10,6 +10,7 @@
 package animations
 
 import (
+	"sync"
 	"time"
 
 	"github.com/AllenDang/giu"
@@ -31,6 +32,13 @@ type transitionState struct {
 	duration      time.Duration
 	customData    any
 	shouldInit    bool
+	m             *sync.Mutex
+}
+
+func (s *transitionState) IsRunning() bool {
+	s.m.Lock()
+	defer s.m.Unlock()
+	return s.isRunning
 }
 
 func (s *transitionState) Dispose() {
@@ -55,6 +63,7 @@ func (t *animationWidget) GetState() *transitionState {
 func (t *animationWidget) newState() *transitionState {
 	return &transitionState{
 		shouldInit: true,
+		m:          &sync.Mutex{},
 	}
 }
 
@@ -90,9 +99,11 @@ func (t *animationWidget) Start(duration time.Duration, fps int) {
 		tickDuration := time.Second / time.Duration(fps)
 		for range time.Tick(tickDuration) {
 			if state.elapsed > state.duration {
+				state.m.Lock()
 				state.isRunning = false
 				state.elapsed = 0
 				state.currentLayout = !state.currentLayout
+				state.m.Unlock()
 
 				return
 			}
@@ -110,17 +121,23 @@ func (t *animationWidget) Start(duration time.Duration, fps int) {
 }
 
 func (t *animationWidget) GetCustomData() any {
-	return t.GetState().customData
+	state := t.GetState()
+	state.m.Lock()
+	defer state.m.Unlock()
+	return state.customData
 }
 
 func (t *animationWidget) SetCustomData(d any) {
-	t.GetState().customData = d
+	state := t.GetState()
+	state.m.Lock()
+	state.customData = d
+	state.m.Unlock()
 }
 
 func (t *animationWidget) BuildNormal(a Animation) (proceeded bool) {
 	state := t.GetState()
 
-	if !state.isRunning {
+	if !state.IsRunning() {
 		if !state.currentLayout {
 			t.renderer1(a)
 		} else {

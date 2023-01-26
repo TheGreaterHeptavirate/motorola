@@ -48,18 +48,17 @@ func HoverColorAnimation(widget giu.Widget, fps int, duration time.Duration) *Ho
 
 func (h *HoverColorAnimationWidget) Reset() {
 	d := h.animationWidget.GetCustomData()
-
-	currentData, ok := d.(*animationData)
-	if !ok {
-		logger.Fatalf("expected data type *animationData, got %T", d)
-	}
-
-	if currentData == nil {
+	if d == nil {
 		h.animationWidget.SetCustomData(&animationData{
 			m: &sync.Mutex{},
 		})
 
 		return
+	}
+
+	currentData, ok := d.(*animationData)
+	if !ok {
+		logger.Fatalf("expected data type *animationData, got %T", d)
 	}
 
 	currentData.m.Lock()
@@ -69,6 +68,10 @@ func (h *HoverColorAnimationWidget) Reset() {
 
 func (h *HoverColorAnimationWidget) Advance(procentDelta float32) bool {
 	d := h.animationWidget.GetCustomData()
+	if d == nil {
+		return true
+	}
+
 	data, ok := d.(*animationData)
 	if !ok {
 		logger.Fatalf("expected data type *animationData, got %T", d)
@@ -116,7 +119,9 @@ func (h *HoverColorAnimationWidget) Build() {
 	procentage := data.procentage
 	data.m.Unlock()
 
-	if !isHovered && h.animationWidget.GetState().isRunning {
+	state := h.animationWidget.GetState()
+
+	if !isHovered && state.IsRunning() {
 		procentage = 1 - procentage
 	}
 
@@ -125,7 +130,7 @@ func (h *HoverColorAnimationWidget) Build() {
 	normalColor.Y += (h.hoveredColor.Y - normalColor.Y) * procentage
 	normalColor.Z += (h.hoveredColor.Z - normalColor.Z) * procentage
 
-	if !h.animationWidget.GetState().isRunning {
+	if !state.IsRunning() {
 		if isHovered {
 			normalColor = h.hoveredColor
 		} else {
@@ -140,7 +145,7 @@ func (h *HoverColorAnimationWidget) Build() {
 	isHoveredNow := imgui.IsItemHovered()
 
 	data.m.Lock()
-	data.shouldStart = isHoveredNow != isHovered && !h.animationWidget.GetState().isRunning
+	data.shouldStart = isHoveredNow != isHovered && !state.IsRunning()
 	data.isHovered = isHoveredNow
 	data.m.Unlock()
 }
