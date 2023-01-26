@@ -144,29 +144,41 @@ litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 						time.Second/2,
 					),
 				),
-				giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
-					logger.Debug("Clearing input textbox...")
-					a.inputString = ""
-				}),
-				giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
-					logger.Debugf("Parsing data: %v", a.inputString)
+				giu.CSSTag("cleanButton").To(
+					animations.HoverColorAnimation(
+						giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+							logger.Debug("Clearing input textbox...")
+							a.inputString = ""
+						}),
+						60,
+						time.Second/2,
+					),
+				),
+				giu.CSSTag("continueButton").To(
+					animations.HoverColorAnimation(
+						giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+							logger.Debugf("Parsing data: %v", a.inputString)
 
-					validString, _ := ValidateCodonsString(a.inputString)
+							validString, _ := ValidateCodonsString(a.inputString)
 
-					logger.Debugf("Input string validated: %v", validString)
+							logger.Debugf("Input string validated: %v", validString)
 
-					d, err := inputparser.ParseInput(validString)
-					if err != nil {
-						a.ReportError(err)
+							d, err := inputparser.ParseInput(validString)
+							if err != nil {
+								a.ReportError(err)
 
-						return
-					}
+								return
+							}
 
-					logger.Debugf("%v proteins found", len(d))
-					a.foundProteins = d
-					a.viewMode = ProteinsView
-					a.layout.Start(time.Second/2, 60)
-				}),
+							logger.Debugf("%v proteins found", len(d))
+							a.foundProteins = d
+							a.viewMode = ProteinsView
+							a.layout.Start(time.Second/4, 60)
+						}),
+						60,
+						time.Second/2,
+					),
+				),
 			).Build()
 		}),
 	}
@@ -225,7 +237,7 @@ func (a *App) toolbox() {
 			}),
 			giu.Separator(),
 			giu.Button("Wróć").OnClick(func() {
-				a.viewMode = LoadView
+				a.layout.Start(time.Second/4, 60)
 			}),
 			giu.Button("O Nas").OnClick(func() {
 				giu.OpenPopup("O Nas")

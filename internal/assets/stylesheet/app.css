@@ -6,18 +6,33 @@
  * ONLY to personal, non-commercial use.
  */
 
-/*
-main {
-	background-color: red;
-}
-*/
-
 main {
         frame-rounding: 15,15;
 }
 
 loadButton {
-        button-color: rgba(0,0,0);
-        border-color: rgba(1,1,1);
-        frame-border-size: 8;
+        frame-border-size: 4;
+        border-color: rgba(0,0,255,1);
+        color: rgba(0,0,255,1);
+        button-hovered-color: rgba(0,0,150,1);
+        button-active-color: rgba(0,0,200,1);
+        button-color: rgba(0,0,0,1);
+}
+
+cleanButton {
+        frame-border-size: 4;
+        border-color: rgba(255,0,0,1);
+        color: rgba(255,0,0,1);
+        button-hovered-color: rgba(150,0,0,1);
+        button-active-color: rgba(200,0,0,1);
+        button-color: rgba(0,0,0,1);
+}
+
+continueButton {
+        frame-border-size: 4;
+        border-color: rgba(0,255,0,1);
+        color: rgba(0,255,0,1);
+        button-hovered-color: rgba(0,150,0,1);
+        button-active-color: rgba(0,200,0,1);
+        button-color: rgba(0,0,0,1);
 }
