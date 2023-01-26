@@ -11,3 +11,13 @@ main {
 	background-color: red;
 }
 */
+
+main {
+        frame-rounding: 15,15;
+}
+
+loadButton {
+        button-color: rgba(0,0,0);
+        border-color: rgba(1,1,1);
+        frame-border-size: 8;
+}

@@ -14,6 +14,7 @@ package app
 
 import (
 	"fmt"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
 
 	"github.com/AllenDang/giu"
 
@@ -37,6 +38,7 @@ type App struct {
 
 	foundProteins  []*protein.Protein
 	currentProtein int32
+	layout         animations.Animation
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel

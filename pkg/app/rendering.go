@@ -11,9 +11,11 @@ package app
 import (
 	"errors"
 	"fmt"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
 	"math"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
@@ -26,7 +28,7 @@ import (
 )
 
 const (
-	inputFieldProcentageHeight                             = 85
+	inputFieldProcentageHeight                             = 90
 	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 250, 250
 	statsWindowW, statsWindowH                             = 250, 300
 	proteinDrawingW, proteinDrawingH                       = 500, 300
@@ -49,22 +51,28 @@ const (
 func (a *App) render() {
 	giu.PrepareMsgbox().Build()
 
-	switch a.viewMode {
-	case LoadView:
-		giu.SingleWindow().Layout(
-			a.inputBar(),
-		)
-	case ProteinsView:
-		a.toolbox()
+	a.layout = animations.Transition(
+		func(animation animations.Animation) {
+			giu.SingleWindow().Layout(
+				a.inputBar(),
+			)
+		},
+		func(animation animations.Animation) {
+			a.toolbox()
 
-		if len(a.foundProteins) == 0 {
-			return
-		}
+			if len(a.foundProteins) == 0 {
+				return
+			}
 
-		a.proteinNotation()
-		a.proteinStats()
-		a.proteinDrawing()
-	}
+			a.proteinNotation()
+			a.proteinStats()
+			a.proteinDrawing()
+		},
+	)
+	a.layout.Build()
+	//switch a.viewMode {
+	//case LoadView:
+	//case ProteinsView:
 }
 
 func (a *App) inputBar() giu.Layout {
@@ -86,50 +94,56 @@ func (a *App) inputBar() giu.Layout {
 
 			buttonH := (availableH*.01*(100-inputFieldProcentageHeight) - spacingH)
 			giu.Row(
-				giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
-					logger.Info("Loading file to input textbox...")
+				giu.CSSTag("loadButton").To(
+					animations.HoverColorAnimation(
+						giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+							logger.Info("Loading file to input textbox...")
 
-					path, err := dialog.File().Load()
-					if err != nil {
-						// this error COULD come from fact that user exited dialog
-						// in this case, don't report app's error, just return
-						if errors.Is(err, dialog.ErrCancelled) {
-							logger.Info("File loading canceled")
+							path, err := dialog.File().Load()
+							if err != nil {
+								// this error COULD come from fact that user exited dialog
+								// in this case, don't report app's error, just return
+								if errors.Is(err, dialog.ErrCancelled) {
+									logger.Info("File loading canceled")
 
-							return
-						}
+									return
+								}
 
-						a.ReportError(err)
+								a.ReportError(err)
 
-						return
-					}
+								return
+							}
 
-					logger.Debugf("Path to file to load: %s", path)
+							logger.Debugf("Path to file to load: %s", path)
 
-					data, err := os.ReadFile(filepath.Clean(path))
-					if err != nil {
-						a.ReportError(err)
+							data, err := os.ReadFile(filepath.Clean(path))
+							if err != nil {
+								a.ReportError(err)
 
-						return
-					}
+								return
+							}
 
-					logger.Debug("File loaded successfully!")
+							logger.Debug("File loaded successfully!")
 
-					a.inputString = string(data)
+							a.inputString = string(data)
 
-					a.inputString, err = ValidateCodonsString(a.inputString)
-					if err != nil {
-						giu.Msgbox(
-							"UWAGA! Plik może zawierać nieprawidłowe dane!",
-							`Plik zawiera nieobsługiwane znaki.
+							a.inputString, err = ValidateCodonsString(a.inputString)
+							if err != nil {
+								giu.Msgbox(
+									"UWAGA! Plik może zawierać nieprawidłowe dane!",
+									`Plik zawiera nieobsługiwane znaki.
 Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
 litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 `,
-						)
-					}
+								)
+							}
 
-					a.inputString = GetPresentableCodonsString(a.inputString, 0)
-				}),
+							a.inputString = GetPresentableCodonsString(a.inputString, 0)
+						}),
+						60,
+						time.Second/2,
+					),
+				),
 				giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
 					logger.Debug("Clearing input textbox...")
 					a.inputString = ""
@@ -151,6 +165,7 @@ litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 					logger.Debugf("%v proteins found", len(d))
 					a.foundProteins = d
 					a.viewMode = ProteinsView
+					a.layout.Start(time.Second/2, 60)
 				}),
 			).Build()
 		}),
