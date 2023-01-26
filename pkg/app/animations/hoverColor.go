@@ -9,9 +9,11 @@
 package animations
 
 import (
+	"fmt"
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
+	"image/color"
 	"sync"
 	"time"
 )
@@ -28,17 +30,41 @@ var _ Animation = &HoverColorAnimationWidget{}
 type HoverColorAnimationWidget struct {
 	*animationWidget
 	giu.Widget
-	hoveredColor imgui.Vec4
-	fps          int
-	duration     time.Duration
+	hoveredColor,
+	normalColor func() color.RGBA
+	fps               int
+	duration          time.Duration
+	hoverID, normalID imgui.StyleColorID
 }
 
-func HoverColorAnimation(widget giu.Widget, fps int, duration time.Duration) *HoverColorAnimationWidget {
+func HoverColorAnimationStyle(widget giu.Widget, fps int, duration time.Duration, hover, normal giu.StyleColorID) *HoverColorAnimationWidget {
+	return HoverColorAnimation(
+		widget,
+		fps, duration,
+		func() color.RGBA {
+			return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorID(hover)))
+		},
+		func() color.RGBA {
+			return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorID(normal)))
+		},
+		hover, normal,
+	)
+}
+
+func HoverColorAnimation(
+	widget giu.Widget,
+	fps int, duration time.Duration,
+	hoverColor, normalColor func() color.RGBA,
+	hoverID, normalID giu.StyleColorID,
+) *HoverColorAnimationWidget {
 	result := &HoverColorAnimationWidget{
-		Widget: widget,
-		//hoveredColor: giu.ToVec4Color(hoveredColor),
-		fps:      fps,
-		duration: duration,
+		Widget:       widget,
+		hoveredColor: hoverColor,
+		normalColor:  normalColor,
+		fps:          fps,
+		duration:     duration,
+		hoverID:      imgui.StyleColorID(hoverID),
+		normalID:     imgui.StyleColorID(normalID),
 	}
 
 	result.animationWidget = newAnimation(result, nil, nil)
@@ -102,7 +128,8 @@ func (h *HoverColorAnimationWidget) Build() {
 		logger.Fatalf("expected data type *animationData, got %T", d)
 	}
 
-	normalColor := imgui.CurrentStyle().GetColor(imgui.StyleColorButton)
+	normalColor := giu.ToVec4Color(h.normalColor())
+	hoverColor := giu.ToVec4Color(h.hoveredColor())
 	data.m.Lock()
 	shouldStart := data.shouldStart
 	isHovered := data.isHovered
@@ -125,23 +152,28 @@ func (h *HoverColorAnimationWidget) Build() {
 		procentage = 1 - procentage
 	}
 
-	h.hoveredColor = imgui.CurrentStyle().GetColor(imgui.StyleColorButtonHovered)
-	normalColor.X += (h.hoveredColor.X - normalColor.X) * procentage
-	normalColor.Y += (h.hoveredColor.Y - normalColor.Y) * procentage
-	normalColor.Z += (h.hoveredColor.Z - normalColor.Z) * procentage
+	normalColor.X += (hoverColor.X - normalColor.X) * procentage
+	normalColor.Y += (hoverColor.Y - normalColor.Y) * procentage
+	normalColor.Z += (hoverColor.Z - normalColor.Z) * procentage
 
 	if !state.IsRunning() {
 		if isHovered {
-			normalColor = h.hoveredColor
+			normalColor = hoverColor
 		} else {
-			normalColor = imgui.CurrentStyle().GetColor(imgui.StyleColorButton)
+			normalColor = giu.ToVec4Color(h.normalColor())
 		}
 	}
 
-	imgui.PushStyleColor(imgui.StyleColorButton, normalColor)
-	imgui.PushStyleColor(imgui.StyleColorButtonHovered, normalColor)
+	fmt.Println(normalColor)
+	imgui.PushStyleColor(h.normalID, normalColor)
+
+	if h.hoverID != h.normalID {
+		imgui.PushStyleColor(h.hoverID, normalColor)
+		defer imgui.PopStyleColor()
+	}
+
 	h.Widget.Build()
-	imgui.PopStyleColorV(2)
+	imgui.PopStyleColor()
 	isHoveredNow := imgui.IsItemHovered()
 
 	data.m.Lock()

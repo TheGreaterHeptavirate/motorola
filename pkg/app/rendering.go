@@ -12,6 +12,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	"golang.org/x/image/colornames"
+	"image/color"
 	"math"
 	"os"
 	"path/filepath"
@@ -95,88 +97,130 @@ func (a *App) inputBar() giu.Layout {
 			buttonH := (availableH*.01*(100-inputFieldProcentageHeight) - spacingH)
 			giu.Row(
 				giu.CSSTag("loadButton").To(
-					animations.HoverColorAnimation(
-						giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
-							logger.Info("Loading file to input textbox...")
+					animations.HoverColorAnimationStyle(
+						animations.HoverColorAnimation(
+							giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+								logger.Info("Loading file to input textbox...")
 
-							path, err := dialog.File().Load()
-							if err != nil {
-								// this error COULD come from fact that user exited dialog
-								// in this case, don't report app's error, just return
-								if errors.Is(err, dialog.ErrCancelled) {
-									logger.Info("File loading canceled")
+								path, err := dialog.File().Load()
+								if err != nil {
+									// this error COULD come from fact that user exited dialog
+									// in this case, don't report app's error, just return
+									if errors.Is(err, dialog.ErrCancelled) {
+										logger.Info("File loading canceled")
+
+										return
+									}
+
+									a.ReportError(err)
 
 									return
 								}
 
-								a.ReportError(err)
+								logger.Debugf("Path to file to load: %s", path)
 
-								return
-							}
+								data, err := os.ReadFile(filepath.Clean(path))
+								if err != nil {
+									a.ReportError(err)
 
-							logger.Debugf("Path to file to load: %s", path)
+									return
+								}
 
-							data, err := os.ReadFile(filepath.Clean(path))
-							if err != nil {
-								a.ReportError(err)
+								logger.Debug("File loaded successfully!")
 
-								return
-							}
+								a.inputString = string(data)
 
-							logger.Debug("File loaded successfully!")
-
-							a.inputString = string(data)
-
-							a.inputString, err = ValidateCodonsString(a.inputString)
-							if err != nil {
-								giu.Msgbox(
-									"UWAGA! Plik może zawierać nieprawidłowe dane!",
-									`Plik zawiera nieobsługiwane znaki.
+								a.inputString, err = ValidateCodonsString(a.inputString)
+								if err != nil {
+									giu.Msgbox(
+										"UWAGA! Plik może zawierać nieprawidłowe dane!",
+										`Plik zawiera nieobsługiwane znaki.
 Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
 litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 `,
-								)
-							}
+									)
+								}
 
-							a.inputString = GetPresentableCodonsString(a.inputString, 0)
-						}),
+								a.inputString = GetPresentableCodonsString(a.inputString, 0)
+							}),
+							60,
+							time.Second/2,
+							func() color.RGBA {
+								return colornames.White
+							},
+							func() color.RGBA {
+								return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
+							},
+							giu.StyleColorText,
+							giu.StyleColorText,
+						),
 						60,
 						time.Second/2,
+						giu.StyleColorButtonHovered,
+						giu.StyleColorButton,
 					),
 				),
 				giu.CSSTag("cleanButton").To(
-					animations.HoverColorAnimation(
-						giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
-							logger.Debug("Clearing input textbox...")
-							a.inputString = ""
-						}),
+					animations.HoverColorAnimationStyle(
+						animations.HoverColorAnimation(
+							giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+								logger.Debug("Clearing input textbox...")
+								a.inputString = ""
+							}),
+							60,
+							time.Second/2,
+							func() color.RGBA {
+								return colornames.White
+							},
+							func() color.RGBA {
+								return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
+							},
+							giu.StyleColorText,
+							giu.StyleColorText,
+						),
 						60,
 						time.Second/2,
+						giu.StyleColorButtonHovered,
+						giu.StyleColorButton,
 					),
 				),
 				giu.CSSTag("continueButton").To(
-					animations.HoverColorAnimation(
-						giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
-							logger.Debugf("Parsing data: %v", a.inputString)
+					animations.HoverColorAnimationStyle(
+						animations.HoverColorAnimation(
+							giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+								logger.Debugf("Parsing data: %v", a.inputString)
 
-							validString, _ := ValidateCodonsString(a.inputString)
+								validString, _ := ValidateCodonsString(a.inputString)
 
-							logger.Debugf("Input string validated: %v", validString)
+								logger.Debugf("Input string validated: %v", validString)
 
-							d, err := inputparser.ParseInput(validString)
-							if err != nil {
-								a.ReportError(err)
+								d, err := inputparser.ParseInput(validString)
+								if err != nil {
+									a.ReportError(err)
 
-								return
-							}
+									return
+								}
 
-							logger.Debugf("%v proteins found", len(d))
-							a.foundProteins = d
-							a.viewMode = ProteinsView
-							a.layout.Start(time.Second/4, 60)
-						}),
+								logger.Debugf("%v proteins found", len(d))
+								a.foundProteins = d
+								a.viewMode = ProteinsView
+								a.layout.Start(time.Second/4, 60)
+							}),
+							60,
+							time.Second/2,
+							func() color.RGBA {
+								return colornames.White
+							},
+							func() color.RGBA {
+								return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
+							},
+							giu.StyleColorText,
+							giu.StyleColorText,
+						),
 						60,
 						time.Second/2,
+						giu.StyleColorButtonHovered,
+						giu.StyleColorButton,
 					),
 				),
 			).Build()

@@ -12,27 +12,27 @@ main {
 
 loadButton {
         frame-border-size: 4;
-        border-color: rgba(0,0,255,1);
-        color: rgba(0,0,255,1);
-        button-hovered-color: rgba(0,0,150,1);
-        button-active-color: rgba(0,0,200,1);
-        button-color: rgba(0,0,0,1);
+        border-color: rgb(0,0,255);
+        color: rgb(0,0,255);
+        button-hovered-color: rgb(0,0,150);
+        button-active-color: rgb(0,0,200);
+        button-color: rgb(0,0,0);
 }
 
 cleanButton {
         frame-border-size: 4;
-        border-color: rgba(255,0,0,1);
-        color: rgba(255,0,0,1);
-        button-hovered-color: rgba(150,0,0,1);
-        button-active-color: rgba(200,0,0,1);
-        button-color: rgba(0,0,0,1);
+        border-color: rgb(255,0,0);
+        color: rgb(255,0,0);
+        button-hovered-color: rgb(150,0,0);
+        button-active-color: rgb(200,0,0);
+        button-color: rgb(0,0,0);
 }
 
 continueButton {
         frame-border-size: 4;
-        border-color: rgba(0,255,0,1);
-        color: rgba(0,255,0,1);
-        button-hovered-color: rgba(0,150,0,1);
-        button-active-color: rgba(0,200,0,1);
-        button-color: rgba(0,0,0,1);
+        border-color: rgb(0,255,0);
+        color: rgb(0,255,0);
+        button-hovered-color: rgb(0,150,0);
+        button-active-color: rgb(0,200,0);
+        button-color: rgb(0,0,0);
 }
