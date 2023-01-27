@@ -7,11 +7,13 @@
 package app
 
 import (
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
-	"strings"
-
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	"golang.org/x/image/colornames"
+	"image/color"
+	"strings"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
@@ -168,4 +170,26 @@ func splitInputTextIntoCodons(c *imgui.InputTextCallbackData) {
 	}
 
 	c.MarkBufferModified()
+}
+
+func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
+	return animations.HoverColorAnimationStyle(
+		animations.HoverColorAnimation(
+			button,
+			animationFPS,
+			animationDuration,
+			func() color.RGBA {
+				return colornames.White
+			},
+			func() color.RGBA {
+				return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
+			},
+			giu.StyleColorText,
+			giu.StyleColorText,
+		),
+		animationFPS,
+		animationDuration,
+		giu.StyleColorButtonHovered,
+		giu.StyleColorButton,
+	)
 }

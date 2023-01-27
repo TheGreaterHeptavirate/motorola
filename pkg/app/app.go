@@ -15,6 +15,7 @@ package app
 import (
 	"fmt"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	"time"
 
 	"github.com/AllenDang/giu"
 
@@ -24,8 +25,9 @@ import (
 )
 
 const (
-	appTitle                       = "Białkomat"
-	appResolutionX, appResolutionY = 800, 600
+	appTitle                        = "Białkomat"
+	appResolutionX, appResolutionY  = 800, 600
+	animationFPS, animationDuration = 60, time.Second / 2
 
 	toolboxProcentageWidth = 0.2
 )
