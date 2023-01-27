@@ -9,7 +9,6 @@
 package animations
 
 import (
-	"fmt"
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
@@ -164,7 +163,6 @@ func (h *HoverColorAnimationWidget) Build() {
 		}
 	}
 
-	fmt.Println(normalColor)
 	imgui.PushStyleColor(h.normalID, normalColor)
 
 	if h.hoverID != h.normalID {
