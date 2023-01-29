@@ -28,7 +28,7 @@ build: setup
 	#@cp cmd/motorola/*syso .
 	CGO_ENABLED="1" GOOS="windows" CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ \
 		HOST=x86_64-w64-mingw32 \
-		$(GOCMD) build \#-ldflags "-s -w -H=windowsgui -extldflags=-static" 
+		$(GOCMD) build -ldflags "-s -w -extldflags=-static" \
 		-o build/motorola.exe ./cmd/motorola
 	#@rm *.syso
 
