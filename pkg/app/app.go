@@ -28,7 +28,7 @@ import (
 const (
 	appTitle                        = "Białkomat"
 	appResolutionX, appResolutionY  = 800, 600
-	animationFPS, animationDuration = 60, time.Second / 2
+	animationFPS, animationDuration = 60, time.Second / 5
 
 	toolboxProcentageWidth = 0.2
 )
