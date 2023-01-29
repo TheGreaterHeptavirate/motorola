@@ -15,6 +15,7 @@ package app
 import (
 	"fmt"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	"strings"
 	"time"
 
 	"github.com/AllenDang/giu"
@@ -81,7 +82,7 @@ func (a *App) Run() error {
 	// add stylesheet
 	logger.Debug("Adding main stylesheet...")
 
-	if err := giu.ParseCSSStyleSheet(assets.AppCSS); err != nil {
+	if err := giu.ParseCSSStyleSheet([]byte(strings.ReplaceAll(string(assets.AppCSS), "\r", ""))); err != nil {
 		return fmt.Errorf("error parsing CSS stylesheet: %w", err)
 	}
 
