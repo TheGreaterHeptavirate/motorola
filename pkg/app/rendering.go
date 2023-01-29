@@ -36,12 +36,6 @@ Białkomat to projekt tworzony przez [Dróżynę GigaCHADS](https://github.com/T
 // ViewMode represents currently displayed view
 type ViewMode byte
 
-// View modes
-const (
-	LoadView ViewMode = iota
-	ProteinsView
-)
-
 func (a *App) render() {
 	giu.PrepareMsgbox().Build()
 
@@ -64,9 +58,6 @@ func (a *App) render() {
 		},
 	)
 	a.layout.Build()
-	//switch a.viewMode {
-	//case LoadView:
-	//case ProteinsView:
 }
 
 func (a *App) inputBar() giu.Layout {

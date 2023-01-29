@@ -260,6 +260,5 @@ func (a *App) OnProceed() {
 
 	logger.Debugf("%v proteins found", len(d))
 	a.foundProteins = d
-	a.viewMode = ProteinsView
 	a.layout.Start(time.Second/4, 60)
 }
