@@ -7,13 +7,18 @@
 package app
 
 import (
+	"errors"
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	"github.com/sqweek/dialog"
 	"golang.org/x/image/colornames"
 	"image/color"
+	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
@@ -192,4 +197,69 @@ func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 		giu.StyleColorButtonHovered,
 		giu.StyleColorButton,
 	)
+}
+
+func (a *App) OnLoadFromFile() {
+	logger.Info("Loading file to input textbox...")
+
+	path, err := dialog.File().Load()
+	if err != nil {
+		// this error COULD come from fact that user exited dialog
+		// in this case, don't report app's error, just return
+		if errors.Is(err, dialog.ErrCancelled) {
+			logger.Info("File loading canceled")
+
+			return
+		}
+
+		a.ReportError(err)
+
+		return
+	}
+
+	logger.Debugf("Path to file to load: %s", path)
+
+	data, err := os.ReadFile(filepath.Clean(path))
+	if err != nil {
+		a.ReportError(err)
+
+		return
+	}
+
+	logger.Debug("File loaded successfully!")
+
+	a.inputString = string(data)
+
+	a.inputString, err = ValidateCodonsString(a.inputString)
+	if err != nil {
+		giu.Msgbox(
+			"UWAGA! Plik może zawierać nieprawidłowe dane!",
+			`Plik zawiera nieobsługiwane znaki.
+Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
+litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
+`,
+		)
+	}
+
+	a.inputString = GetPresentableCodonsString(a.inputString, 0)
+}
+
+func (a *App) OnProceed() {
+	logger.Debugf("Parsing data: %v", a.inputString)
+
+	validString, _ := ValidateCodonsString(a.inputString)
+
+	logger.Debugf("Input string validated: %v", validString)
+
+	d, err := inputparser.ParseInput(validString)
+	if err != nil {
+		a.ReportError(err)
+
+		return
+	}
+
+	logger.Debugf("%v proteins found", len(d))
+	a.foundProteins = d
+	a.viewMode = ProteinsView
+	a.layout.Start(time.Second/4, 60)
 }
