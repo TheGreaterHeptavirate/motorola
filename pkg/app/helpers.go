@@ -10,17 +10,15 @@ import (
 	"errors"
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	animations "github.com/gucio321/giu-animations"
 	"github.com/sqweek/dialog"
 	"golang.org/x/image/colornames"
 	"image/color"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
-
-	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
 
 // ReportError prints an error to the log and shows a message box in App.
@@ -178,25 +176,25 @@ func splitInputTextIntoCodons(c *imgui.InputTextCallbackData) {
 }
 
 func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
-	return animations.HoverColorAnimationStyle(
-		animations.HoverColorAnimation(
-			button,
-			animationFPS,
-			animationDuration,
-			func() color.RGBA {
-				return colornames.White
-			},
-			func() color.RGBA {
-				return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
-			},
-			giu.StyleColorText,
-			giu.StyleColorText,
+	return animations.Animator(
+		animations.HoverColorStyle(
+			animations.Animator(
+				animations.HoverColor(
+					button,
+					func() color.RGBA {
+						return colornames.White
+					},
+					func() color.RGBA {
+						return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
+					},
+					giu.StyleColorText,
+					giu.StyleColorText,
+				),
+			).Duration(animationDuration).FPS(animationFPS),
+			giu.StyleColorButtonHovered,
+			giu.StyleColorButton,
 		),
-		animationFPS,
-		animationDuration,
-		giu.StyleColorButtonHovered,
-		giu.StyleColorButton,
-	)
+	).Duration(animationDuration).FPS(animationFPS)
 }
 
 func (a *App) OnLoadFromFile() {
@@ -260,5 +258,5 @@ func (a *App) OnProceed() {
 
 	logger.Debugf("%v proteins found", len(d))
 	a.foundProteins = d
-	a.layout.Start(time.Second/4, 60)
+	a.layout.Start()
 }

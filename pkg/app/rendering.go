@@ -10,12 +10,10 @@ package app
 
 import (
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
-	"math"
-	"time"
-
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
+	animations "github.com/gucio321/giu-animations"
+	"math"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
@@ -39,13 +37,13 @@ type ViewMode byte
 func (a *App) render() {
 	giu.PrepareMsgbox().Build()
 
-	a.layout = animations.Transition(
-		func(animation animations.Animation) {
+	a.layout = animations.Animator(animations.Transition(
+		func(starter func()) {
 			giu.SingleWindow().Layout(
 				a.inputBar(),
 			)
 		},
-		func(animation animations.Animation) {
+		func(starter func()) {
 			a.toolbox()
 
 			if len(a.foundProteins) == 0 {
@@ -56,7 +54,7 @@ func (a *App) render() {
 			a.proteinStats()
 			a.proteinDrawing()
 		},
-	)
+	))
 	a.layout.Build()
 }
 
@@ -155,7 +153,7 @@ func (a *App) toolbox() {
 			}),
 			giu.Separator(),
 			giu.Button("Wróć").OnClick(func() {
-				a.layout.Start(time.Second/4, 60)
+				a.layout.Start()
 			}),
 			giu.Button("O Nas").OnClick(func() {
 				giu.OpenPopup("O Nas")

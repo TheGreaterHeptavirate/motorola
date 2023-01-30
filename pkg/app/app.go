@@ -14,7 +14,7 @@ package app
 
 import (
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/app/animations"
+	animations "github.com/gucio321/giu-animations"
 	"strings"
 	"time"
 
@@ -41,7 +41,7 @@ type App struct {
 
 	foundProteins  []*protein.Protein
 	currentProtein int32
-	layout         animations.Animation
+	layout         *animations.AnimatorWidget
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel
