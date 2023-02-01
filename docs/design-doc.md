@@ -163,6 +163,31 @@ Poniższe referencje mogą okazać się ciekawe:
 no, to to właśnie po to ImPlot - te wykresy powinny być
 całkiem proste do zrobienia tylko trzeba znaleźć wzory.
 
+### Punkt izoelektryczny
+
+Po rozmowie z [Chatem GPT](https://chat.openai.com) otrzymaliśmy następujący kod:
+
+```go
+package main
+
+import (
+    "fmt"
+
+    "github.com/biogo/biogo/seq"
+    "github.com/biogo/biogo/seq/acid"
+)
+
+func main() {
+    protein := "MVKVFGVGGG"
+    p := seq.NewPeptide(acid.Alphabet, []byte(protein))
+    pI := p.IsoelectricPoint()
+
+    fmt.Printf("The isoelectric point of the protein is %.2f\n", pI)
+}
+```
+
+Teraz tylko wystarczy zweryfikować i może mamy punkt izoelektryczny :smile:
+
 # UI
 
 napisałem prostą symulację, wygląd mniej więcej tak:
