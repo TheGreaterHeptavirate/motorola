@@ -9,6 +9,18 @@ TODO
 
 Reffer [to docs](./docs)
 
+# STATUS
+
+In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/11/MSC3_2022_Bioinformatyka.pdf)
+- [X] Genetic code reading (35 pts)
+- [X] Proteins presentation (25 pts)
+- [ ] More plots and charts (65 pts)
+- [ ] Additional things:
+    - [ ] "Application architecture" (10 pts)
+    - [ ] documentation (10 pts) (**CAUTION** the current documentation needs to be rewriten! It contains bad language IIRC.)
+    - [ ] UI (25 pts)
+    - [ ] Unittesting :smile: (5 pts)
+
 # Installation instruction
 
 ## Pre-requirements
