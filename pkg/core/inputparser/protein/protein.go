@@ -14,6 +14,9 @@ package protein
 import (
 	"errors"
 	"fmt"
+	"github.com/biogo/biogo/alphabet"
+	"github.com/biogo/biogo/seq/linear"
+	"strings"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 )
@@ -79,4 +82,14 @@ func (p *Protein) Mass() (mass float32) {
 	}
 
 	return mass
+}
+
+func (p *Protein) IsoelectricPoint() (pI float32) {
+	fmt.Println(p.AminoAcids.String())
+	s := p.AminoAcids.String()
+	s = strings.TrimPrefix(s, aminoacid.StartCodon)
+	s = strings.TrimSuffix(s, aminoacid.StopCodon)
+	biogoProtein := linear.NewSeq("protein", []alphabet.Letter(s), alphabet.Protein)
+	x := biogoProtein.
+	return 0
 }

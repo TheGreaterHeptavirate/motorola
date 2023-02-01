@@ -10,10 +10,12 @@ package app
 
 import (
 	"fmt"
+	"math"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
+
 	animations "github.com/gucio321/giu-animations"
-	"math"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
@@ -198,6 +200,7 @@ func (a *App) proteinNotation() {
 
 func (a *App) proteinStats() {
 	inputProtein := a.foundProteins[a.currentProtein]
+	fmt.Println(inputProtein.IsoelectricPoint())
 	windowW, _ := a.window.GetSize()
 	giu.Window("Statystyki").
 		Size(statsWindowW, statsWindowH).
