@@ -8,11 +8,13 @@
 
 main {
         frame-rounding: 15,15;
+	background-color: #121212;
+	frame-background-color: #202020;
+	scrollbar-grab-color: #202020;
+	scrollbar-grab-hovered-color: #303030;
 }
 
 loadButton {
-        frame-border-size: 4;
-        border-color: rgb(0,0,255);
         color: rgb(0,0,255);
         button-hovered-color: rgb(0,0,150);
         button-active-color: rgb(0,0,200);
@@ -20,8 +22,6 @@ loadButton {
 }
 
 cleanButton {
-        frame-border-size: 4;
-        border-color: rgb(255,0,0);
         color: rgb(255,0,0);
         button-hovered-color: rgb(150,0,0);
         button-active-color: rgb(200,0,0);
@@ -29,8 +29,6 @@ cleanButton {
 }
 
 continueButton {
-        frame-border-size: 4;
-        border-color: rgb(0,255,0);
         color: rgb(0,255,0);
         button-hovered-color: rgb(0,150,0);
         button-active-color: rgb(0,200,0);
