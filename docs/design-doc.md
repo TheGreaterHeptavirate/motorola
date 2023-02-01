@@ -134,6 +134,32 @@ to mam nadzieje 1 prosty wzór i 1 więcej pole w jsonie powyżej.
 
 ## Jeszcze więcej wykresów i diagramów
 
+Niestety wzory nie są proste, **ale** o dziwo istnieje biblioteka
+w GO, która załatwia to za nas: https://github.com/biogo/biogoo
+(Moje przypuszczenie na temat dlaczego: bo GO ma to (nie)szczęście być
+językiem tworzonym przez Google).
+<details><summary>Ciekawostka</summary>
+
+Podczas szukania  biblioteki natknęliśmy się z @Garnn na BioPython,
+który robi mniej więcej to samo. Kontynuując dalsze poszukiwania prubowaliśmy
+zaimplementować Pythona w GO!
+Polega to na tym, że istnieje CGO - integralna część języka pozwalająca wintegrować
+C, a Python posiada CPython - zestaw headerów czyli _teoretycznie_ byłoby to możliwe.
+Niestety z powodu _tego, że python nie ma [Go 1 compatibility promise](https://go.dev/doc/go1compat)_
+z powodu różnic między Pythonem 3.7 a (obecnie używanym przez Red Hata 3.11) niemożliwe
+okazało się korzystanie z istniejących już repozytoriów, natomiast
+próba kompilacji najprostszych przykładów kończyła się crashem linkera.
+Natywna biblioteka w GO rozwiązała problem w jego istocie, więc nie
+dokońćzyliśmy researchu (może [@gucio321](https://github.com/gucio321)) dokończyy
+go w wolnej chwili).
+
+Poniższe referencje mogą okazać się ciekawe:
+- przykład: https://poweruser.blog/embedding-python-in-go-338c0399f3d5
+- temat na go forum: https://forum.golangbridge.org/t/use-python-in-go-code/30503
+- Problem na GitHubie w jednym z repozytoriów: https://github.com/go-python/cpy3/issues/33
+
+</details>
+
 no, to to właśnie po to ImPlot - te wykresy powinny być
 całkiem proste do zrobienia tylko trzeba znaleźć wzory.
 
