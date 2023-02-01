@@ -24,6 +24,8 @@ odnoszę się tutaj do części PDFa z [referencjami](#referencje)
 
 ## Odczyt kodu genetycznego
 
+<details>
+
 ### zczytanie z pliku/wejścia
 
 nie powinno to sprawić praktycznie żadnych problemów.
@@ -109,8 +111,11 @@ IMO nie ma co wydziwiać - po prostu walnąć
 
 więcej w sekcji [o UI](ui)
 
+</details>
+
 ## Wizualizacja kandydatów na białka
 
+<details>
 no tutaj troche zabawy będzie.
 
 Mówiąc troche mam na myśli BAAARDZO DUŻO
@@ -120,6 +125,8 @@ takich schemacików. Miałby on używać implota (wykresów)
 żeby rysować te rysunki. Plusy są takie:
 - nienajgorszy wygląd graficzny (użydkownik może przesuwać wykres i nie zajmuje on za dużo miejsca)
 - implot nie jest chyba super trudny (nie używałem wykresów w giu tbh)
+
+</details>
 
 ## liczenie masy
 
