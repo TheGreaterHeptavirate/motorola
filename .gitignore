@@ -34,3 +34,6 @@ build/
 
 # libreoffice lock files
 .~*\#
+
+#python virtual enviroument directory
+venv/
