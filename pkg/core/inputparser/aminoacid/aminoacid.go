@@ -24,16 +24,6 @@ func (a *AminoAcids) Push(aminoAcid *AminoAcid) {
 	*a = append(*a, aminoAcid)
 }
 
-func (a *AminoAcids) String() string {
-	result := ""
-
-	for _, aminoAcid := range *a {
-		result += aminoAcid.Sign
-	}
-
-	return result
-}
-
 // AminoAcid represents statistic of a single amino-acid.
 type AminoAcid struct {
 	// Sing is the one-letter code from this circle-scheme
