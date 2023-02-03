@@ -39,6 +39,13 @@ jobs:
           restore-keys: |
             ubuntu-latest-go-
 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: install pip dependencies
+        run: pip install -r requirements.txt
+
       - name: make setup
         run: |
           make setup
