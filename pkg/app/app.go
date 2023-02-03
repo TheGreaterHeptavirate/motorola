@@ -12,6 +12,10 @@
 // see: cmd/motorola/main.go for main use-case
 package app
 
+//#cgo pkg-config: python3-embed
+//#include <Python.h>
+import "C"
+
 import (
 	"fmt"
 	animations "github.com/gucio321/giu-animations"
@@ -73,6 +77,10 @@ func (a *App) Run() error {
 
 	logger.Infof("Setting log level to %s", a.logLevel)
 	logger.SetLevel(a.logLevel)
+
+	logger.Debug("Initializing Python3")
+	C.Py_Initialize()
+	defer C.Py_Finalize()
 
 	// create master window
 	logger.Debug("Creating master window...")
