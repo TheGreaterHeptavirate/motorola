@@ -10,7 +10,7 @@
 package db
 
 import (
-	"golang.org/x/image/colornames"
+	"image/color"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/drawcommands"
 )
@@ -19,8 +19,8 @@ import (
 //
 //nolint:gochecknoglobals // it must be tagged `var`, since its value is color.Color
 var (
-	ComponentsColor = colornames.Blue
-	BondColor       = colornames.Blueviolet
+	ComponentsColor = color.RGBA{R: 0, G: 92, B: 206, A: 255}
+	BondColor       = color.RGBA{R: 255, G: 124, B: 0, A: 255}
 )
 
 // StandardLine is a length of standard line.
@@ -205,7 +205,7 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			DoubleLine(drawcommands.DownRight, StandardLine).
 			ChemicalText("O", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
 
-		//https://en.wikipedia.org/wiki/Glutamic_acid#/media/File:L-Glutamins%C3%A4ure_-_L-Glutamic_acid.svg
+		// https://en.wikipedia.org/wiki/Glutamic_acid#/media/File:L-Glutamins%C3%A4ure_-_L-Glutamic_acid.svg
 		"E": drawcommands.Draw(ComponentsColor).
 			DrawLine(drawcommands.Right, StandardLine).
 			DrawLine(drawcommands.DownRight, StandardLine).

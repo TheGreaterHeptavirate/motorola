@@ -12,6 +12,10 @@ main {
 	frame-background-color: #202020;
 	scrollbar-grab-color: #202020;
 	scrollbar-grab-hovered-color: #303030;
+	child-background-color: black;
+	resize-grip-color:rgb(30,30,30);
+	resize-grip-hovered-color:rgb(50,50,50);
+	resize-grip-active-color:rgb(60,60,60);
 }
 
 loadButton {
