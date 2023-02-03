@@ -204,6 +204,7 @@ func (a *App) proteinStats() {
 		Pos(toolboxProcentageWidth*float32(windowW)+proteinNotationWindowSizeX, 0).
 		Layout(
 			giu.Labelf("Masa: %v", inputProtein.Mass()),
+			giu.Labelf("pH: %f", inputProtein.PH),
 		)
 }
 
