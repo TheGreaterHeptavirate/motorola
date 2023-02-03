@@ -28,6 +28,7 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
 - [go](https://go.dev)
 - GCC
 - mingw (**for cross-platform compilation only**)
+- Python 3.11 version **with C headers** (you can test if another versions works)
 
 ## Source
 
@@ -38,6 +39,8 @@ git clone git@github.com:TheGreaterHeptavirate/motorola
 cd motorola
 # download go dependencies
 go get -d ./...
+# setup python dependencies (ofc you can use virtualenv)
+python3 -m pip install -r requirements.txt
 
 # run app:
 go run github.com/TheGreaterHeptavirate/motorola/cmd/motorola
