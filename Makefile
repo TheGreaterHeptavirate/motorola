@@ -20,16 +20,8 @@ all: build
 ## build: Builds the binary
 build: setup
 	@echo "files will be saved in build/"
-	mkdir -p build
-	@echo "Building..."
-	@echo "Building - linux..."
-	CGO_ENABLED="1" GOOS="linux" $(GOCMD) build -o build/motorola.bin cmd/motorola/main.go
-	@echo "Building - windows..."
+	CGO_ENABLED="1" $(GOCMD) build -o build/ github.com/TheGreaterHeptavirate/motorola/cmd/motorola
 	#@cp cmd/motorola/*syso .
-	CGO_ENABLED="1" GOOS="windows" CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ \
-		HOST=x86_64-w64-mingw32 \
-		$(GOCMD) build -ldflags "-s -w -extldflags=-static" \
-		-o build/motorola.exe ./cmd/motorola
 	#@rm *.syso
 
 ## setup: Runs mod download and generate
