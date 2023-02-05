@@ -12,15 +12,15 @@
 // see: cmd/motorola/main.go for main use-case
 package app
 
-//#cgo pkg-config: python3-embed
 //#include <Python.h>
 import "C"
 
 import (
 	"fmt"
-	animations "github.com/gucio321/giu-animations"
 	"strings"
 	"time"
+
+	animations "github.com/gucio321/giu-animations"
 
 	"github.com/AllenDang/giu"
 
