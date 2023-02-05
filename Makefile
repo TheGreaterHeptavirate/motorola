@@ -39,16 +39,17 @@ setup:
 	@echo "Consti Tutor INFO:"
 	@echo "Consti Tutor INFO: For more details check https://github.com/AllenDang/giu"
 	@echo "Downloading tools and dependencies..."
-	@git submodule update --init --recursive
-	@$(GOCMD) get golang.org/x/tools/cmd/stringer
-	@$(GOCMD) install golang.org/x/tools/cmd/stringer
-	@$(GOCMD) install github.com/mewspring/tools/cmd/string2enum@latest
-	@$(GOCMD) install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
-	@$(GOCMD) get -d ./...
-	@$(GOCMD) mod download -x
-	@$(GOCMD) generate -v ./...
+	git submodule update --init --recursive
+	$(GOCMD) get golang.org/x/tools/cmd/stringer
+	$(GOCMD) install golang.org/x/tools/cmd/stringer
+	$(GOCMD) install github.com/mewspring/tools/cmd/string2enum@latest
+	$(GOCMD) install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
+	$(GOCMD) get -d ./...
+	$(GOCMD) mod download -x
+	$(GOCMD) generate -v ./...
 	#generate specific windows stuff
 	@GOOS=windows $(GOCMD) generate -v ./...
+	$(GOCMD) run scripts/flags.go -o pkg/python_integration/flags.go -pycfg python3-config
 
 ## test: Runs the tests with coverage
 test:
