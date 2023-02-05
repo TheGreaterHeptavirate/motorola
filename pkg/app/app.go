@@ -12,11 +12,10 @@
 // see: cmd/motorola/main.go for main use-case
 package app
 
-//#include <Python.h>
 import "C"
-
 import (
 	"fmt"
+	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 	"strings"
 	"time"
 
@@ -79,8 +78,8 @@ func (a *App) Run() error {
 	logger.SetLevel(a.logLevel)
 
 	logger.Debug("Initializing Python3")
-	C.Py_Initialize()
-	defer C.Py_Finalize()
+	python.Initialize()
+	defer python.Finalize()
 
 	// create master window
 	logger.Debug("Creating master window...")
