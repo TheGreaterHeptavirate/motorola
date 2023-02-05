@@ -53,6 +53,11 @@ jobs:
         run: |
           make setup
 
+      - name: Setup tmate session
+        if: startsWith(matrix.os,'windows')
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: true
       - name: make test
         run: |
           make test
