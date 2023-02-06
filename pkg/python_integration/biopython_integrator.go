@@ -17,7 +17,7 @@ import (
 	"strings"
 )
 
-//go:embed biopython
+//go:embed all:biopython
 var stuff embed.FS
 
 func InitializeBiopython() (finisher func(), err error) {
@@ -70,17 +70,18 @@ func loadDir(base, dirname string) error {
 		}
 
 		filename := joinPath(dirname, file.Name())
+		fmt.Println(filename)
 
 		fileData, err := stuff.ReadFile(filename)
 		if err != nil {
 			return fmt.Errorf("reading file %s: %w", filename, err)
 		}
 
-		if filepath.Ext(file.Name()) != ".py" {
-			logger.Debugf("file %s has is not a ptyhon file", filename)
-
-			continue
-		}
+		//if filepath.Ext(file.Name()) != ".py" {
+		//	logger.Debugf("file %s has is not a ptyhon file", filename)
+		//
+		//	continue
+		//}
 
 		err = os.WriteFile(joinPath(base, file.Name()), fileData, 0o644)
 		if err != nil {

@@ -68,7 +68,7 @@ func OpenPyModule(name string) (*PyObject, error) {
 }
 
 func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyObject, err error) {
-	logger.Debugf("[PYTHON]: Calling python function %s", funcName)
+	logger.Debugf("[PYTHON]: Calling python function %s (module %v)", funcName, module)
 	functionName := C.CString(funcName)
 	defer C.free(unsafe.Pointer(functionName))
 
@@ -78,7 +78,11 @@ func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyOb
 		return nil, fmt.Errorf("IsoelecctricPoint function cannot be called: %w", ErrPython)
 	}
 
-	return (*PyObject)(C.PyObject_CallObject(function, args.toC())), nil
+	result = (*PyObject)(C.PyObject_CallObject(function, args.toC()))
+
+	logger.Debugf("[PYTHON]: Function called. Resulting object is %v", result)
+
+	return result, nil
 }
 
 func CallPyMethodNoArgs(obj *PyObject, name string) *PyObject {
