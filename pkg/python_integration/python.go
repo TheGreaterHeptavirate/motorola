@@ -75,7 +75,7 @@ func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyOb
 	function := C.PyObject_GetAttrString(module.toC(), functionName)
 
 	if function == nil || C.PyCallable_Check(function) == 0 {
-		return nil, fmt.Errorf("IsoelecctricPoint function cannot be called: %w", ErrPython)
+		return nil, fmt.Errorf("%s function cannot be called: %w", funcName, ErrPython)
 	}
 
 	result = (*PyObject)(C.PyObject_CallObject(function, args.toC()))

@@ -10,10 +10,11 @@ package app
 
 import (
 	"fmt"
+	"math"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	animations "github.com/gucio321/giu-animations"
-	"math"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
@@ -116,8 +117,8 @@ func (a *App) toolbox() {
 		).Pos(0, 0).
 		Size(float32(windowW)*toolboxProcentageWidth, float32(windowH)).
 		Layout(
-			//here I'm going to do a small trick for spelling:
-			//0, 5+ - białEK
+			// here I'm going to do a small trick for spelling:
+			// 0, 5+ - białEK
 			//		1 - białKO
 			//		2-4 - białKA
 			giu.Custom(func() {
@@ -134,14 +135,14 @@ func (a *App) toolbox() {
 				giu.Labelf("Znaleziono %d biał%s", len(a.foundProteins), ending).Build()
 			}),
 			giu.Label("Znalezione białka:"),
-			//proteins list
+			// proteins list
 			giu.Custom(func() {
 				buttons := make([]giu.Widget, len(a.foundProteins))
 				for i := range a.foundProteins {
 					// closure xD
 					i := i
 					buttons[i] = giu.RadioButton(
-						//TODO: name
+						// TODO: name
 						fmt.Sprintf("Białko %d", i),
 						a.currentProtein == int32(i),
 					).OnChange(func() {
@@ -204,7 +205,10 @@ func (a *App) proteinStats() {
 		Pos(toolboxProcentageWidth*float32(windowW)+proteinNotationWindowSizeX, 0).
 		Layout(
 			giu.Labelf("Masa: %v", inputProtein.Mass()),
-			giu.Labelf("pH: %f", inputProtein.PH),
+			giu.Labelf("pH: %f", inputProtein.Stats.PH),
+			giu.Labelf("Molecular Weight: %f", inputProtein.Stats.MolecularWeight),
+			giu.Labelf("Aromaticity: %f", inputProtein.Stats.Aromaticity),
+			giu.Labelf("Instability Index: %f", inputProtein.Stats.InstabilityIndex),
 		)
 }
 

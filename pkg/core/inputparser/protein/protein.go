@@ -27,7 +27,12 @@ var ErrInvalidProtein = errors.New("invalid protein")
 // [STOP]/[START] elements.
 type Protein struct {
 	AminoAcids aminoacid.AminoAcids
-	PH         float32
+	Stats      struct {
+		PH               float32
+		MolecularWeight  float32
+		Aromaticity      float32
+		InstabilityIndex float32
+	}
 }
 
 // NewProtein creates a new protein instance.
@@ -42,10 +47,8 @@ func NewProtein(a aminoacid.AminoAcids) (*Protein, error) {
 		return nil, fmt.Errorf("checking protein: %w", err)
 	}
 
-	var err error
-	result.PH, err = result.pH()
-	if err != nil {
-		return nil, fmt.Errorf("error calculating protein's pH: %w", err)
+	if err := result.FillStats(); err != nil {
+		return nil, fmt.Errorf("filling in protein stats: %w", err)
 	}
 
 	return result, nil

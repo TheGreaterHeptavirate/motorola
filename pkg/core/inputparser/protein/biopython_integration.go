@@ -10,21 +10,50 @@ package protein
 
 import "C"
 import (
-	"errors"
 	"fmt"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 	"strings"
 )
 
-// ErrPython is returned when there is something wrong with python compiler
-var ErrPython = errors.New("error in python wraper")
-
 func (p *Protein) FillStats() (err error) {
-	p.PH, err = p.pH()
+	p.Stats.PH, err = p.pH()
 	if err != nil {
-		return fmt.Errorf("error calculating protein's pH: %w", err)
+		return fmt.Errorf("calculating protein's pH: %w", err)
 	}
+
+	if err := p.analysis(); err != nil {
+		return fmt.Errorf("analyzing protein: %w", err)
+	}
+
+	return nil
+}
+
+func (p *Protein) analysis() error {
+	module, err := python.OpenPyModule("Bio.SeqUtils.ProtParam")
+	if err != nil {
+		return fmt.Errorf("cannot open module: %w", err)
+	}
+
+	args := python.Tuple(1)
+	defer python.Clean(args)
+
+	proteinStr := p.AminoAcids.String()
+	proteinStr = strings.TrimPrefix(proteinStr, aminoacid.StartCodon)
+	proteinStr = strings.TrimSuffix(proteinStr, aminoacid.StopCodon)
+
+	argument := python.ToPyString(proteinStr)
+
+	python.Tuple_Set(args, 0, argument)
+
+	resultProtein, err := python.CallPyFunc(module, "ProteinAnalysis", args)
+	if err != nil {
+		return fmt.Errorf("calling python function: %w", err)
+	}
+
+	p.Stats.MolecularWeight = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "molecular_weight"))
+	p.Stats.Aromaticity = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "aromaticity"))
+	p.Stats.InstabilityIndex = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "instability_index"))
 
 	return nil
 }
@@ -39,7 +68,7 @@ func (p *Protein) pH() (float32, error) {
 	defer python.Clean(args)
 
 	proteinStr := p.AminoAcids.String()
-	proteinStr = strings.TrimPrefix(proteinStr, aminoacid.StartCodon)
+	proteinStr = strings.ReplaceAll(proteinStr, aminoacid.StartCodon, "M")
 	proteinStr = strings.TrimSuffix(proteinStr, aminoacid.StopCodon)
 
 	argument := python.ToPyString(proteinStr)
@@ -48,7 +77,7 @@ func (p *Protein) pH() (float32, error) {
 
 	resultProtein, err := python.CallPyFunc(module, "IsoelectricPoint", args)
 	if err != nil {
-		return -1, fmt.Errorf("error calling python function: %w", err)
+		return -1, fmt.Errorf("calling python function: %w", err)
 	}
 
 	defer python.Clean(resultProtein)
