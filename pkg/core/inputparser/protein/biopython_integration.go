@@ -16,6 +16,8 @@ import (
 	"strings"
 )
 
+const Codons = "FLSYCWPHQRITNKVADEGM"
+
 func (p *Protein) FillStats() (err error) {
 	p.Stats.PH, err = p.pH()
 	if err != nil {
@@ -39,7 +41,7 @@ func (p *Protein) analysis() error {
 	defer python.Clean(args)
 
 	proteinStr := p.AminoAcids.String()
-	proteinStr = strings.TrimPrefix(proteinStr, aminoacid.StartCodon)
+	proteinStr = strings.ReplaceAll(proteinStr, aminoacid.StartCodon, "M")
 	proteinStr = strings.TrimSuffix(proteinStr, aminoacid.StopCodon)
 
 	argument := python.ToPyString(proteinStr)
@@ -54,6 +56,11 @@ func (p *Protein) analysis() error {
 	p.Stats.MolecularWeight = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "molecular_weight"))
 	p.Stats.Aromaticity = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "aromaticity"))
 	p.Stats.InstabilityIndex = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "instability_index"))
+
+	percentageMap := python.CallPyMethodNoArgs(resultProtein, "get_amino_acids_percent")
+	for _, c := range Codons {
+		p.Stats.AminoAcidsPercentage[string(c)] = python.FromPyFloat(python.GetDictObject(percentageMap, python.ToPyString(string(c))))
+	}
 
 	return nil
 }

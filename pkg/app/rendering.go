@@ -11,6 +11,7 @@ package app
 import (
 	"fmt"
 	"math"
+	"sort"
 
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
@@ -209,6 +210,32 @@ func (a *App) proteinStats() {
 			giu.Labelf("Molecular Weight: %f", inputProtein.Stats.MolecularWeight),
 			giu.Labelf("Aromaticity: %f", inputProtein.Stats.Aromaticity),
 			giu.Labelf("Instability Index: %f", inputProtein.Stats.InstabilityIndex),
+			giu.Custom(func() {
+				labels := make([]string, 0)
+				for key, value := range inputProtein.Stats.AminoAcidsPercentage {
+					if value > 0 {
+						labels = append(labels, key)
+					}
+				}
+
+				sort.Strings(labels)
+
+				values := make([]float64, 0)
+				for _, key := range labels {
+					values = append(values, float64(inputProtein.Stats.AminoAcidsPercentage[key]))
+				}
+
+				giu.Plot("Amino Acids [%]").
+					Flags(giu.PlotFlagsEqual|giu.PlotFlagsNoMousePos).
+					Size(250, 250).
+					XAxeFlags(giu.PlotAxisFlagsNoDecorations).
+					YAxeFlags(giu.PlotAxisFlagsNoDecorations, 0, 0).
+					AxisLimits(0, 1, 0, 1, giu.ConditionAlways).
+					Plots(
+						giu.PieChart(labels, values, 0.5, 0.5, 0.45),
+					).Build()
+
+			}),
 		)
 }
 

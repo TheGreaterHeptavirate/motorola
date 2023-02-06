@@ -27,8 +27,9 @@ import "C"
 import (
 	"errors"
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"unsafe"
+
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
 
 type PyObject C.PyObject
@@ -111,4 +112,8 @@ func ToPyString(s string) *PyObject {
 
 func FromPyFloat(f *PyObject) float32 {
 	return float32(C.PyFloat_AsDouble(f.toC()))
+}
+
+func GetDictObject(dict *PyObject, key *PyObject) *PyObject {
+	return (*PyObject)(C.PyDict_GetItem(dict.toC(), key.toC()))
 }
