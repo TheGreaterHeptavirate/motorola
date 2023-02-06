@@ -37,7 +37,7 @@ func InitializeBiopython() (finisher func(), err error) {
 		return nil, fmt.Errorf("error creating temporary directory: %w", err)
 	}
 
-	C.PyObject_CallMethodOneArg(sysPath, C.PyUnicode_FromString(C.CString("append")), C.PyUnicode_FromString(C.CString(path)))
+	C.PyObject_CallMethodOneArg(sysPath, C.PyUnicode_FromString(C.CString("append")), C.PyUnicode_FromString(C.CString(joinPath(path, "biopython"))))
 
 	logger.Debugf("tempdir created: %s", path)
 
@@ -60,7 +60,7 @@ func loadDir(base, dirname string, sysPath *C.PyObject) error {
 			dir := joinPath(dirname, file.Name())
 			dirpath := joinPath(base, dirname)
 
-			err = os.Mkdir(joinPath(base, file.Name()), 0o644)
+			err = os.Mkdir(joinPath(base, file.Name()), 0o700)
 			if err != nil {
 				return fmt.Errorf("unable to create dir %s: %w", dirpath, err)
 			}
