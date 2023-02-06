@@ -27,6 +27,7 @@ import "C"
 import (
 	"errors"
 	"fmt"
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"unsafe"
 )
 
@@ -37,10 +38,12 @@ func (p *PyObject) toC() *C.PyObject {
 }
 
 func Initialize() {
+	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()
 }
 
 func Finalize() {
+	logger.Debugf("[PYTHON]: Finalize")
 	C.Py_Finalize()
 }
 
@@ -52,6 +55,7 @@ func Clean(ref *PyObject) {
 }
 
 func OpenPyModule(name string) (*PyObject, error) {
+	logger.Debugf("[PYTHON]: Opening module %s", name)
 	moduleName := C.CString(name)
 	defer C.free(unsafe.Pointer(moduleName))
 
@@ -64,6 +68,7 @@ func OpenPyModule(name string) (*PyObject, error) {
 }
 
 func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyObject, err error) {
+	logger.Debugf("[PYTHON]: Calling python function %s", funcName)
 	functionName := C.CString(funcName)
 	defer C.free(unsafe.Pointer(functionName))
 
@@ -77,19 +82,23 @@ func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyOb
 }
 
 func CallPyMethodNoArgs(obj *PyObject, name string) *PyObject {
+	logger.Debugf("[PYTHON]: Calling python method %s (object %v)", name, obj)
 	pyName := ToPyString(name)
 	return (*PyObject)(C.PyObject_CallMethodNoArgs(obj.toC(), pyName.toC()))
 }
 
 func Tuple(length int) *PyObject {
+	logger.Debugf("[PYTHON]: creating new tuple")
 	return (*PyObject)(C.PyTuple_New(C.xlong(length)))
 }
 
 func Tuple_Set(tuple *PyObject, pos int, value *PyObject) {
+	logger.Debugf("[PYTHON]: setting element %d of python tuple", pos)
 	C.PyTuple_SetItem(tuple.toC(), C.xlong(pos), value.toC())
 }
 
 func ToPyString(s string) *PyObject {
+	logger.Debugf("[PYTHON]: converting %s to python string", s)
 	argumentCStr := C.CString(s)
 	defer C.free(unsafe.Pointer(argumentCStr))
 

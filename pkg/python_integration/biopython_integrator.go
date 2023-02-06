@@ -21,35 +21,29 @@ import (
 var stuff embed.FS
 
 func InitializeBiopython() (finisher func(), err error) {
-	sysModule, err := OpenPyModule("sys")
-	if err != nil {
-		return nil, fmt.Errorf("error opening python's sys module: %w", err)
-	}
-
-	logger.Debug("python3: import sys")
-
-	sysModuleDict := C.PyModule_GetDict(sysModule.toC())
-
-	sysPath := C.PyDict_GetItemString(sysModuleDict, C.CString("path"))
-
 	path, err := os.MkdirTemp("", "motorola*-biopython-data")
 	if err != nil {
 		return nil, fmt.Errorf("error creating temporary directory: %w", err)
 	}
 
-	C.PyObject_CallMethodOneArg(sysPath, C.PyUnicode_FromString(C.CString("append")), C.PyUnicode_FromString(C.CString(joinPath(path, "biopython"))))
-
 	logger.Debugf("tempdir created: %s", path)
 
-	err = loadDir(path, ".", sysPath)
+	newSyspath := joinPath(path, "biopython")
+
+	logger.Debugf("adding %s to python's syspath", newSyspath)
+
+	C.PyRun_SimpleString(C.CString(fmt.Sprintf(`import sys
+sys.path.append('%s')`, newSyspath)))
+
+	err = loadDir(path, ".")
 	if err != nil {
 		return nil, fmt.Errorf("error loading content of directory: %w", err)
 	}
 
-	return nil, nil
+	return func() { os.RemoveAll(path) }, nil
 }
 
-func loadDir(base, dirname string, sysPath *C.PyObject) error {
+func loadDir(base, dirname string) error {
 	files, err := stuff.ReadDir(dirname)
 	if err != nil {
 		return fmt.Errorf("reading directory %s: %w", dirname, err)
@@ -65,14 +59,9 @@ func loadDir(base, dirname string, sysPath *C.PyObject) error {
 				return fmt.Errorf("unable to create dir %s: %w", dirpath, err)
 			}
 
-			base = joinPath(base, file.Name())
+			b := joinPath(base, file.Name())
 
-			logger.Debugf("adding %s to python path", base)
-			//s := C.CString(base)
-			//defer C.free(unsafe.Pointer(s))
-			//C.PyObject_CallMethodOneArg(sysPath, C.PyUnicode_FromString(C.CString("append")), C.PyUnicode_FromString(s))
-
-			err := loadDir(base, dir, sysPath)
+			err := loadDir(b, dir)
 			if err != nil {
 				return err
 			}
@@ -88,7 +77,7 @@ func loadDir(base, dirname string, sysPath *C.PyObject) error {
 		}
 
 		if filepath.Ext(file.Name()) != ".py" {
-			logger.Debug("file %s has is not a ptyhon file", filename)
+			logger.Debugf("file %s has is not a ptyhon file", filename)
 
 			continue
 		}
