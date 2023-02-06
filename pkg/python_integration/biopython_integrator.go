@@ -11,11 +11,16 @@ import "C"
 import (
 	"embed"
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
+
+var excludeFiles = map[string]bool{
+	"setup.py": true,
+}
 
 //go:embed all:biopython
 var stuff embed.FS
@@ -50,6 +55,10 @@ func loadDir(base, dirname string) error {
 	}
 
 	for _, file := range files {
+		if exclude, found := excludeFiles[file.Name()]; found && exclude {
+			continue
+		}
+
 		if file.IsDir() {
 			dir := joinPath(dirname, file.Name())
 			dirpath := joinPath(base, dirname)
