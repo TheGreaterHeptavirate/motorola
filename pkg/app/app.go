@@ -81,6 +81,14 @@ func (a *App) Run() error {
 	python.Initialize()
 	defer python.Finalize()
 
+	logger.Debug("Initialize BioPython module")
+	biopythonFinisher, err := python.InitializeBiopython()
+	if err != nil {
+		return fmt.Errorf("error initializing biopython: %w", err)
+	}
+
+	defer biopythonFinisher()
+
 	// create master window
 	logger.Debug("Creating master window...")
 
