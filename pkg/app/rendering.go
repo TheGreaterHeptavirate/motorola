@@ -244,7 +244,7 @@ func (a *App) proteinStats() {
 					availableWToPlotX := availableW / plotSizeX
 					availableHToPlotY := availableH / plotSizeY
 					var resultPlotW, resultPlotH float32
-					if availableHToPlotY < 1 || availableHToPlotY < 1 {
+					if availableWToPlotX < 1 || availableHToPlotY < 1 {
 						if availableWToPlotX < availableHToPlotY {
 							resultPlotW = availableW
 							resultPlotH = plotSizeY / plotSizeX * availableW
@@ -265,7 +265,6 @@ func (a *App) proteinStats() {
 						Plots(
 							giu.PieChart(labels, values, 0.5, 0.5, 0.45),
 						).Build()
-
 				}),
 			),
 		)
