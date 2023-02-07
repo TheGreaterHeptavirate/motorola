@@ -28,10 +28,11 @@ const (
 	statsWindowW, statsWindowH                             = 300, 400
 	proteinDrawingW, proteinDrawingH                       = 500, 300
 	projectInfo                                            = `
-Białkomat to projekt tworzony przez Dróżynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
+Białkomat to projekt tworzony przez Drużynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
 [Motorola Science Cup 2022](https://www.science-cup.pl/).
 `
-	plotSizeX, plotSizeY = 250, 250
+	plotSizeX, plotSizeY  = 250, 250
+	toolboxAlignDownDelta = 30
 )
 
 // ViewMode represents currently displayed view
@@ -154,13 +155,21 @@ func (a *App) toolbox() {
 
 				giu.Layout(buttons).Build()
 			}),
+			giu.Custom(func() {
+				_, availableH := giu.GetAvailableRegion()
+				giu.Dummy(0, availableH-toolboxAlignDownDelta).Build()
+			}),
 			giu.Separator(),
-			giu.Button("Wróć").OnClick(func() {
-				a.layout.Start()
-			}),
-			giu.Button("O Nas").OnClick(func() {
-				giu.OpenPopup("O Nas")
-			}),
+			giu.Align(giu.AlignCenter).To(
+				giu.Row(
+					giu.Button("Wróć").OnClick(func() {
+						a.layout.Start()
+					}),
+					giu.Button("O Nas").OnClick(func() {
+						giu.OpenPopup("O Nas")
+					}),
+				),
+			),
 			giu.Custom(func() {
 				imgui.SetNextWindowSizeV(imgui.Vec2{X: 300, Y: 200}, imgui.ConditionAppearing)
 			}),
