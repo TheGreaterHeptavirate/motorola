@@ -153,45 +153,47 @@ func (a *App) toolbox() {
 
 				giu.Labelf("Znaleziono %d biał%s", len(a.foundProteins), ending).Build()
 			}),
-			giu.Label("Znalezione białka:"),
-			// proteins list
-			giu.Custom(func() {
-				buttons := make([]giu.Widget, len(a.foundProteins))
-				for i := range a.foundProteins {
-					// closure xD
-					i := i
-					buttons[i] = giu.RadioButton(
-						// TODO: name
-						fmt.Sprintf("Białko %d", i),
-						a.currentProtein == int32(i),
-					).OnChange(func() {
-						a.currentProtein = int32(i)
-					})
-				}
-
-				giu.Layout(buttons).Build()
-			}),
 			giu.Custom(func() {
 				_, availableH := giu.GetAvailableRegion()
-				giu.Dummy(0, availableH-toolboxAlignDownDelta).Build()
-			}),
-			giu.Separator(),
-			giu.Align(giu.AlignCenter).To(
-				giu.Row(
-					giu.Button("Wróć").OnClick(func() {
-						a.layout.Start()
+				giu.Layout{
+					giu.Child().Layout(
+						// proteins list
+						giu.Custom(func() {
+							buttons := make([]giu.Widget, len(a.foundProteins))
+							for i := range a.foundProteins {
+								// closure xD
+								i := i
+								buttons[i] = giu.RadioButton(
+									// TODO: name
+									fmt.Sprintf("Białko %d", i),
+									a.currentProtein == int32(i),
+								).OnChange(func() {
+									a.currentProtein = int32(i)
+								})
+							}
+
+							giu.Layout(buttons).Build()
+						}),
+					).Size(-1, availableH-toolboxAlignDownDelta),
+					giu.Separator(),
+					giu.Align(giu.AlignCenter).To(
+						giu.Row(
+							giu.Button("Wróć").OnClick(func() {
+								a.layout.Start()
+							}),
+							giu.Button("O Nas").OnClick(func() {
+								giu.OpenPopup("O Nas")
+							}),
+						),
+					),
+					giu.Custom(func() {
+						imgui.SetNextWindowSizeV(imgui.Vec2{X: 300, Y: 200}, imgui.ConditionAppearing)
 					}),
-					giu.Button("O Nas").OnClick(func() {
-						giu.OpenPopup("O Nas")
-					}),
-				),
-			),
-			giu.Custom(func() {
-				imgui.SetNextWindowSizeV(imgui.Vec2{X: 300, Y: 200}, imgui.ConditionAppearing)
+					giu.Popup("O Nas").Layout(
+						giu.Markdown(&aboutUs),
+					),
+				}.Build()
 			}),
-			giu.Popup("O Nas").Layout(
-				giu.Markdown(&aboutUs),
-			),
 		)
 }
 
