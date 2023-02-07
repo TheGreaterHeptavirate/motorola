@@ -31,8 +31,9 @@ const (
 Białkomat to projekt tworzony przez Drużynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
 [Motorola Science Cup 2022](https://www.science-cup.pl/).
 `
-	plotSizeX, plotSizeY  = 250, 250
-	toolboxAlignDownDelta = 30
+	plotSizeX, plotSizeY    = 250, 250
+	toolboxAlignDownDelta   = 30
+	progressIndicatorRadius = 50
 )
 
 // ViewMode represents currently displayed view
@@ -59,7 +60,22 @@ func (a *App) render() {
 			a.proteinDrawing()
 		},
 	))
-	a.layout.Build()
+
+	a.loadingScreen = animations.Animator(animations.Transition(
+		func(_ func()) {
+			a.layout.Build()
+		},
+		func(_ func()) {
+			giu.SingleWindow().Layout(
+				giu.Custom(func() {
+					availableW, availableH := giu.GetAvailableRegion()
+					giu.ProgressIndicator(
+						"Proszę czekać...", availableW, availableH, progressIndicatorRadius).Build()
+				}),
+			)
+		}),
+	)
+	a.loadingScreen.Build()
 }
 
 func (a *App) inputBar() giu.Layout {

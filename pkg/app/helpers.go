@@ -12,6 +12,7 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	"github.com/faiface/mainthread"
 	animations "github.com/gucio321/giu-animations"
 	"github.com/sqweek/dialog"
 	"golang.org/x/image/colornames"
@@ -198,48 +199,55 @@ func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 }
 
 func (a *App) OnLoadFromFile() {
-	logger.Info("Loading file to input textbox...")
+	logger.Debugf("starting transition to loading screen")
+	a.loadingScreen.Start()
 
-	path, err := dialog.File().Load()
-	if err != nil {
-		// this error COULD come from fact that user exited dialog
-		// in this case, don't report app's error, just return
-		if errors.Is(err, dialog.ErrCancelled) {
-			logger.Info("File loading canceled")
+	go func() {
+		logger.Info("Loading file to input textbox...")
+
+		path, err := dialog.File().Load()
+		if err != nil {
+			// this error COULD come from fact that user exited dialog
+			// in this case, don't report app's error, just return
+			if errors.Is(err, dialog.ErrCancelled) {
+				logger.Info("File loading canceled")
+
+				return
+			}
+
+			a.ReportError(err)
 
 			return
 		}
 
-		a.ReportError(err)
+		logger.Debugf("Path to file to load: %s", path)
 
-		return
-	}
+		data, err := os.ReadFile(filepath.Clean(path))
+		if err != nil {
+			a.ReportError(err)
 
-	logger.Debugf("Path to file to load: %s", path)
+			return
+		}
 
-	data, err := os.ReadFile(filepath.Clean(path))
-	if err != nil {
-		a.ReportError(err)
+		logger.Debug("File loaded successfully!")
 
-		return
-	}
+		a.inputString = string(data)
 
-	logger.Debug("File loaded successfully!")
-
-	a.inputString = string(data)
-
-	a.inputString, err = ValidateCodonsString(a.inputString)
-	if err != nil {
-		giu.Msgbox(
-			"UWAGA! Plik może zawierać nieprawidłowe dane!",
-			`Plik zawiera nieobsługiwane znaki.
+		a.inputString, err = ValidateCodonsString(a.inputString)
+		if err != nil {
+			giu.Msgbox(
+				"UWAGA! Plik może zawierać nieprawidłowe dane!",
+				`Plik zawiera nieobsługiwane znaki.
 Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
 litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 `,
-		)
-	}
+			)
+		}
 
-	a.inputString = GetPresentableCodonsString(a.inputString, 0)
+		a.inputString = GetPresentableCodonsString(a.inputString, 0)
+		logger.Debug("loading finished. Exiting loading screen.")
+		mainthread.Call(a.loadingScreen.Start)
+	}()
 }
 
 func (a *App) OnProceed() {

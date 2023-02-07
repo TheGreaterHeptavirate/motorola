@@ -45,6 +45,7 @@ type App struct {
 	foundProteins  []*protein.Protein
 	currentProtein int32
 	layout         *animations.AnimatorWidget
+	loadingScreen  *animations.AnimatorWidget
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel
