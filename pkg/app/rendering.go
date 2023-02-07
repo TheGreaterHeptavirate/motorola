@@ -31,6 +31,7 @@ const (
 Białkomat to projekt tworzony przez Dróżynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
 [Motorola Science Cup 2022](https://www.science-cup.pl/).
 `
+	plotSizeX, plotSizeY = 250, 250
 )
 
 // ViewMode represents currently displayed view
@@ -205,37 +206,59 @@ func (a *App) proteinStats() {
 		Size(statsWindowW, statsWindowH).
 		Pos(toolboxProcentageWidth*float32(windowW)+proteinNotationWindowSizeX, 0).
 		Layout(
-			giu.Labelf("Masa: %v", inputProtein.Mass()),
-			giu.Labelf("pH: %f", inputProtein.Stats.PH),
-			giu.Labelf("Molecular Weight: %f", inputProtein.Stats.MolecularWeight),
-			giu.Labelf("Aromaticity: %f", inputProtein.Stats.Aromaticity),
-			giu.Labelf("Instability Index: %f", inputProtein.Stats.InstabilityIndex),
-			giu.Custom(func() {
-				labels := make([]string, 0)
-				for key, value := range inputProtein.Stats.AminoAcidsPercentage {
-					if value > 0 {
-						labels = append(labels, key)
+			giu.Align(giu.AlignCenter).To(
+				giu.Labelf("Masa: %v", inputProtein.Mass()),
+				giu.Labelf("pH: %f", inputProtein.Stats.PH),
+				giu.Labelf("Molecular Weight: %f", inputProtein.Stats.MolecularWeight),
+				giu.Labelf("Aromaticity: %f", inputProtein.Stats.Aromaticity),
+				giu.Labelf("Instability Index: %f", inputProtein.Stats.InstabilityIndex),
+				giu.Custom(func() {
+					labels := make([]string, 0)
+					for key, value := range inputProtein.Stats.AminoAcidsPercentage {
+						if value > 0 {
+							labels = append(labels, key)
+						}
 					}
-				}
 
-				sort.Strings(labels)
+					sort.Strings(labels)
 
-				values := make([]float64, 0)
-				for _, key := range labels {
-					values = append(values, float64(inputProtein.Stats.AminoAcidsPercentage[key]))
-				}
+					values := make([]float64, 0)
+					for _, key := range labels {
+						values = append(values, float64(inputProtein.Stats.AminoAcidsPercentage[key]))
+					}
 
-				giu.Plot("Amino Acids [%]").
-					Flags(giu.PlotFlagsEqual|giu.PlotFlagsNoMousePos).
-					Size(250, 250).
-					XAxeFlags(giu.PlotAxisFlagsNoDecorations).
-					YAxeFlags(giu.PlotAxisFlagsNoDecorations, 0, 0).
-					AxisLimits(0, 1, 0, 1, giu.ConditionAlways).
-					Plots(
-						giu.PieChart(labels, values, 0.5, 0.5, 0.45),
-					).Build()
+					// calculate size as follows:
+					// this plot needs to be square all the time, so
+					// obtain available space and check if one of dimensions
+					// is not smaller than plotSizeX/plotSizeY
+					availableW, availableH := giu.GetAvailableRegion()
+					availableWToPlotX := availableW / plotSizeX
+					availableHToPlotY := availableH / plotSizeY
+					var resultPlotW, resultPlotH float32
+					if availableHToPlotY < 1 || availableHToPlotY < 1 {
+						if availableWToPlotX < availableHToPlotY {
+							resultPlotW = availableW
+							resultPlotH = plotSizeY / plotSizeX * availableW
+						} else {
+							resultPlotW = plotSizeX / plotSizeY * availableH
+							resultPlotH = availableH
+						}
+					} else {
+						resultPlotW, resultPlotH = plotSizeX, plotSizeY
+					}
 
-			}),
+					giu.Plot("Amino Acids [%]").
+						Flags(giu.PlotFlagsEqual|giu.PlotFlagsNoMousePos).
+						Size(int(resultPlotW), int(resultPlotH)).
+						XAxeFlags(giu.PlotAxisFlagsNoDecorations).
+						YAxeFlags(giu.PlotAxisFlagsNoDecorations, 0, 0).
+						AxisLimits(0, 1, 0, 1, giu.ConditionAlways).
+						Plots(
+							giu.PieChart(labels, values, 0.5, 0.5, 0.45),
+						).Build()
+
+				}),
+			),
 		)
 }
 
