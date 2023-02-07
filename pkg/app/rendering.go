@@ -24,8 +24,8 @@ import (
 
 const (
 	inputFieldProcentageHeight                             = 90
-	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 250, 250
-	statsWindowW, statsWindowH                             = 250, 300
+	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 220, 220
+	statsWindowW, statsWindowH                             = 300, 400
 	proteinDrawingW, proteinDrawingH                       = 500, 300
 	projectInfo                                            = `
 Białkomat to projekt tworzony przez Dróżynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
