@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
@@ -26,9 +27,8 @@ const (
 	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 250, 250
 	statsWindowW, statsWindowH                             = 250, 300
 	proteinDrawingW, proteinDrawingH                       = 500, 300
-	// TODO: team name
-	projectInfo = `
-Białkomat to projekt tworzony przez [Dróżynę GigaCHADS](https://github.com/TheGreaterHeptavirate) w ramac
+	projectInfo                                            = `
+Białkomat to projekt tworzony przez Dróżynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
 [Motorola Science Cup 2022](https://www.science-cup.pl/).
 `
 )
@@ -104,7 +104,7 @@ func (a *App) inputBar() giu.Layout {
 
 func (a *App) toolbox() {
 	windowW, windowH := a.window.GetSize()
-	aboutUs := projectInfo
+	aboutUs := strings.ReplaceAll(projectInfo, "\n", " ")
 
 	if int32(len(a.foundProteins)) <= a.currentProtein {
 		a.currentProtein = 0
