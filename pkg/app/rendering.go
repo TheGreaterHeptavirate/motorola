@@ -165,7 +165,7 @@ func (a *App) toolbox() {
 								i := i
 								buttons[i] = giu.RadioButton(
 									// TODO: name
-									fmt.Sprintf("Białko %d", i),
+									fmt.Sprintf("Białko %d", i+1),
 									a.currentProtein == int32(i),
 								).OnChange(func() {
 									a.currentProtein = int32(i)
