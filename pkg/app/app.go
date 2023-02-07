@@ -79,13 +79,17 @@ func (a *App) Run() error {
 
 	logger.Debug("Initializing Python3")
 	python.Initialize()
+
 	defer python.Finalize()
 
 	logger.Debug("Initialize BioPython module")
+
 	biopythonFinisher, err := python.InitializeBiopython()
 	if err != nil {
 		return fmt.Errorf("error initializing biopython: %w", err)
 	}
+
+	logger.Success("Biopython initialized.")
 
 	defer biopythonFinisher()
 

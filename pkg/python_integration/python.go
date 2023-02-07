@@ -5,6 +5,7 @@
  * All copies of this software (if not stated otherway) are dedicated
  * ONLY to personal, non-commercial use.
  */
+
 package python
 
 // #include <Python.h>
@@ -32,30 +33,42 @@ import (
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
 
-type PyObject C.PyObject
+type (
+	PyObject C.PyObject
+	Module   PyObject
+)
 
-func (p *PyObject) toC() *C.PyObject {
-	return (*C.PyObject)(p)
+func (obj *PyObject) toC() *C.PyObject {
+	return (*C.PyObject)(obj)
+}
+
+func (module *Module) toC() *C.PyObject {
+	return (*C.PyObject)(module)
 }
 
 func Initialize() {
 	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()
+	logger.Success("[PYTHON]: Interpreter Initialized")
 }
 
 func Finalize() {
 	logger.Debugf("[PYTHON]: Finalize")
 	C.Py_Finalize()
+	logger.Success("[PYTHON]: Interpreter finalized")
 }
 
 // ErrPython is returned when there is something wrong with python compiler
 var ErrPython = errors.New("error in python wraper")
 
-func Clean(ref *PyObject) {
+// Destroy destroys python object
+func Destroy(ref *PyObject) {
 	C.clean(ref.toC())
 }
 
-func OpenPyModule(name string) (*PyObject, error) {
+// OpenModule is like `import name`
+// It returns module reference
+func OpenModule(name string) (*Module, error) {
 	logger.Debugf("[PYTHON]: Opening module %s", name)
 	moduleName := C.CString(name)
 	defer C.free(unsafe.Pointer(moduleName))
@@ -65,10 +78,11 @@ func OpenPyModule(name string) (*PyObject, error) {
 		return nil, fmt.Errorf("cannot find module %s (ensure you have it installed): %w", name, ErrPython)
 	}
 
-	return (*PyObject)(module), nil
+	return (*Module)(module), nil
 }
 
-func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyObject, err error) {
+// CallFunc calls a python function from module
+func (module *Module) CallFunc(funcName string, args *PyObject) (result *PyObject, err error) {
 	logger.Debugf("[PYTHON]: Calling python function %s (module %v)", funcName, module)
 	functionName := C.CString(funcName)
 	defer C.free(unsafe.Pointer(functionName))
@@ -86,7 +100,7 @@ func CallPyFunc(module *PyObject, funcName string, args *PyObject) (result *PyOb
 	return result, nil
 }
 
-func CallPyMethodNoArgs(obj *PyObject, name string) *PyObject {
+func (obj *PyObject) CallMethodNoArgs(name string) *PyObject {
 	logger.Debugf("[PYTHON]: Calling python method %s (object %v)", name, obj)
 	pyName := ToPyString(name)
 	return (*PyObject)(C.PyObject_CallMethodNoArgs(obj.toC(), pyName.toC()))
@@ -110,10 +124,10 @@ func ToPyString(s string) *PyObject {
 	return (*PyObject)(C.PyUnicode_FromString(argumentCStr))
 }
 
-func FromPyFloat(f *PyObject) float32 {
-	return float32(C.PyFloat_AsDouble(f.toC()))
+func (obj *PyObject) FromPyFloat() float32 {
+	return float32(C.PyFloat_AsDouble(obj.toC()))
 }
 
-func GetDictObject(dict *PyObject, key *PyObject) *PyObject {
-	return (*PyObject)(C.PyDict_GetItem(dict.toC(), key.toC()))
+func (obj *PyObject) GetDictObject(key *PyObject) *PyObject {
+	return (*PyObject)(C.PyDict_GetItem(obj.toC(), key.toC()))
 }

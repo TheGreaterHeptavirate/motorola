@@ -9,11 +9,13 @@
 package protein
 
 import "C"
+
 import (
 	"fmt"
+	"strings"
+
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
 	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
-	"strings"
 )
 
 const Codons = "FLSYCWPHQRITNKVADEGM"
@@ -32,13 +34,13 @@ func (p *Protein) FillStats() (err error) {
 }
 
 func (p *Protein) analysis() error {
-	module, err := python.OpenPyModule("Bio.SeqUtils.ProtParam")
+	module, err := python.OpenModule("Bio.SeqUtils.ProtParam")
 	if err != nil {
 		return fmt.Errorf("cannot open module: %w", err)
 	}
 
 	args := python.Tuple(1)
-	defer python.Clean(args)
+	defer python.Destroy(args)
 
 	proteinStr := p.AminoAcids.String()
 	proteinStr = strings.ReplaceAll(proteinStr, aminoacid.StartCodon, "M")
@@ -48,31 +50,31 @@ func (p *Protein) analysis() error {
 
 	python.Tuple_Set(args, 0, argument)
 
-	resultProtein, err := python.CallPyFunc(module, "ProteinAnalysis", args)
+	resultProtein, err := module.CallFunc("ProteinAnalysis", args)
 	if err != nil {
 		return fmt.Errorf("calling python function: %w", err)
 	}
 
-	p.Stats.MolecularWeight = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "molecular_weight"))
-	p.Stats.Aromaticity = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "aromaticity"))
-	p.Stats.InstabilityIndex = python.FromPyFloat(python.CallPyMethodNoArgs(resultProtein, "instability_index"))
+	p.Stats.MolecularWeight = resultProtein.CallMethodNoArgs("molecular_weight").FromPyFloat()
+	p.Stats.Aromaticity = resultProtein.CallMethodNoArgs("aromaticity").FromPyFloat()
+	p.Stats.InstabilityIndex = resultProtein.CallMethodNoArgs("instability_index").FromPyFloat()
 
-	percentageMap := python.CallPyMethodNoArgs(resultProtein, "get_amino_acids_percent")
+	percentageMap := resultProtein.CallMethodNoArgs("get_amino_acids_percent")
 	for _, c := range Codons {
-		p.Stats.AminoAcidsPercentage[string(c)] = python.FromPyFloat(python.GetDictObject(percentageMap, python.ToPyString(string(c))))
+		p.Stats.AminoAcidsPercentage[string(c)] = percentageMap.GetDictObject(python.ToPyString(string(c))).FromPyFloat()
 	}
 
 	return nil
 }
 
 func (p *Protein) pH() (float32, error) {
-	module, err := python.OpenPyModule("Bio.SeqUtils.IsoelectricPoint")
+	module, err := python.OpenModule("Bio.SeqUtils.IsoelectricPoint")
 	if err != nil {
 		return -1, fmt.Errorf("cannot open module: %w", err)
 	}
 
 	args := python.Tuple(1)
-	defer python.Clean(args)
+	defer python.Destroy(args)
 
 	proteinStr := p.AminoAcids.String()
 	proteinStr = strings.ReplaceAll(proteinStr, aminoacid.StartCodon, "M")
@@ -82,15 +84,15 @@ func (p *Protein) pH() (float32, error) {
 
 	python.Tuple_Set(args, 0, argument)
 
-	resultProtein, err := python.CallPyFunc(module, "IsoelectricPoint", args)
+	resultProtein, err := module.CallFunc("IsoelectricPoint", args)
 	if err != nil {
 		return -1, fmt.Errorf("calling python function: %w", err)
 	}
 
-	defer python.Clean(resultProtein)
+	defer python.Destroy(resultProtein)
 
-	result := python.CallPyMethodNoArgs(resultProtein, "pi")
-	defer python.Clean(result)
+	result := resultProtein.CallMethodNoArgs("pi")
+	defer python.Destroy(result)
 
-	return python.FromPyFloat(result), nil
+	return result.FromPyFloat(), nil
 }
