@@ -184,8 +184,12 @@ func DrawingDatabase() map[string]*drawcommands.DrawCommands {
 			ChemicalText("NH_2_", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
 
 		// https://en.wikipedia.org/wiki/Valine
-		// TODO!!!
-		"V": drawcommands.Draw(ComponentsColor).ChemicalText("TODO!", drawcommands.VAlignCenter, drawcommands.HAlignLeft),
+		// TODO!!! I'm certainly sure it is not right this way...
+		"V": drawcommands.Draw(ComponentsColor).
+			DrawLine(drawcommands.Right, StandardLine).
+			DrawLine(drawcommands.UpRight, StandardLine).
+			Ignore(drawcommands.IgnoreAll).
+			DrawLine(drawcommands.DownRight, StandardLine),
 
 		// https://en.wikipedia.org/wiki/Alanine#/media/File:L-Alanin_-_L-Alanine.svg
 		"A": drawcommands.Draw(ComponentsColor).
