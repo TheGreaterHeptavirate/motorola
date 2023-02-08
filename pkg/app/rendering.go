@@ -10,11 +10,13 @@ package app
 
 import (
 	"fmt"
-	"github.com/AllenDang/giu"
-	"github.com/AllenDang/imgui-go"
-	animations "github.com/gucio321/giu-animations"
 	"math"
 	"sort"
+
+	"github.com/AllenDang/giu"
+	"github.com/AllenDang/imgui-go"
+
+	animations "github.com/gucio321/giu-animations"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
@@ -26,16 +28,17 @@ const (
 	statsWindowW, statsWindowH                             = 300, 400
 	proteinDrawingW, proteinDrawingH                       = 500, 300
 	projectInfo                                            = `
-Białkomat to projekt tworzony przez Drużynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac [Motorola Science Cup 2022](https://www.science-cup.pl/).
+Białkomat is a projekt developed by GigaCHADS Team - a part of [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate).
+This Application i created for the purpose of participating in [Motorola Science Cup 2022](https://www.science-cup.pl/) competition.
 
-Niniejszy projekt udostępniony jest na następującej licencji:
+The project is shared under the following license:
 Copyright 2022/2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
 All Rights Reserved
 
 All copies of this software (if not stated otherwise) are dedicated
 ONLY to personal, non-commercial use.
 
-# Informacje licencyjne oprogramowania stron trzecich:
+# Information licensing of third-party software
 - [BioPython](https://github.com/biopython/biopython)
 Biopython License Agreement
 Permission to use, copy, modify, and distribute this software and its documentation with or without modifications and for any purpose and without fee is hereby granted, provided that any copyright notices appear in all copies and that both those copyright notices and this permission notice appear in supporting documentation, and that the names of the contributors or copyright holders not be used in advertising or publicity pertaining to distribution of the software without specific prior permission.
@@ -51,6 +54,7 @@ Redistributions of source code must retain the above copyright notice, this list
 Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 - [GIU](https://github.com/AllenDang/giu):
 MIT License
 
@@ -72,6 +76,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+
 - [imgui](https://github.com/ocornut/imgui):
 The MIT License (MIT)
 
@@ -94,6 +99,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 - [implot](https://github.com/epezent/implot):
 MIT License
 
@@ -115,7 +121,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- [rozszeżenie giu-animations (autorski projekt członka Wspanialszego Heptawiratu)](https://github.com/gucio321/giu-animations):
+
+- [giu-animations](https://github.com/gucio321/giu-animations):
 MIT License
 
 Copyright (c) 2023 M.Sz. (@gucio321)
@@ -138,7 +145,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-- [glg](https://github.com/kpango/glg):
+- [glg logger](https://github.com/kpango/glg):
 MIT License
 
 Copyright (c) 2019 kpango (Yusuke Kato)
@@ -201,7 +208,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-- [Aplikacja zawiera części kodu języka PYTHON](https://python.org):
+- [application contains parts of PYTHON's code'](https://python.org):
 PSF LICENSE AGREEMENT FOR PYTHON 3.11.1
 1. This LICENSE AGREEMENT is between the Python Software Foundation ("PSF"), and
    the Individual or Organization ("Licensee") accessing and otherwise using Python
@@ -283,7 +290,7 @@ func (a *App) render() {
 				giu.Custom(func() {
 					availableW, availableH := giu.GetAvailableRegion()
 					giu.ProgressIndicator(
-						"Proszę czekać...", availableW, availableH, progressIndicatorRadius).Build()
+						"Please wait...", availableW, availableH, progressIndicatorRadius).Build()
 				}),
 			)
 		}),
@@ -312,12 +319,12 @@ func (a *App) inputBar() giu.Layout {
 			giu.Row(
 				giu.CSSTag("loadButton").To(
 					AnimatedButton(
-						giu.Button("Wczytaj z pliku").Size((availableW-2*spacingW)/3, buttonH).OnClick(a.OnLoadFromFile),
+						giu.Button("Load from file").Size((availableW-2*spacingW)/3, buttonH).OnClick(a.OnLoadFromFile),
 					),
 				),
 				giu.CSSTag("cleanButton").To(
 					AnimatedButton(
-						giu.Button("Czyść").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
+						giu.Button("Clear").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
 							logger.Debug("Clearing input textbox...")
 							a.inputString = ""
 						}),
@@ -325,7 +332,7 @@ func (a *App) inputBar() giu.Layout {
 				),
 				giu.CSSTag("continueButton").To(
 					AnimatedButton(
-						giu.Button("Przetwórz").Size((availableW-2*spacingW)/3, buttonH).OnClick(a.OnProceed),
+						giu.Button("Proceed").Size((availableW-2*spacingW)/3, buttonH).OnClick(a.OnProceed),
 					),
 				),
 			).Build()
@@ -349,22 +356,13 @@ func (a *App) toolbox() {
 		).Pos(0, 0).
 		Size(float32(windowW)*toolboxProcentageWidth, float32(windowH)).
 		Layout(
-			// here I'm going to do a small trick for spelling:
-			// 0, 5+ - białEK
-			//		1 - białKO
-			//		2-4 - białKA
 			giu.Custom(func() {
 				var ending string
-				switch len(a.foundProteins) {
-				case 1:
-					ending = "ko"
-				case 2, 3, 4:
-					ending = "ka"
-				default:
-					ending = "ek"
+				proteinsCount := len(a.foundProteins)
+				if proteinsCount != 1 {
+					ending = "s"
 				}
-
-				giu.Labelf("Znaleziono %d biał%s", len(a.foundProteins), ending).Build()
+				giu.Labelf("Found %d protein%s", proteinsCount, ending).Build()
 			}),
 			giu.Custom(func() {
 				_, availableH := giu.GetAvailableRegion()
@@ -378,7 +376,7 @@ func (a *App) toolbox() {
 								i := i
 								buttons[i] = giu.RadioButton(
 									// TODO: name
-									fmt.Sprintf("Białko %d", i+1),
+									fmt.Sprintf("Protein %d", i+1),
 									a.currentProtein == int32(i),
 								).OnChange(func() {
 									a.currentProtein = int32(i)
@@ -391,18 +389,18 @@ func (a *App) toolbox() {
 					giu.Separator(),
 					giu.Align(giu.AlignCenter).To(
 						giu.Row(
-							giu.Button("Wróć").OnClick(func() {
+							giu.Button("Back").OnClick(func() {
 								a.layout.Start()
 							}),
-							giu.Button("O Nas").OnClick(func() {
-								giu.OpenPopup("O Nas")
+							giu.Button("About us").OnClick(func() {
+								giu.OpenPopup("About us")
 							}),
 						),
 					),
 					giu.Custom(func() {
 						imgui.SetNextWindowSizeV(imgui.Vec2{X: 300, Y: 200}, imgui.ConditionAppearing)
 					}),
-					giu.Popup("O Nas").Layout(
+					giu.Popup("About us").Layout(
 						giu.Markdown(&aboutUs),
 					),
 				}.Build()
@@ -414,7 +412,7 @@ func (a *App) proteinNotation() {
 	inputProtein := a.foundProteins[a.currentProtein]
 	windowX, _ := a.window.GetSize()
 
-	giu.Window("Zapis aminokwasowy białka").
+	giu.Window("Amino acids notation").
 		Size(proteinNotationWindowSizeX, proteinNotationWindowSizeY).
 		Pos(toolboxProcentageWidth*float32(windowX), 0).
 		Layout(
@@ -442,12 +440,11 @@ func (a *App) proteinNotation() {
 func (a *App) proteinStats() {
 	inputProtein := a.foundProteins[a.currentProtein]
 	windowW, _ := a.window.GetSize()
-	giu.Window("Statystyki").
+	giu.Window("Stats").
 		Size(statsWindowW, statsWindowH).
 		Pos(toolboxProcentageWidth*float32(windowW)+proteinNotationWindowSizeX, 0).
 		Layout(
 			giu.Align(giu.AlignCenter).To(
-				giu.Labelf("Masa: %v", inputProtein.Mass()),
 				giu.Labelf("pH: %f", inputProtein.Stats.PH),
 				giu.Labelf("Molecular Weight: %f", inputProtein.Stats.MolecularWeight),
 				giu.Labelf("Aromaticity: %f", inputProtein.Stats.Aromaticity),
@@ -470,7 +467,7 @@ func (a *App) proteinStats() {
 
 				availableW, availableH := giu.GetAvailableRegion()
 
-				giu.Plot("Amino Acids [%]").
+				giu.Plot("Amino Acids").
 					Flags(giu.PlotFlagsEqual|giu.PlotFlagsNoMousePos).
 					Size(int(availableW), int(availableH)).
 					XAxeFlags(giu.PlotAxisFlagsNoDecorations).
@@ -486,7 +483,7 @@ func (a *App) proteinStats() {
 func (a *App) proteinDrawing() {
 	inputProtein := a.foundProteins[a.currentProtein]
 	windowW, _ := a.window.GetSize()
-	giu.Window("Rysunek").
+	giu.Window("Scheme").
 		Size(proteinDrawingW, proteinDrawingH).
 		Pos(toolboxProcentageWidth*float32(windowW), float32(math.Max(statsWindowH, proteinNotationWindowSizeY))).
 		Layout(
