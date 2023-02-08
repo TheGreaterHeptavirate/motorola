@@ -31,8 +31,8 @@ type Protein struct {
 		PH                   float32
 		MolecularWeight      float32
 		Aromaticity          float32
-		InstabilityIndex     float32
-		AminoAcidsPercentage map[string]float32
+		InstabilityIndex float32
+		AminoAcidsCount  map[string]float32
 	}
 }
 
@@ -44,7 +44,7 @@ func NewProtein(a aminoacid.AminoAcids) (*Protein, error) {
 		AminoAcids: a,
 	}
 
-	result.Stats.AminoAcidsPercentage = make(map[string]float32)
+	result.Stats.AminoAcidsCount = make(map[string]float32)
 
 	if err := result.Validate(); err != nil {
 		return nil, fmt.Errorf("checking protein: %w", err)

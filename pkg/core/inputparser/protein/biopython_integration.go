@@ -59,9 +59,9 @@ func (p *Protein) analysis() error {
 	p.Stats.Aromaticity = resultProtein.CallMethodNoArgs("aromaticity").FromPyFloat()
 	p.Stats.InstabilityIndex = resultProtein.CallMethodNoArgs("instability_index").FromPyFloat()
 
-	percentageMap := resultProtein.CallMethodNoArgs("get_amino_acids_percent")
+	percentageMap := resultProtein.CallMethodNoArgs("count_amino_acids")
 	for _, c := range Codons {
-		p.Stats.AminoAcidsPercentage[string(c)] = percentageMap.GetDictObject(python.ToPyString(string(c))).FromPyFloat()
+		p.Stats.AminoAcidsCount[string(c)] = percentageMap.GetDictObject(python.ToPyString(string(c))).FromPyFloat()
 	}
 
 	return nil

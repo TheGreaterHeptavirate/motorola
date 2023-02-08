@@ -241,7 +241,7 @@ func (a *App) proteinStats() {
 				giu.Labelf("Instability Index: %f", inputProtein.Stats.InstabilityIndex),
 				giu.Custom(func() {
 					labels := make([]string, 0)
-					for key, value := range inputProtein.Stats.AminoAcidsPercentage {
+					for key, value := range inputProtein.Stats.AminoAcidsCount {
 						if value > 0 {
 							labels = append(labels, key)
 						}
@@ -251,7 +251,7 @@ func (a *App) proteinStats() {
 
 					values := make([]float64, 0)
 					for _, key := range labels {
-						values = append(values, float64(inputProtein.Stats.AminoAcidsPercentage[key]))
+						values = append(values, float64(inputProtein.Stats.AminoAcidsCount[key]))
 					}
 
 					// calculate size as follows:
