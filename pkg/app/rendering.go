@@ -31,7 +31,6 @@ const (
 Białkomat to projekt tworzony przez Drużynę GigaCHADS, część [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate) w ramac
 [Motorola Science Cup 2022](https://www.science-cup.pl/).
 `
-	plotSizeX, plotSizeY    = 250, 250
 	toolboxAlignDownDelta   = 30
 	progressIndicatorRadius = 50
 )
