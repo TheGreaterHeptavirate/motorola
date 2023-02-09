@@ -12,11 +12,11 @@ package drawer
 
 import (
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	"image"
 
 	"github.com/AllenDang/giu"
 
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/db"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer/drawcommands"
 )

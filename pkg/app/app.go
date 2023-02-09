@@ -15,6 +15,7 @@ package app
 import "C"
 import (
 	"fmt"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 	"strings"
 	"time"
@@ -25,7 +26,6 @@ import (
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/protein"
 )
 
 const (
