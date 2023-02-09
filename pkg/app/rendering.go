@@ -254,6 +254,7 @@ PSF LICENSE AGREEMENT FOR PYTHON 3.11.1
 `
 	toolboxAlignDownDelta   = 30
 	progressIndicatorRadius = 50
+	plotBaseAngle           = 75
 )
 
 // ViewMode represents currently displayed view
@@ -474,7 +475,8 @@ func (a *App) proteinStats() {
 					YAxeFlags(giu.PlotAxisFlagsNoDecorations, 0, 0).
 					AxisLimits(0, 1, 0, 1, giu.ConditionOnce).
 					Plots(
-						giu.PieChart(labels, values, 0.5, 0.5, 0.45),
+						giu.PieChart(labels, values, 0.5, 0.5, 0.45).
+							Angle0(plotBaseAngle),
 					).Build()
 			}),
 		)
