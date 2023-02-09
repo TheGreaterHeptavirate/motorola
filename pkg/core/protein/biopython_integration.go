@@ -14,7 +14,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/aminoacid"
 	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 )
 

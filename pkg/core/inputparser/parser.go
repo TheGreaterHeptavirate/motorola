@@ -11,11 +11,12 @@ package inputparser
 import (
 	"errors"
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	"io"
 
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
+
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/aminoacid"
 )
 
 // ParseInput takes a string as an argument and returns list of

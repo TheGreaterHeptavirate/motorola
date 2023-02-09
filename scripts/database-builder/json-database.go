@@ -14,7 +14,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/aminoacid"
 )
 
 const allCodons = 4 * 4 * 4

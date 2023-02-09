@@ -15,7 +15,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser/aminoacid"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/aminoacid"
 )
 
 // ErrInvalidProtein is returned (mostly by Validate()) whenever a protein IS NOT valid
@@ -28,9 +28,9 @@ var ErrInvalidProtein = errors.New("invalid protein")
 type Protein struct {
 	AminoAcids aminoacid.AminoAcids
 	Stats      struct {
-		PH                   float32
-		MolecularWeight      float32
-		Aromaticity          float32
+		PH               float32
+		MolecularWeight  float32
+		Aromaticity      float32
 		InstabilityIndex float32
 		AminoAcidsCount  map[string]float32
 	}
