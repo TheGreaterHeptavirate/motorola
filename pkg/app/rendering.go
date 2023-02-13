@@ -26,6 +26,7 @@ const (
 	inputFieldProcentageHeight                             = 90
 	proteinNotationWindowSizeX, proteinNotationWindowSizeY = 220, 220
 	statsWindowW, statsWindowH                             = 300, 400
+	statsWindowMinW, statsWindowMinH                       = 200, 300
 	proteinDrawingW, proteinDrawingH                       = 500, 300
 	projectInfo                                            = `
 Białkomat is a projekt developed by GigaCHADS Team - a part of [The Greater Heptavirate](https://github.com/TheGreaterHeptavirate).
@@ -441,6 +442,10 @@ func (a *App) proteinNotation() {
 func (a *App) proteinStats() {
 	inputProtein := a.foundProteins[a.currentProtein]
 	windowW, _ := a.window.GetSize()
+
+	imgui.PushStyleVarVec2(imgui.StyleVarWindowMinSize, imgui.Vec2{X: statsWindowMinW, Y: statsWindowMinH})
+	defer imgui.PopStyleVar()
+
 	giu.Window("Stats").
 		Size(statsWindowW, statsWindowH).
 		Pos(toolboxProcentageWidth*float32(windowW)+proteinNotationWindowSizeX, 0).
