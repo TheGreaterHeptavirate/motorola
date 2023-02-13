@@ -39,8 +39,6 @@ git clone git@github.com:TheGreaterHeptavirate/motorola
 cd motorola
 # download go dependencies
 go get -d ./...
-# setup python dependencies (ofc you can use virtualenv)
-python3 -m pip install -r requirements.txt
 
 # run app:
 go run github.com/TheGreaterHeptavirate/motorola/cmd/motorola
@@ -49,3 +47,28 @@ cd cmd/motorola
 go run .
 ```
 
+## Alternative - `Docker`
+
+As compilation in the way described above may be a bit painful on some operating systems (especially Windows :smile:)
+We've introduced another way to run our application - [Docker](https://docker.io).
+
+```sh
+# start immedietly
+docker-compose up
+# you can also construct a large docker command like this:
+docker run --name=motorola_app_1 \
+--security-opt label:type:container_runtime_t \
+--network bridge \
+-e DISPLAY=:0 \
+-v /tmp/.X11-unix:/tmp/.X11-unix .
+```
+
+**NOTE** commands above are tested for [podman](https://podman.io),
+but since it has the same api as docker, everything should work.
+
+### important linux note
+
+you need to disable access control for your X envirouemnt, otherwise it will not run:
+```sh
+xhost +
+```
