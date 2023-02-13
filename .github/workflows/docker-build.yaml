@@ -1,0 +1,19 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  Docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - uses: docker-practice/actions-setup-docker@master
+        name: setup docker
+
+      - name: login docker
+        run: |
+          echo ${{ secrets.docker_token }} |docker login ghcr.io -u TheGreaterHeptavirate --password-stdin
+      - name: build
+        run:
+          docker build -t=ghcr.io/TheGreaterHeptavirate/motorola:${{ github.ref }} .
+          docker push ghcr.io/TheGreaterHeptavirate/motorola:${{ github.ref }}
