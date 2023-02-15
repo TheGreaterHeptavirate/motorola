@@ -49,6 +49,9 @@ type App struct {
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel
+
+	shouldExecuteOptions bool
+	options              *AppOptions
 }
 
 // New creates a new App instance.
@@ -68,6 +71,13 @@ func (a *App) EnforceLogLevel(loglevel logger.LogLevel) {
 // overrides EnforceLogLevel.
 func (a *App) Verbose() {
 	a.logLevel = logger.LogLevelDebug
+}
+
+func (a *App) Options(o *AppOptions) *App {
+	a.shouldExecuteOptions = true
+	a.options = o
+
+	return a
 }
 
 // Run starts main loop.
