@@ -297,6 +297,9 @@ func (a *App) render() {
 			)
 		}),
 	)
+
+	a.executeOptions()
+
 	a.loadingScreen.Build()
 }
 

@@ -202,52 +202,56 @@ func (a *App) OnLoadFromFile() {
 	logger.Debugf("starting transition to loading screen")
 	a.loadingScreen.Start()
 
+	logger.Info("Loading file to input textbox...")
+
+	path, err := dialog.File().Load()
+	if err != nil {
+		// this error COULD come from fact that user exited dialog
+		// in this case, don't report app's error, just return
+		if errors.Is(err, dialog.ErrCancelled) {
+			logger.Info("File loading canceled")
+
+			return
+		}
+
+		a.ReportError(err)
+
+		return
+	}
+
+	logger.Debugf("Path to file to load: %s", path)
+
 	go func() {
-		logger.Info("Loading file to input textbox...")
-
-		path, err := dialog.File().Load()
-		if err != nil {
-			// this error COULD come from fact that user exited dialog
-			// in this case, don't report app's error, just return
-			if errors.Is(err, dialog.ErrCancelled) {
-				logger.Info("File loading canceled")
-
-				return
-			}
-
-			a.ReportError(err)
-
-			return
-		}
-
-		logger.Debugf("Path to file to load: %s", path)
-
-		data, err := os.ReadFile(filepath.Clean(path))
-		if err != nil {
-			a.ReportError(err)
-
-			return
-		}
-
-		logger.Debug("File loaded successfully!")
-
-		a.inputString = string(data)
-
-		a.inputString, err = ValidateCodonsString(a.inputString)
-		if err != nil {
-			giu.Msgbox(
-				"UWAGA! Plik może zawierać nieprawidłowe dane!",
-				`Plik zawiera nieobsługiwane znaki.
-Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
-litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
-`,
-			)
-		}
-
-		a.inputString = GetPresentableCodonsString(a.inputString, 0)
+		a.loadFile(path)
 		logger.Debug("loading finished. Exiting loading screen.")
 		mainthread.Call(a.loadingScreen.Start)
 	}()
+}
+
+func (a *App) loadFile(path string) {
+	data, err := os.ReadFile(filepath.Clean(path))
+	if err != nil {
+		a.ReportError(err)
+
+		return
+	}
+
+	logger.Debug("File loaded successfully!")
+
+	a.inputString = string(data)
+
+	a.inputString, err = ValidateCodonsString(a.inputString)
+	if err != nil {
+		giu.Msgbox(
+			"UWAGA! Plik może zawierać nieprawidłowe dane!",
+			`Plik zawiera nieobsługiwane znaki.
+Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
+litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
+`,
+		)
+	}
+
+	a.inputString = GetPresentableCodonsString(a.inputString, 0)
 }
 
 func (a *App) OnProceed() {
