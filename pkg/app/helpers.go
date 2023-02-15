@@ -263,12 +263,11 @@ func (a *App) OnProceed() {
 		d, errChan := inputparser.ParseInput(validString)
 		for {
 			select {
-			case <-d:
-				for p := range d {
-					a.foundProteins = append(a.foundProteins, p)
-					giu.Update()
-				}
+			case p := <-d:
+				a.foundProteins = append(a.foundProteins, p)
+				giu.Update()
 			case err := <-errChan:
+				logger.Debugf("Error received %v", err)
 				if err != nil {
 					a.ReportError(err)
 				}

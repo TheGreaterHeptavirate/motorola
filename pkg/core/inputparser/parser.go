@@ -60,6 +60,8 @@ func ParseInput(input string) (chan *protein.Protein, chan error) {
 				}
 			}
 		}
+
+		logger.Debug("Parsing ginished; exiting foroutine.")
 		resultErr <- nil
 	}()
 
