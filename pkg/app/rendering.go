@@ -481,7 +481,7 @@ func (a *App) proteinStats() {
 					AxisLimits(0, 1, 0, 1, giu.ConditionOnce).
 					Plots(
 						giu.PieChart(labels, values, 0.5, 0.5, 0.45).
-							Angle0(plotBaseAngle),
+							Angle0(plotBaseAngle).LabelFormat("%.0f"),
 					).Build()
 			}),
 		)
