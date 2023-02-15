@@ -40,11 +40,11 @@ func (a *App) executeOptions() {
 
 	a.shouldExecuteOptions = false
 
-	if a.options.shouldSkipToProteinsView {
-		a.OnProceed()
-	}
-
 	if a.options.inputFilePath != "" {
 		a.loadFile(a.options.inputFilePath)
+	}
+
+	if a.options.shouldSkipToProteinsView {
+		a.OnProceed()
 	}
 }
