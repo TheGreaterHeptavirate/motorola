@@ -21,43 +21,49 @@ import (
 
 // ParseInput takes a string as an argument and returns list of
 // proteins found in that string. It may return an error.
-func ParseInput(input string) ([]*protein.Protein, error) {
-	logger.Debugf("Parsing input string: %s", input)
+func ParseInput(input string) (chan *protein.Protein, chan error) {
+	logger.Debugf("Parsing input string")
 
-	result := make([]*protein.Protein, 0)
+	result := make(chan *protein.Protein)
+	resultErr := make(chan error)
 
-	aminoAcids, err := StringToAminoAcids(input)
-	if err != nil {
-		return nil, fmt.Errorf("unable to convert input string to amino acids list: %w", err)
-	}
+	go func() {
+		aminoAcids, err := StringToAminoAcids(input)
+		if err != nil {
+			resultErr <- fmt.Errorf("unable to convert input string to amino acids list: %w", err)
+			return
+		}
 
-	for _, aminoAcids := range aminoAcids {
-		var (
-			isReading = false
-			start     = 0
-		)
+		for _, aminoAcids := range aminoAcids {
+			var (
+				isReading = false
+				start     = 0
+			)
 
-		for i, aminoAcid := range *aminoAcids {
-			switch aminoAcid.Sign {
-			case aminoacid.StartCodon:
-				isReading = true
-				start = i
-			case aminoacid.StopCodon:
-				if isReading {
-					isReading = false
+			for i, aminoAcid := range *aminoAcids {
+				switch aminoAcid.Sign {
+				case aminoacid.StartCodon:
+					isReading = true
+					start = i
+				case aminoacid.StopCodon:
+					if isReading {
+						isReading = false
 
-					newProtein, err := protein.NewProtein((*aminoAcids)[start : i+1])
-					if err != nil {
-						return nil, fmt.Errorf("unable to create new protein (should not happen): %w", err)
+						newProtein, err := protein.NewProtein((*aminoAcids)[start : i+1])
+						if err != nil {
+							resultErr <- fmt.Errorf("unable to create new protein (should not happen): %w", err)
+							return
+						}
+
+						result <- newProtein
 					}
-
-					result = append(result, newProtein)
 				}
 			}
 		}
-	}
+		resultErr <- nil
+	}()
 
-	return result, nil
+	return result, resultErr
 }
 
 // StringToAminoAcids converts given string into a list of aminoacids.

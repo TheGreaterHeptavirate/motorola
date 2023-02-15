@@ -251,20 +251,29 @@ litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
 }
 
 func (a *App) OnProceed() {
-	logger.Debugf("Parsing data: %v", a.inputString)
+	logger.Debugf("Parsing data")
 
 	validString, _ := ValidateCodonsString(a.inputString)
 
-	logger.Debugf("Input string validated: %v", validString)
+	go func() {
+		d, errChan := inputparser.ParseInput(validString)
+		for {
+			select {
+			case <-d:
+				for p := range d {
+					a.foundProteins = append(a.foundProteins, p)
+					giu.Update()
+				}
+			case err := <-errChan:
+				if err != nil {
+					a.ReportError(err)
+				}
 
-	d, err := inputparser.ParseInput(validString)
-	if err != nil {
-		a.ReportError(err)
+				logger.Debugf("%v proteins found", len(a.foundProteins))
+				return
+			}
+		}
+	}()
 
-		return
-	}
-
-	logger.Debugf("%v proteins found", len(d))
-	a.foundProteins = d
 	a.layout.Start()
 }
