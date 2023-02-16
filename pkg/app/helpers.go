@@ -280,9 +280,9 @@ func (a *App) OnProceed() {
 		for {
 			select {
 			case p := <-d:
-				// a.appSync.Lock()
+				a.appSync.Lock()
 				a.foundProteins = append(a.foundProteins, p)
-				// a.appSync.Unlock()
+				a.appSync.Unlock()
 				giu.Update()
 			case err := <-errChan:
 				logger.Debugf("Error received %v", err)
