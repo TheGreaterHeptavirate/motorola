@@ -22,9 +22,9 @@ const subscriptFontSize = 10
 type VAlignment byte
 
 const (
-	// VAlignTop aligns to tpo.
+	// VAlignTop aligns to top.
 	VAlignTop VAlignment = iota
-	// VAlignCenter centers alignment (does not return Y size!
+	// VAlignCenter centers alignment (does not return Y size!)
 	VAlignCenter
 	// VAlignBottom aligns to bottom.
 	VAlignBottom
@@ -40,8 +40,8 @@ const (
 	HAlignRight
 )
 
-// ChemicalText draws a text but formats it as follows:
-// - string between `_`  characters is subscript
+// ChemicalText draws text but formats it as follows:
+// - string between `_`  characters is in subscript
 // it uses giu.SetFontSize to change font size
 //
 // conditions about returned size:
@@ -118,6 +118,7 @@ func (d *DrawCommands) ChemicalText(t string, vAlignment VAlignment, hAlignment 
 
 			// QUESTION: why changing value of hideTextAfterDoubleHash fixes the problem
 			// of invalid width?!
+			// ANSWER: I dunno, magic ?
 			s := imgui.CalcTextSize(string(r), true, 0)
 			w, h := s.X, s.Y
 
