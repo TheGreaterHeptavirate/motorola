@@ -87,6 +87,11 @@ func (a *App) Options(o *AppOptions) *App {
 	return a
 }
 
+// Info prints app info in stdout
+func (a *App) Info() {
+	fmt.Println(projectInfo)
+}
+
 // Run starts main loop.
 // It holds goroutine until app running.
 func (a *App) Run() error {

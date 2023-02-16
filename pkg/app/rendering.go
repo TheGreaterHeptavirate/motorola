@@ -39,7 +39,7 @@ All Rights Reserved
 All copies of this software (if not stated otherwise) are dedicated
 ONLY to personal, non-commercial use.
 
-# Information licensing of third-party software
+# Information about licensing of third-party software
 - [BioPython](https://github.com/biopython/biopython)
 Biopython License Agreement
 Permission to use, copy, modify, and distribute this software and its documentation with or without modifications and for any purpose and without fee is hereby granted, provided that any copyright notices appear in all copies and that both those copyright notices and this permission notice appear in supporting documentation, and that the names of the contributors or copyright holders not be used in advertising or publicity pertaining to distribution of the software without specific prior permission.
