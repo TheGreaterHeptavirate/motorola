@@ -8,6 +8,11 @@ package app
 
 import (
 	"errors"
+	"image/color"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
@@ -16,14 +21,10 @@ import (
 	animations "github.com/gucio321/giu-animations"
 	"github.com/sqweek/dialog"
 	"golang.org/x/image/colornames"
-	"image/color"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 // ReportError prints an error to the log and shows a message box in App.
-// this ReportError method could be used ONLY inside of git's main loop!
+// this ReportError method can ONLY be used inside of giu's main loop!
 func (a *App) ReportError(err error) {
 	text := "Unknown exception occurred!"
 	if err != nil {
@@ -112,8 +113,8 @@ func TextWidth(s string) float32 {
 }
 
 // ValidateCodonsString returns a valid copy of given string.
-// it removes or redundand characters and replaces t with u.
-// it returns error that would be returned by inputparser.Validate.
+// it removes or redundant characters and replaces t with u.
+// it returns error that would be returned by inputparser. Validate.
 func ValidateCodonsString(s string) (result string, err error) {
 	err = inputparser.Validate(s)
 
@@ -131,7 +132,7 @@ func ValidateCodonsString(s string) (result string, err error) {
 
 // GetPresentableCodonsString returns a nice-looking string grouped
 // in codons (like AAA CAC AUG)
-// it arbitrary calls ValidateCodonsString and refuses all the errors.
+// it arbitrarily calls ValidateCodonsString and refuses all the errors.
 func GetPresentableCodonsString(s string, offset int) (result string) {
 	s, _ = ValidateCodonsString(s)
 	offset %= 3
