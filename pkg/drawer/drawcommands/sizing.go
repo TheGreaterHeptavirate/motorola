@@ -12,7 +12,7 @@ import "image"
 
 // Size represents multidimensional Size
 // it is like image.Rectangle
-// min is a minimal Size, construction can have, and max is a maximal Size.
+// min is a minimal Size a construction can have, and max is the maximum Size.
 type Size struct {
 	min, max image.Point
 }
