@@ -13,12 +13,14 @@
 package app
 
 import "C"
+
 import (
 	"fmt"
-	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
-	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 	"strings"
 	"time"
+
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
+	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 
 	animations "github.com/gucio321/giu-animations"
 
@@ -52,13 +54,15 @@ type App struct {
 
 	shouldExecuteOptions bool
 	options              *AppOptions
+	showInAppErrors      bool
 }
 
 // New creates a new App instance.
 func New() *App {
 	return &App{
-		inputString: "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
-		logLevel:    logger.LogLevelInfo,
+		inputString:     "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
+		logLevel:        logger.LogLevelInfo,
+		showInAppErrors: true,
 	}
 }
 

@@ -13,10 +13,13 @@ import "github.com/TheGreaterHeptavirate/motorola/internal/logger"
 type AppOptions struct {
 	inputFilePath            string
 	shouldSkipToProteinsView bool
+	inAppErrors              bool
 }
 
 func Options() *AppOptions {
-	return &AppOptions{}
+	return &AppOptions{
+		inAppErrors: true,
+	}
 }
 
 func (o *AppOptions) LoadFile(path string) *AppOptions {
@@ -31,6 +34,12 @@ func (o *AppOptions) SkipToProteinsView() *AppOptions {
 	return o
 }
 
+func (o *AppOptions) NoInAppErrors() *AppOptions {
+	o.inAppErrors = false
+
+	return o
+}
+
 func (a *App) executeOptions() {
 	if !a.shouldExecuteOptions || a.options == nil {
 		return
@@ -39,6 +48,8 @@ func (a *App) executeOptions() {
 	logger.Info("Applying app options")
 
 	a.shouldExecuteOptions = false
+
+	a.showInAppErrors = a.options.inAppErrors
 
 	if a.options.inputFilePath != "" {
 		a.loadFile(a.options.inputFilePath)

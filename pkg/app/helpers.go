@@ -26,13 +26,19 @@ import (
 // ReportError prints an error to the log and shows a message box in App.
 // this ReportError method could be used ONLY inside of git's main loop!
 func (a *App) ReportError(err error) {
-	text := "Unknown exception occurred!"
-	if err != nil {
-		text = err.Error()
-	}
-
-	giu.Msgbox("An error occurred!", text)
 	logger.Error(err)
+
+	if a.showInAppErrors {
+		logger.Debug("Displaying in-app error")
+		text := "Unexpected error happened!"
+		if err != nil {
+			text = err.Error()
+		}
+
+		giu.Msgbox("An error occurred!", text)
+	} else {
+		logger.Debugf("Noth snowing an error in app - disabled in options.")
+	}
 }
 
 // WrapInputTextMultiline is a callback to wrap an input text multiline.
@@ -244,13 +250,16 @@ func (a *App) loadFile(path string) {
 
 	a.inputString, err = ValidateCodonsString(a.inputString)
 	if err != nil {
-		giu.Msgbox(
-			"UWAGA! Plik może zawierać nieprawidłowe dane!",
-			`Plik zawiera nieobsługiwane znaki.
-Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
-litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
+		if a.showInAppErrors {
+			giu.Msgbox(
+				"WARNING! File might contain invalid data!",
+				`The file contains incorrect characters.
+It may mean, that the protein will be processed incorrectly. Input files may contain only
+the characters A, C, G, T, or U. All other characters will be considered invalid and removed.
 `,
-		)
+			)
+		}
+		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 	}
 
 	a.inputString = GetPresentableCodonsString(a.inputString, 0)
