@@ -55,7 +55,7 @@ As compilation in the way described above may be a bit painful on some operating
 We've introduced another way to run our application - [Docker](https://docker.io).
 
 ```sh
-# start immedietly
+# start immediately
 docker-compose up
 # you can also construct a large docker command like this:
 docker run --name=motorola_app_1 \
