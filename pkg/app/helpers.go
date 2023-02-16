@@ -8,6 +8,11 @@ package app
 
 import (
 	"errors"
+	"image/color"
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
@@ -16,10 +21,6 @@ import (
 	animations "github.com/gucio321/giu-animations"
 	"github.com/sqweek/dialog"
 	"golang.org/x/image/colornames"
-	"image/color"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 // ReportError prints an error to the log and shows a message box in App.
@@ -204,24 +205,25 @@ func (a *App) OnLoadFromFile() {
 
 	logger.Info("Loading file to input textbox...")
 
-	path, err := dialog.File().Load()
-	if err != nil {
-		// this error COULD come from fact that user exited dialog
-		// in this case, don't report app's error, just return
-		if errors.Is(err, dialog.ErrCancelled) {
-			logger.Info("File loading canceled")
+	go func() {
+		path, err := dialog.File().Load()
+		if err != nil {
+			defer a.loadingScreen.Start()
+			// this error COULD come from fact that user exited dialog
+			// in this case, don't report app's error, just return
+			if errors.Is(err, dialog.ErrCancelled) {
+				logger.Info("File loading canceled")
+
+				return
+			}
+
+			a.ReportError(err)
 
 			return
 		}
 
-		a.ReportError(err)
+		logger.Debugf("Path to file to load: %s", path)
 
-		return
-	}
-
-	logger.Debugf("Path to file to load: %s", path)
-
-	go func() {
 		a.loadFile(path)
 		logger.Debug("loading finished. Exiting loading screen.")
 		mainthread.Call(a.loadingScreen.Start)
