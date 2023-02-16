@@ -33,4 +33,4 @@ require (
 
 replace github.com/allendang/giu => github.com/TheGreaterHeptavirate/giu v0.0.0-20230216095733-f4ec2dda1b79
 
-replace github.com/AllenDang/giu => github.com/TheGreaterHeptavirate/giu v0.0.0-20230216095733-f4ec2dda1b79
+replace github.com/AllenDang/giu => github.com/TheGreaterHeptavirate/giu v0.0.0-20230216174011-9e4b67a70660
