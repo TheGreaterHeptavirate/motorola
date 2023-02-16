@@ -246,9 +246,9 @@ func (a *App) loadFile(path string) {
 
 	logger.Debug("File loaded successfully!")
 
-	a.inputString = string(data)
+	inputString := string(data)
 
-	a.inputString, err = ValidateCodonsString(a.inputString)
+	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
 		if a.showInAppErrors {
 			giu.Msgbox(
@@ -262,7 +262,11 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 	}
 
-	a.inputString = GetPresentableCodonsString(a.inputString, 0)
+	inputString = GetPresentableCodonsString(inputString, 0)
+
+	a.appSync.Lock()
+	a.inputString = inputString
+	a.appSync.Unlock()
 }
 
 func (a *App) OnProceed() {
