@@ -17,6 +17,7 @@ import "C"
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
@@ -48,6 +49,7 @@ type App struct {
 	currentProtein int32
 	layout         *animations.AnimatorWidget
 	loadingScreen  *animations.AnimatorWidget
+	appSync        *sync.Mutex
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel
@@ -63,6 +65,7 @@ func New() *App {
 		inputString:     "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
 		logLevel:        logger.LogLevelInfo,
 		showInAppErrors: true,
+		appSync:         &sync.Mutex{},
 	}
 }
 

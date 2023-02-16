@@ -273,9 +273,11 @@ func (a *App) render() {
 		func(starter func()) {
 			a.toolbox()
 
+			a.appSync.Lock()
 			if len(a.foundProteins) == 0 {
 				return
 			}
+			a.appSync.Unlock()
 
 			a.proteinNotation()
 			a.proteinStats()
@@ -349,7 +351,11 @@ func (a *App) toolbox() {
 	windowW, windowH := a.window.GetSize()
 	aboutUs := projectInfo
 
-	if int32(len(a.foundProteins)) <= a.currentProtein {
+	a.appSync.Lock()
+	numProteins := len(a.foundProteins)
+	a.appSync.Unlock()
+
+	if int32(numProteins) <= a.currentProtein {
 		a.currentProtein = 0
 	}
 
@@ -363,11 +369,10 @@ func (a *App) toolbox() {
 		Layout(
 			giu.Custom(func() {
 				var ending string
-				proteinsCount := len(a.foundProteins)
-				if proteinsCount != 1 {
+				if numProteins != 1 {
 					ending = "s"
 				}
-				giu.Labelf("Found %d protein%s", proteinsCount, ending).Build()
+				giu.Labelf("Found %d protein%s", numProteins, ending).Build()
 			}),
 			giu.Custom(func() {
 				_, availableH := giu.GetAvailableRegion()
@@ -375,6 +380,7 @@ func (a *App) toolbox() {
 					giu.Child().Layout(
 						// proteins list
 						giu.Custom(func() {
+							a.appSync.Lock()
 							buttons := make([]giu.Widget, len(a.foundProteins))
 							for i := range a.foundProteins {
 								// closure xD
@@ -387,6 +393,8 @@ func (a *App) toolbox() {
 									a.currentProtein = int32(i)
 								})
 							}
+
+							a.appSync.Unlock()
 
 							giu.Layout(buttons).Build()
 						}),
@@ -443,7 +451,10 @@ func (a *App) proteinNotation() {
 }
 
 func (a *App) proteinStats() {
+	a.appSync.Lock()
 	inputProtein := a.foundProteins[a.currentProtein]
+	a.appSync.Unlock()
+
 	windowW, _ := a.window.GetSize()
 
 	imgui.PushStyleVarVec2(imgui.StyleVarWindowMinSize, imgui.Vec2{X: statsWindowMinW, Y: statsWindowMinH})
@@ -491,7 +502,10 @@ func (a *App) proteinStats() {
 }
 
 func (a *App) proteinDrawing() {
+	a.appSync.Lock()
 	inputProtein := a.foundProteins[a.currentProtein]
+	a.appSync.Unlock()
+
 	windowW, _ := a.window.GetSize()
 	giu.Window("Scheme").
 		Size(proteinDrawingW, proteinDrawingH).

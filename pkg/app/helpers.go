@@ -30,7 +30,7 @@ func (a *App) ReportError(err error) {
 
 	if a.showInAppErrors {
 		logger.Debug("Displaying in-app error")
-		text := "Unexpected error happened!"
+		text := "Unknown error happened!"
 		if err != nil {
 			text = err.Error()
 		}
@@ -275,7 +275,9 @@ func (a *App) OnProceed() {
 		for {
 			select {
 			case p := <-d:
+				a.appSync.Lock()
 				a.foundProteins = append(a.foundProteins, p)
+				a.appSync.Unlock()
 				giu.Update()
 			case err := <-errChan:
 				logger.Debugf("Error received %v", err)

@@ -5,11 +5,11 @@ go 1.18
 require (
 	github.com/AllenDang/giu v0.6.3-0.20221213134548-da051513855e
 	github.com/AllenDang/imgui-go v1.12.1-0.20221124025851-59b862ca5a0c
-	github.com/gucio321/giu-animations v0.0.0-20230130163612-70fee68326fe
+	github.com/gucio321/giu-animations v0.0.0-20230201162405-6d4a7cf8a18d
 	github.com/kpango/glg v1.6.14
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/image v0.3.0
+	golang.org/x/image v0.5.0
 )
 
 require (
@@ -26,7 +26,7 @@ require (
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sahilm/fuzzy v0.1.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
 	gopkg.in/eapache/queue.v1 v1.1.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
