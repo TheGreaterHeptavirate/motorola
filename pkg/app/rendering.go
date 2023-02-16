@@ -498,7 +498,7 @@ func (a *App) proteinDrawing() {
 	inputProtein := a.foundProteins[a.currentProtein]
 
 	windowW, _ := a.window.GetSize()
-	giu.Window("Scheme").
+	giu.Window("Diagram").
 		Size(proteinDrawingW, proteinDrawingH).
 		Pos(toolboxProcentageWidth*float32(windowW), float32(math.Max(statsWindowH, proteinNotationWindowSizeY))).
 		Layout(
