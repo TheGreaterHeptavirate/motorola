@@ -26,13 +26,19 @@ import (
 // ReportError prints an error to the log and shows a message box in App.
 // this ReportError method can ONLY be used inside of giu's main loop!
 func (a *App) ReportError(err error) {
-	text := "Unknown exception occurred!"
-	if err != nil {
-		text = err.Error()
-	}
-
-	giu.Msgbox("An error occurred!", text)
 	logger.Error(err)
+
+	if a.showInAppErrors {
+		logger.Debug("Displaying in-app error")
+		text := "Unknown error happened!"
+		if err != nil {
+			text = err.Error()
+		}
+
+		giu.Msgbox("An error occurred!", text)
+	} else {
+		logger.Debugf("Noth snowing an error in app - disabled in options.")
+	}
 }
 
 // WrapInputTextMultiline is a callback to wrap an input text multiline.
@@ -205,24 +211,25 @@ func (a *App) OnLoadFromFile() {
 
 	logger.Info("Loading file to input textbox...")
 
-	path, err := dialog.File().Load()
-	if err != nil {
-		// this error COULD come from fact that user exited dialog
-		// in this case, don't report app's error, just return
-		if errors.Is(err, dialog.ErrCancelled) {
-			logger.Info("File loading canceled")
+	go func() {
+		path, err := dialog.File().Load()
+		if err != nil {
+			defer a.loadingScreen.Start()
+			// this error COULD come from fact that user exited dialog
+			// in this case, don't report app's error, just return
+			if errors.Is(err, dialog.ErrCancelled) {
+				logger.Info("File loading canceled")
+
+				return
+			}
+
+			a.ReportError(err)
 
 			return
 		}
 
-		a.ReportError(err)
+		logger.Debugf("Path to file to load: %s", path)
 
-		return
-	}
-
-	logger.Debugf("Path to file to load: %s", path)
-
-	go func() {
 		a.loadFile(path)
 		logger.Debug("loading finished. Exiting loading screen.")
 		mainthread.Call(a.loadingScreen.Start)
@@ -239,33 +246,49 @@ func (a *App) loadFile(path string) {
 
 	logger.Debug("File loaded successfully!")
 
-	a.inputString = string(data)
+	inputString := string(data)
 
-	a.inputString, err = ValidateCodonsString(a.inputString)
+	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
-		giu.Msgbox(
-			"UWAGA! Plik może zawierać nieprawidłowe dane!",
-			`Plik zawiera nieobsługiwane znaki.
-Może to oznaczać, że białko zostanie przetworzone nieprawidłowo. Plik może zawierać jedynie
-litery A, C, G, T, lub U. Wszystkie inne znaki zostaną usunięte.
+		if a.showInAppErrors {
+			giu.Msgbox(
+				"WARNING! File might contain invalid data!",
+				`The file contains incorrect characters.
+It may mean, that the protein will be processed incorrectly. Input files may contain only
+the characters A, C, G, T, or U. All other characters will be considered invalid and removed.
 `,
-		)
+			)
+		}
+		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 	}
 
-	a.inputString = GetPresentableCodonsString(a.inputString, 0)
+	inputString = GetPresentableCodonsString(inputString, 0)
+
+	a.appSync.Lock()
+	a.inputString = inputString
+	a.appSync.Unlock()
 }
 
 func (a *App) OnProceed() {
 	logger.Debugf("Parsing data")
-
-	validString, _ := ValidateCodonsString(a.inputString)
+	a.layout.Start()
 
 	go func() {
+		// get inputString and let app render normally
+		a.appSync.Lock()
+		inputString := a.inputString
+		a.appSync.Unlock()
+
+		validString, _ := ValidateCodonsString(inputString)
+		logger.Debug("string validated")
+
 		d, errChan := inputparser.ParseInput(validString)
 		for {
 			select {
 			case p := <-d:
+				a.appSync.Lock()
 				a.foundProteins = append(a.foundProteins, p)
+				a.appSync.Unlock()
 				giu.Update()
 			case err := <-errChan:
 				logger.Debugf("Error received %v", err)
@@ -278,6 +301,4 @@ func (a *App) OnProceed() {
 			}
 		}
 	}()
-
-	a.layout.Start()
 }

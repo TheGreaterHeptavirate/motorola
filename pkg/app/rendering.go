@@ -39,7 +39,7 @@ All Rights Reserved
 All copies of this software (if not stated otherwise) are dedicated
 ONLY to personal, non-commercial use.
 
-# Information licensing of third-party software
+# Information about licensing of third-party software
 - [BioPython](https://github.com/biopython/biopython)
 Biopython License Agreement
 Permission to use, copy, modify, and distribute this software and its documentation with or without modifications and for any purpose and without fee is hereby granted, provided that any copyright notices appear in all copies and that both those copyright notices and this permission notice appear in supporting documentation, and that the names of the contributors or copyright holders not be used in advertising or publicity pertaining to distribution of the software without specific prior permission.
@@ -262,6 +262,7 @@ PSF LICENSE AGREEMENT FOR PYTHON 3.11.1
 type ViewMode byte
 
 func (a *App) render() {
+	a.appSync.Lock()
 	giu.PrepareMsgbox().Build()
 
 	a.layout = animations.Animator(animations.Transition(
@@ -301,6 +302,7 @@ func (a *App) render() {
 	a.executeOptions()
 
 	a.loadingScreen.Build()
+	a.appSync.Unlock()
 }
 
 func (a *App) inputBar() giu.Layout {
@@ -349,7 +351,9 @@ func (a *App) toolbox() {
 	windowW, windowH := a.window.GetSize()
 	aboutUs := projectInfo
 
-	if int32(len(a.foundProteins)) <= a.currentProtein {
+	numProteins := len(a.foundProteins)
+
+	if int32(numProteins) <= a.currentProtein {
 		a.currentProtein = 0
 	}
 
@@ -363,11 +367,10 @@ func (a *App) toolbox() {
 		Layout(
 			giu.Custom(func() {
 				var ending string
-				proteinsCount := len(a.foundProteins)
-				if proteinsCount != 1 {
+				if numProteins != 1 {
 					ending = "s"
 				}
-				giu.Labelf("Found %d protein%s", proteinsCount, ending).Build()
+				giu.Labelf("Found %d protein%s", numProteins, ending).Build()
 			}),
 			giu.Custom(func() {
 				_, availableH := giu.GetAvailableRegion()
@@ -444,6 +447,7 @@ func (a *App) proteinNotation() {
 
 func (a *App) proteinStats() {
 	inputProtein := a.foundProteins[a.currentProtein]
+
 	windowW, _ := a.window.GetSize()
 
 	imgui.PushStyleVarVec2(imgui.StyleVarWindowMinSize, imgui.Vec2{X: statsWindowMinW, Y: statsWindowMinH})
@@ -492,8 +496,9 @@ func (a *App) proteinStats() {
 
 func (a *App) proteinDrawing() {
 	inputProtein := a.foundProteins[a.currentProtein]
+
 	windowW, _ := a.window.GetSize()
-	giu.Window("Scheme").
+	giu.Window("Diagram").
 		Size(proteinDrawingW, proteinDrawingH).
 		Pos(toolboxProcentageWidth*float32(windowW), float32(math.Max(statsWindowH, proteinNotationWindowSizeY))).
 		Layout(

@@ -13,9 +13,11 @@
 package app
 
 import "C"
+
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
@@ -47,19 +49,23 @@ type App struct {
 	currentProtein int32
 	layout         *animations.AnimatorWidget
 	loadingScreen  *animations.AnimatorWidget
+	appSync        *sync.Mutex
 
 	window   *giu.MasterWindow
 	logLevel logger.LogLevel
 
 	shouldExecuteOptions bool
 	options              *AppOptions
+	showInAppErrors      bool
 }
 
 // New creates a new App instance.
 func New() *App {
 	return &App{
-		inputString: "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
-		logLevel:    logger.LogLevelInfo,
+		inputString:     "AUGUUUUAA", // TODO: it is just a testcase; assigning here to make easier to test
+		logLevel:        logger.LogLevelInfo,
+		showInAppErrors: true,
+		appSync:         &sync.Mutex{},
 	}
 }
 
@@ -79,6 +85,11 @@ func (a *App) Options(o *AppOptions) *App {
 	a.options = o
 
 	return a
+}
+
+// Info prints app info in stdout
+func (a *App) Info() {
+	fmt.Println(projectInfo)
 }
 
 // Run starts main loop.
