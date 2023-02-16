@@ -270,7 +270,10 @@ func (a *App) OnProceed() {
 	a.layout.Start()
 
 	go func() {
+		// need to lock here, because conflicts with imgui's TextMultiline implementation.
+		a.appSync.Lock()
 		validString, _ := ValidateCodonsString(a.inputString)
+		a.appSync.Unlock()
 		logger.Debug("string validated")
 
 		d, errChan := inputparser.ParseInput(validString)
