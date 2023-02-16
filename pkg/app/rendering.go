@@ -262,6 +262,7 @@ PSF LICENSE AGREEMENT FOR PYTHON 3.11.1
 type ViewMode byte
 
 func (a *App) render() {
+	a.appSync.Lock()
 	giu.PrepareMsgbox().Build()
 
 	a.layout = animations.Animator(animations.Transition(
@@ -273,11 +274,9 @@ func (a *App) render() {
 		func(starter func()) {
 			a.toolbox()
 
-			a.appSync.Lock()
 			if len(a.foundProteins) == 0 {
 				return
 			}
-			a.appSync.Unlock()
 
 			a.proteinNotation()
 			a.proteinStats()
@@ -303,6 +302,7 @@ func (a *App) render() {
 	a.executeOptions()
 
 	a.loadingScreen.Build()
+	a.appSync.Unlock()
 }
 
 func (a *App) inputBar() giu.Layout {
@@ -351,9 +351,7 @@ func (a *App) toolbox() {
 	windowW, windowH := a.window.GetSize()
 	aboutUs := projectInfo
 
-	a.appSync.Lock()
 	numProteins := len(a.foundProteins)
-	a.appSync.Unlock()
 
 	if int32(numProteins) <= a.currentProtein {
 		a.currentProtein = 0
@@ -380,7 +378,6 @@ func (a *App) toolbox() {
 					giu.Child().Layout(
 						// proteins list
 						giu.Custom(func() {
-							a.appSync.Lock()
 							buttons := make([]giu.Widget, len(a.foundProteins))
 							for i := range a.foundProteins {
 								// closure xD
@@ -393,8 +390,6 @@ func (a *App) toolbox() {
 									a.currentProtein = int32(i)
 								})
 							}
-
-							a.appSync.Unlock()
 
 							giu.Layout(buttons).Build()
 						}),
@@ -451,9 +446,7 @@ func (a *App) proteinNotation() {
 }
 
 func (a *App) proteinStats() {
-	a.appSync.Lock()
 	inputProtein := a.foundProteins[a.currentProtein]
-	a.appSync.Unlock()
 
 	windowW, _ := a.window.GetSize()
 
@@ -502,9 +495,7 @@ func (a *App) proteinStats() {
 }
 
 func (a *App) proteinDrawing() {
-	a.appSync.Lock()
 	inputProtein := a.foundProteins[a.currentProtein]
-	a.appSync.Unlock()
 
 	windowW, _ := a.window.GetSize()
 	giu.Window("Scheme").

@@ -267,17 +267,19 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 
 func (a *App) OnProceed() {
 	logger.Debugf("Parsing data")
-
-	validString, _ := ValidateCodonsString(a.inputString)
+	a.layout.Start()
 
 	go func() {
+		validString, _ := ValidateCodonsString(a.inputString)
+		logger.Debug("string validated")
+
 		d, errChan := inputparser.ParseInput(validString)
 		for {
 			select {
 			case p := <-d:
-				a.appSync.Lock()
+				// a.appSync.Lock()
 				a.foundProteins = append(a.foundProteins, p)
-				a.appSync.Unlock()
+				// a.appSync.Unlock()
 				giu.Update()
 			case err := <-errChan:
 				logger.Debugf("Error received %v", err)
@@ -290,6 +292,4 @@ func (a *App) OnProceed() {
 			}
 		}
 	}()
-
-	a.layout.Start()
 }

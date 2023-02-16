@@ -52,10 +52,14 @@ func (a *App) executeOptions() {
 	a.showInAppErrors = a.options.inAppErrors
 
 	if a.options.inputFilePath != "" {
+		logger.Debugf("loading data from file %s")
 		a.loadFile(a.options.inputFilePath)
 	}
 
 	if a.options.shouldSkipToProteinsView {
+		logger.Debugf("skipping to proteins view")
 		a.OnProceed()
 	}
+
+	logger.Debug("options applied")
 }
