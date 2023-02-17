@@ -6,7 +6,7 @@ require (
 	github.com/AllenDang/giu v0.6.3-0.20221213134548-da051513855e
 	github.com/AllenDang/imgui-go v1.12.1-0.20221124025851-59b862ca5a0c
 	github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3
-	github.com/gucio321/giu-animations v0.0.0-20230201162405-6d4a7cf8a18d
+	github.com/gucio321/giu-animations v0.0.0-20230217082132-7c7e5963e069
 	github.com/kpango/glg v1.6.14
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/stretchr/testify v1.8.1

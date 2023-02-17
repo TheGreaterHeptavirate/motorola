@@ -185,9 +185,9 @@ func splitInputTextIntoCodons(c *imgui.InputTextCallbackData) {
 
 func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 	return animations.Animator(
-		animations.HoverColorStyle(
+		animations.ColorFlowStyle(
 			animations.Animator(
-				animations.HoverColor(
+				animations.ColorFlow(
 					button,
 					func() color.RGBA {
 						return colornames.White
@@ -207,14 +207,14 @@ func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 
 func (a *App) OnLoadFromFile() {
 	logger.Debugf("starting transition to loading screen")
-	a.loadingScreen.Start()
+	a.loadingScreen.Start(animations.PlayAuto)
 
 	logger.Info("Loading file to input textbox...")
 
 	go func() {
 		path, err := dialog.File().Load()
 		if err != nil {
-			defer a.loadingScreen.Start()
+			defer a.loadingScreen.Start(animations.PlayAuto)
 			// this error COULD come from fact that user exited dialog
 			// in this case, don't report app's error, just return
 			if errors.Is(err, dialog.ErrCancelled) {
@@ -232,7 +232,9 @@ func (a *App) OnLoadFromFile() {
 
 		a.loadFile(path)
 		logger.Debug("loading finished. Exiting loading screen.")
-		mainthread.Call(a.loadingScreen.Start)
+		mainthread.Call(func() {
+			a.loadingScreen.Start(animations.PlayAuto)
+		})
 	}()
 }
 
@@ -271,7 +273,7 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 
 func (a *App) OnProceed() {
 	logger.Debugf("Parsing data")
-	a.layout.Start()
+	a.layout.Start(animations.PlayAuto)
 
 	go func() {
 		// get inputString and let app render normally

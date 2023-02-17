@@ -398,7 +398,7 @@ func (a *App) toolbox() {
 					giu.Align(giu.AlignCenter).To(
 						giu.Row(
 							giu.Button("Back").OnClick(func() {
-								a.layout.Start()
+								a.layout.Start(animations.PlayAuto)
 							}),
 							giu.Button("About us").OnClick(func() {
 								giu.OpenPopup("About us")
