@@ -252,6 +252,7 @@ func (a *App) loadFile(path string) {
 
 	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
+		hold := make(chan bool)
 		if a.showInAppErrors {
 			giu.Msgbox(
 				"WARNING! File might contain invalid data!",
@@ -259,8 +260,13 @@ func (a *App) loadFile(path string) {
 It may mean, that the protein will be processed incorrectly. Input files may contain only
 the characters A, C, G, T, or U. All other characters will be considered invalid and removed.
 `,
-			)
+			).ResultCallback(func(_ giu.DialogResult) {
+				hold <- true
+			})
 		}
+
+		<-hold
+
 		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 	}
 
