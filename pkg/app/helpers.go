@@ -17,6 +17,7 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	"github.com/faiface/mainthread"
 	animations "github.com/gucio321/giu-animations"
 	"github.com/sqweek/dialog"
@@ -280,6 +281,7 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 func (a *App) OnProceed() {
 	logger.Debugf("Parsing data")
 	a.layout.Start(animations.PlayAuto)
+	a.foundProteins = make([]*protein.Protein, 0)
 
 	go func() {
 		// get inputString and let app render normally
