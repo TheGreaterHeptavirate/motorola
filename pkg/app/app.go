@@ -89,7 +89,7 @@ func (a *App) Options(o *AppOptions) *App {
 
 // Info prints app info in stdout
 func (a *App) Info() {
-	fmt.Println(projectInfo)
+	fmt.Print(projectInfo)
 }
 
 // Run starts main loop.

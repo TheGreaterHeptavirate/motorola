@@ -53,7 +53,7 @@ func (a *App) executeOptions() {
 		a.showInAppErrors = a.options.inAppErrors
 
 		if a.options.inputFilePath != "" {
-			logger.Debugf("loading data from file %s")
+			logger.Debugf("loading data from file %s", a.options.inputFilePath)
 			a.loadFile(a.options.inputFilePath)
 		}
 
