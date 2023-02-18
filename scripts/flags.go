@@ -38,7 +38,7 @@ func main() {
 		log.Print("python3-command not specified (using pkg-config)")
 	}
 
-	file.WriteString("import \"C\"")
+	file.WriteString("import \"C\"\n")
 
 	os.WriteFile(*output, []byte(file.String()), 0o644)
 }
