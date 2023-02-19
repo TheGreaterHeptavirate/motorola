@@ -40,7 +40,7 @@ func InitializeBiopython() (finisher func(), err error) {
 	C.PyRun_SimpleString(C.CString(fmt.Sprintf(`import sys
 sys.path.append('%s')`, newSyspath)))
 
-	err = loadDir(path, ".")
+	err = loadDir(path, ".", stuff)
 	if err != nil {
 		return nil, fmt.Errorf("error loading content of directory: %w", err)
 	}
@@ -48,8 +48,8 @@ sys.path.append('%s')`, newSyspath)))
 	return func() { os.RemoveAll(path) }, nil
 }
 
-func loadDir(base, dirname string) error {
-	files, err := stuff.ReadDir(dirname)
+func loadDir(base, dirname string, fs embed.FS) error {
+	files, err := fs.ReadDir(dirname)
 	if err != nil {
 		return fmt.Errorf("reading directory %s: %w", dirname, err)
 	}
@@ -70,7 +70,7 @@ func loadDir(base, dirname string) error {
 
 			b := joinPath(base, file.Name())
 
-			err := loadDir(b, dir)
+			err := loadDir(b, dir, fs)
 			if err != nil {
 				return err
 			}
@@ -80,7 +80,7 @@ func loadDir(base, dirname string) error {
 
 		filename := joinPath(dirname, file.Name())
 
-		fileData, err := stuff.ReadFile(filename)
+		fileData, err := fs.ReadFile(filename)
 		if err != nil {
 			return fmt.Errorf("reading file %s: %w", filename, err)
 		}

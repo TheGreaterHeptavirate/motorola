@@ -26,18 +26,18 @@ typedef long xlong;
 import "C"
 
 import (
+	"embed"
 	_ "embed"
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
 	"unsafe"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
 
-//go:embed python311.zip
-var pythonStdLib []byte
+//go:embed cpython/Lib
+var pythonStdLib embed.FS
 
 type (
 	PyObject C.PyObject
@@ -60,11 +60,11 @@ func Initialize() (finisher func(), err error) {
 
 	logger.Debugf("[PYTHON] extracting python standard library to %s", path)
 
-	if err := os.WriteFile(filepath.Join(path, "python311.zip"), pythonStdLib, 0o666); err != nil {
+	if err := loadDir(path, "cpython/Lib", pythonStdLib); err != nil {
 		return nil, fmt.Errorf("writing temp file: %w", err)
 	}
 
-	os.Setenv("PYTHONPATH", filepath.Join(path, "python311.zip"))
+	os.Setenv("PYTHONPATH", path)
 
 	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()

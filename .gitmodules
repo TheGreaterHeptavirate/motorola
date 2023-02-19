@@ -1,3 +1,6 @@
 [submodule "pkg/python_integration/biopython"]
 	path = pkg/python_integration/biopython
 	url = https://github.com/biopython/biopython
+[submodule "pkg/python_integration/cpython"]
+	path = pkg/python_integration/cpython
+	url = git@github.com:python/cpython
