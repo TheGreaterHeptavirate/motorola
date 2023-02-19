@@ -1,3 +1,5 @@
+[![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/motorola?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/motorola)
+
 motorola project is an application written for
 [Motorola Science Cup](https://science-cup.pl/) competition
 
