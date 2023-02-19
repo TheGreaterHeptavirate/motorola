@@ -56,7 +56,7 @@ go run .
 
 ## Alternative - `Docker`
 
-**An official image is available as `quay.io/gucio321/bialkomat`**
+**An official image is available as [quay.io/gucio321/bialkomat]**
 
 As compilation in the way described above may be a bit painful on some operating systems (especially Windows :smile:)
 We've introduced another way to run our application - [Docker](https://docker.io).
