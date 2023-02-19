@@ -4,3 +4,6 @@
 [submodule "pkg/python_integration/cpython"]
 	path = pkg/python_integration/cpython
 	url = git@github.com:python/cpython
+[submodule "scripts/golang-tools-install-script"]
+	path = scripts/golang-tools-install-script
+	url = https://github.com/canha/golang-tools-install-script
