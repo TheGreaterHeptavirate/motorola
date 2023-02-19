@@ -1,11 +1,13 @@
 [![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/motorola?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/motorola)
 
-motorola project is an application written for
-[Motorola Science Cup](https://science-cup.pl/) competition
+Białkomat project is an application written for
+[Motorola Science Cup](https://science-cup.pl/) competition.
 
 # Description
 
-TODO
+Białkomat is intended to be used for analyzing a genetic code typed in or
+loaded from source file. For more details, take a lok on our [documentation](#documentation)
+(*required knowladge of polish lanugage*).
 
 # Documentation
 
@@ -27,10 +29,13 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
 
 ## Pre-requirements
 
+### for building
 - [go](https://go.dev)
 - GCC
 - mingw (**for cross-platform compilation only**)
-- Python 3.11 version **with C headers** (you can test if another versions works)
+
+### for running binaries
+- Python 3.11 (**NOTE** remember to add it to PATH on windows)
 
 ## Source
 
@@ -40,7 +45,7 @@ git clone git@github.com:TheGreaterHeptavirate/motorola
 # change-dir
 cd motorola
 # download go dependencies
-go get -d ./...
+make setup
 
 # run app:
 go run github.com/TheGreaterHeptavirate/motorola/cmd/motorola
