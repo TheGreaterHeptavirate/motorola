@@ -45,6 +45,7 @@ func main() {
 	}
 
 	opt := app.Options()
+	shouldSetOptions := false
 	if *path != "" {
 		// check if path exists
 		if d, err := os.Stat(*path); err != nil ||
@@ -52,21 +53,26 @@ func main() {
 			log.Panicf("invalid file path %s", *path)
 		}
 		opt.LoadFile(*path)
+		shouldSetOptions = true
 	}
 
 	if *skip {
 		opt.SkipToProteinsView()
+		shouldSetOptions = true
 	}
 
 	if *muteErrors {
 		opt.NoInAppErrors()
+		shouldSetOptions = true
 	}
 
 	if *verbose {
 		a.Verbose()
 	}
 
-	a.Options(opt)
+	if shouldSetOptions {
+		a.Options(opt)
+	}
 
 	if err := a.Run(); err != nil {
 		panic(err)
