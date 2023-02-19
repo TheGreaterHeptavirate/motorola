@@ -10,8 +10,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
+	"runtime/debug"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app"
 )
@@ -22,7 +24,18 @@ func main() {
 	path := flag.String("i", "", "Load data from file")
 	muteErrors := flag.Bool("no-errors", false, "Do not display error messages in app (messages will be logged anyway)")
 	info := flag.Bool("info", false, "Print app info and exit")
+	version := flag.Bool("version", false, "print project's version")
 	flag.Parse()
+
+	if *version {
+		if info, ok := debug.ReadBuildInfo(); ok {
+			fmt.Println(info)
+		} else {
+			fmt.Println("Build info not available.")
+		}
+
+		os.Exit(0)
+	}
 
 	a := app.New()
 
