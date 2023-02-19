@@ -8,7 +8,10 @@
 
 package app
 
-import "github.com/TheGreaterHeptavirate/motorola/internal/logger"
+import (
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
+	animations "github.com/gucio321/giu-animations"
+)
 
 type AppOptions struct {
 	inputFilePath            string
@@ -49,6 +52,7 @@ func (a *App) executeOptions() {
 
 	a.shouldExecuteOptions = false
 
+	a.loadingScreen.Start(animations.PlayForward)
 	go func() {
 		a.showInAppErrors = a.options.inAppErrors
 
@@ -63,5 +67,6 @@ func (a *App) executeOptions() {
 		}
 
 		logger.Debug("options applied")
+		a.loadingScreen.Start(animations.PlayForward)
 	}()
 }
