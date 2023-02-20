@@ -9,7 +9,8 @@ RUN apt-get install -y libgtk-3-dev libasound2-dev libxxf86vm-dev
 WORKDIR /
 RUN wget https://go.dev/dl/go1.20.1.linux-amd64.tar.gz
 RUN tar xvf go1.20.1.linux-amd64.tar.gz
-ENV PATH="${PATH}:/go/bin"
+ENV PATH="${PATH}:/go/bin:/gopath/bin"
+ENV GOPATH="/gopath"
 
 # set workidr
 WORKDIR /app
