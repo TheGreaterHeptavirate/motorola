@@ -16,14 +16,14 @@ jobs :
           submodules : 'true'
       - name : Build and run Docker container
         uses : docker/build-push-action@v2
+        id : "container"
         with :
           context : .
           file : ./build.dockerfile
-          tags : TheGreaterHeptavirate/motorola:latest
+          tags : thegreaterheptavirate/motorola:latest
       - name : Extract files from container
         run : |
-          CONTAINER_ID=$(docker ps -qf ancestor=TheGreaterHeptavirate/motorola:latest)
-          docker cp $CONTAINER_ID:/build/* build/
+          docker cp `docker container run ${{ setps.container.outputs.imageid }}`:/build/* build/
 
       - name : "Upload files"
         uses : "actions/upload-artifact@v3.1.2"
