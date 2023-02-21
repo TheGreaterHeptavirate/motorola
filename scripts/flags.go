@@ -34,7 +34,7 @@ func main() {
 		c.Stdout = file
 		c.Run()
 	} else {
-		file.WriteString("// #cgo pkg-config: python3-embed")
+		file.WriteString("// #cgo pkg-config: python3-embed\n")
 		log.Print("python3-command not specified (using pkg-config)")
 	}
 
