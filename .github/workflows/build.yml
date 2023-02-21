@@ -1,74 +1,33 @@
-name: Build UI (cmd/constitutor)
+name : Build UI (cmd/constitutor)
 
-on:
-  workflow_dispatch:
-    tags:
+on :
+  workflow_dispatch :
+    tags :
       - 'v*'
 
-jobs:
-  BuildExecs:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    steps:
-      - name: Checkout out source code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          submodules: 'true'
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
-      - name: Set up Go environment
-        uses: actions/setup-go@v3
-        with:
-          go-version: '1.19.x'
-        id: go
+jobs :
+  BuildExecs :
+    runs-on : ubuntu-latest
+    steps :
+      - name : Checkout out source code
+        uses : actions/checkout@v3
+        with :
+          fetch-depth : 0
+          submodules : 'true'
+      - name : Build and run Docker container
+        uses : docker/build-push-action@v2
+        with :
+          context : .
+          file : ./build.dockerfile
+          tags : TheGreaterHeptavirate/motorola:latest
+      - name : Extract files from container
+        run : |
+          CONTAINER_ID=$(docker ps -qf ancestor=TheGreaterHeptavirate/motorola:latest)
+          docker cp $CONTAINER_ID:/build/* build/
 
-      - name: Set up LibGL, Mesa & X11 libraries
-        if: startsWith(matrix.os,'ubuntu')
-        run: |
-          sudo apt-get --allow-releaseinfo-change update
-          sudo apt-get install -y libgtk-3-dev libasound2-dev libxxf86vm-dev
-
-      - name: Cache Go modules
-        uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ matrix.os }}-go-
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: install pip dependencies
-        run: pip install -r requirements.txt
-
-      - name: make setup
-        run: |
-          make setup
-
-      - name: Setup tmate session
-        if: startsWith(matrix.os,'windows')
-        uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: true
-      - name: make test
-        run: |
-          make test
-
-      - name: make build
-        run: |
-          make build
-
-      - name: "Upload files"
-        uses: "actions/upload-artifact@v3.1.2"
-        with:
-          name: Builds-${{ matrix.os }}
-          path: build/
+      - name : "Upload files"
+        uses : "actions/upload-artifact@v3.1.2"
+        with :
+          name : Builds-${{ matrix.os }}
+          path : build/
 
