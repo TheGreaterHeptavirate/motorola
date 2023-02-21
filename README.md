@@ -75,6 +75,12 @@ docker run --name=motorola_app_1 \
 **NOTE** commands above are tested for [podman](https://podman.io),
 but since it has the same api as docker, everything should work.
 
+### windows setup
+
+If you wish to run dockerimage on windows, first of all refer to official docker instruction
+for setting up DOcker Desktop on Windows. Then, refer to [this page](https://dev.to/darksmile92/run-gui-app-in-linux-docker-container-on-windows-host-4kde)
+to set up X enviroument and be able to display our app.
+
 ### important linux note
 
 you need to disable access control for your X envirouemnt, otherwise it will not run:
