@@ -1,35 +1,33 @@
-name : Build UI (cmd/constitutor)
+name: Build UI (cmd/constitutor)
 
-on :
-  workflow_dispatch :
-    tags :
+on:
+  workflow_dispatch:
+    tags:
       - 'v*'
 
-jobs :
-  BuildExecs :
-    runs-on : ubuntu-latest
-    steps :
-      - name : Checkout out source code
-        uses : actions/checkout@v3
-        with :
-          fetch-depth : 0
-          submodules : 'true'
-      - name : Build and run Docker container
-        uses : docker/build-push-action@v2
-        id : "container"
-        with :
-          context : .
-          file : ./build.dockerfile
-          tags : thegreaterheptavirate/motorola:latest
+jobs:
+  BuildExecs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout out source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: 'true'
+      - name: Build and run Docker container
+        uses: docker/build-push-action@v2
+        id: "container"
+        with:
+          context: .
+          file: ./build.dockerfile
+          tags: thegreaterheptavirate/motorola:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name : Extract files from container
-        run : |
-          docker cp `docker container run ${{ setps.container.outputs.imageid }}`:/build/* build/
-
-      - name : "Upload files"
-        uses : "actions/upload-artifact@v3.1.2"
-        with :
-          name : Builds-${{ matrix.os }}
-          path : build/
+      - name: Extract files from container
+        run: docker cp $(docker container run ${{ steps.container.outputs.imageid }}):/build/* build/
+      - name: "Upload files"
+        uses: "actions/upload-artifact@v3.1.2"
+        with:
+          name: Builds-${{ matrix.os }}
+          path: build/
 
