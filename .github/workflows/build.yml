@@ -19,10 +19,10 @@ jobs :
         with :
           context : .
           file : ./build.dockerfile
-          tags : TheGreaterHeptavirate/motorola:latest
+          tags : thegreaterheptavirate/motorola:latest
       - name : Extract files from container
         run : |
-          CONTAINER_ID=$(docker ps -qf ancestor=TheGreaterHeptavirate/motorola:latest)
+          export CONTAINER_ID=$(docker ps -qf ancestor=thegreaterheptavirate/motorola:latest)
           docker cp $CONTAINER_ID:/build/* build/
 
       - name : "Upload files"
