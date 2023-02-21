@@ -21,8 +21,8 @@ jobs:
           context: .
           file: ./build.dockerfile
           tags: thegreaterheptavirate/motorola:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
       - name: Extract files from container
         run: docker cp $(docker container run ${{ steps.container.outputs.imageid }}):/build/* build/
       - name: "Upload files"
