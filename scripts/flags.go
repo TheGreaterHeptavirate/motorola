@@ -8,6 +8,33 @@ import (
 	"strings"
 )
 
+func pkgConfig(sb *strings.Builder) {
+	sb.WriteString("// #cgo pkg-config: python3-embed\n")
+}
+
+func pycfgCommand(pycfg string, file *strings.Builder) {
+	subCmd := &strings.Builder{}
+	subCmd.WriteString("//#cgo LDFLAGS: ")
+	c := exec.Command(pycfg, "--embed", "--ldflags")
+	c.Stdout = subCmd
+	if err := c.Run(); err != nil {
+		log.Printf("%s command returned an error %v; using pkg-config", pycfg, err)
+		pkgConfig(file)
+		return
+	}
+
+	subCmd.WriteString("//#cgo CFLAGS: ")
+	c = exec.Command(pycfg, "--includes")
+	c.Stdout = subCmd
+	if err := c.Run(); err != nil {
+		log.Printf("%s command returned an error %v; using pkg-config", pycfg, err)
+		pkgConfig(file)
+		return
+	}
+
+	file.WriteString(subCmd.String())
+}
+
 func main() {
 	output := flag.String("o", "", "output filename (required)")
 	pycfg := flag.String("pycfg", "", "python3-config executable name/path")
@@ -23,19 +50,11 @@ func main() {
 	file.WriteString("package python\n\n")
 
 	if *pycfg != "" {
-		log.Print("specified python3-config")
-		file.WriteString("//#cgo LDFLAGS: ")
-		c := exec.Command(*pycfg, "--embed", "--ldflags")
-		c.Stdout = file
-		c.Run()
-
-		file.WriteString("//#cgo CFLAGS: ")
-		c = exec.Command(*pycfg, "--includes")
-		c.Stdout = file
-		c.Run()
+		log.Printf("specified python3-config command %s", *pycfg)
+		pycfgCommand(*pycfg, file)
 	} else {
-		file.WriteString("// #cgo pkg-config: python3-embed\n")
 		log.Print("python3-command not specified (using pkg-config)")
+		pkgConfig(file)
 	}
 
 	file.WriteString("import \"C\"\n")
