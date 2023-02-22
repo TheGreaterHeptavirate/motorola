@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+ * Copyright (c) 2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
  * All Rights Reserved
  *
- * All copies of this software (if not stated otherway) are dedicated
+ * All copies of this software (if not stated otherwise) are dedicated
  * ONLY to personal, non-commercial use.
  */
 
@@ -56,13 +56,13 @@ func check() {
 
 func main() {
 	fmt.Print(`
-Copyright 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+Copyright 2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
 All Rights Reserved
 
-All copies of this software (if not stated otherway) are dedicated
+All copies of this software (if not stated otherwise) are dedicated
 ONLY to personal, non-commercial use.
 
-This Script creates an instance of aminoacide.Database in JSON.
+This Script creates an instance of "aminoacid.Database" in JSON.
 
 NOTE: the given, hard-coded data are valid on the time the script is being written, but please
 verify them

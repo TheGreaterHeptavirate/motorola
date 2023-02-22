@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+ * Copyright (c) 2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
  * All Rights Reserved
  *
- * All copies of this software (if not stated otherway) are dedicated
+ * All copies of this software (if not stated otherwise) are dedicated
  * ONLY to personal, non-commercial use.
  */
 
@@ -17,8 +17,8 @@ import (
 
 /*
  * DO NOT even try to understand what is going on here :-)
- * if you want something from this file, immadinatly ask me (@gucio321 on GH)
- * But for me or someone crazy who'd want to read this, here is a documentation:
+ * if you want something from this file, immediately ask me (@gucio321 on GH)
+ * But for me or someone crazy who'd want to read this, here is the documentation:
  *
  * drawCommands _should_ self-implement drawCommand interface
  * it is factory-based type to draw chemical schemes

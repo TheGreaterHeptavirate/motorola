@@ -11,7 +11,7 @@ projektu BioIT do konkursu Motorola Science Cup.
 
 ## TECHNOLOGIE
 
-- Język: [GO](https://golang.org/)
+- Języki: [GO](https://golang.org/), C, [Python](https://www.python.org/)
 - Framework Graficzny:
     * [giu](https://github.com/AllenDang/giu) (ewentualnie fork z autorskimi zmianami)
     * do wykresów [ImPlot](https://github.com/epezent/implot) (obecnie część giu)
@@ -53,7 +53,7 @@ czyli:
 * v2: `BCD EFG`
 * v3: `CDE FGH`
 
-### konwersja do na aminokwasy:
+### konwersja na aminokwasy:
 
 Poniższy schemat przedstawia sposób konwersji
 kodonów (potrójnych sekwencji) na aminokwasy:

@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2023. The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+ * Copyright (c) 2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
  * All Rights Reserved
  *
- * All copies of this software (if not stated otherway) are dedicated
+ * All copies of this software (if not stated otherwise) are dedicated
  * ONLY to personal, non-commercial use.
  */
 
 package aminoacid
 
 import (
+	"testing"
+
 	"github.com/TheGreaterHeptavirate/motorola/internal/assets"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestDatabase_GetFromCodon(t *testing.T) {

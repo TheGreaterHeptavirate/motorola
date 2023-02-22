@@ -28,7 +28,7 @@ nazwami aminokwasów (oznaczonymi jako `Sign` w JSONie)
 
 ### Wartość
 
-wartość to (najczęściej) będzie wywołąnie "fabryki" schematu.
+wartość to (najczęściej) będzie wywołanie "fabryki" schematu.
 
 przyjżyjmy się następującemu łańcuchowi:
 

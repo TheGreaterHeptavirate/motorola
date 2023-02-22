@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+ * Copyright (c) 2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
  * All Rights Reserved
  *
- * All copies of this software (if not stated otherway) are dedicated
+ * All copies of this software (if not stated otherwise) are dedicated
  * ONLY to personal, non-commercial use.
  */
 
@@ -12,7 +12,7 @@ import "image"
 
 // Size represents multidimensional Size
 // it is like image.Rectangle
-// min is a minimal Size, construction can have, and max is a maximal Size.
+// min is a minimal Size a construction can have, and max is the maximum Size.
 type Size struct {
 	min, max image.Point
 }

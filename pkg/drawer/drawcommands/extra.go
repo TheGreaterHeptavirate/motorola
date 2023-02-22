@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2022 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
+ * Copyright (c) 2023 The Greater Heptavirate team (https://github.com/TheGreaterHeptavirate)
  * All Rights Reserved
  *
- * All copies of this software (if not stated otherway) are dedicated
+ * All copies of this software (if not stated otherwise) are dedicated
  * ONLY to personal, non-commercial use.
  */
 
@@ -45,12 +45,12 @@ func (d *DrawCommands) Ignore(i Ignore) *DrawCommands {
 	return d.Move(delta)
 }
 
-// AromaticRing draws an aromatic ring scheme.
+// AromaticRing draws an aromatic ring diagram.
 func (d *DrawCommands) AromaticRing(side int, rotation Angle) *DrawCommands {
 	// draw a hexagon using AddLine.
 	// size is width and height of the hexagon
 	// startPos is the top left corner of the square containing the hexagon
-	//  is drawn in the middle of the square
+	// is drawn in the middle of the square
 	result := Draw(d.currentColor)
 	for alpha := Angle(0); alpha <= 360; alpha += 60 {
 		result.DrawLineAngle(rotation+alpha, side)
