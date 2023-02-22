@@ -8,31 +8,11 @@ on:
 jobs:
   BuildExecs:
     runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
     steps:
       - name: Checkout out source code
         uses: actions/checkout@v3
         with:
           submodules: 'true'
           fetch-depth: 0
-      - uses: ./build
-        name: build docker image
-#      - name: Build and run Docker container
-#        uses: docker/build-push-action@v2
-#        id: "container"
-#        with:
-#          context: .
-#          file: ./build.dockerfile
-#          tags: thegreaterheptavirate/motorola:latest
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
-#      - name: Extract files from container
-#        run: |
-#          export DOCKER_ID=$(docker run ${{ steps.container.outputs.imageid }})
-#          echo $DOCKER_ID
-#          docker cp ${DOCKER_ID}:/build/* build/
-#      - name: "Upload files"
-#        uses: "actions/upload-artifact@v3.1.2"
-#        with:
-#          name: Builds-${{ matrix.os }}
-#          path: build/
-
