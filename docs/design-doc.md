@@ -11,7 +11,7 @@ projektu BioIT do konkursu Motorola Science Cup.
 
 ## TECHNOLOGIE
 
-- Języki: [GO](https://golang.org/), [C], [Python](https://www.python.org/)
+- Języki: [GO](https://golang.org/), C, [Python](https://www.python.org/)
 - Framework Graficzny:
     * [giu](https://github.com/AllenDang/giu) (ewentualnie fork z autorskimi zmianami)
     * do wykresów [ImPlot](https://github.com/epezent/implot) (obecnie część giu)
