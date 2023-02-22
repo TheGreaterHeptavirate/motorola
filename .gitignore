@@ -30,7 +30,7 @@ vendor/
 go_build*
 
 # build directory create dby Makefile
-build/
+#build/
 
 # libreoffice lock files
 .~*\#

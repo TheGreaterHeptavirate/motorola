@@ -14,7 +14,7 @@ jobs:
         with:
           submodules: 'true'
           fetch-depth: 0
-      - uses: ./build.dockerfile
+      - uses: ./build
         name: build docker image
 #      - name: Build and run Docker container
 #        uses: docker/build-push-action@v2
