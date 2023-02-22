@@ -33,12 +33,21 @@ jobs:
         with:
           submodules: 'true'
           fetch-depth: 0
+      - run: chown -R root:root .
       - name: run Make Setup
-        run: make setup
+        run: |
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
+          make setup
       - name: build linux
-        run: go build -o build/motorola.bin github.com/TheGreaterHeptavirate/motorola/cmd/motorola
+        run: |
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
+          go build -o build/motorola.bin github.com/TheGreaterHeptavirate/motorola/cmd/motorola
       - name: build for windows
         run: |
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
           go run scripts/flags.go -o pkg/python_integration/flags.go -ldflags "-static /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpython3.10.dll.a -L/usr/x86_64-w64-mingw32/sys-root/mingw/lib -lpthread -lm -lversion -lshlwapi -lm"  -cflags "-I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10 -I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10  -Wno-unused-result -Wsign-compare  -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -DNDEBUG -g -O3 -Wall"
           CGO_ENABLED=1 CC=/usr/bin/x86_64-w64-mingw32-gcc CXX=/usr/bin/x86_64-w64-mingw32-g++  GOOS=windows  GOARCH=amd64 go build -o build/motorola.exe github.com/TheGreaterHeptavirate/motorola/cmd/motorola
       - name: "Upload files"
