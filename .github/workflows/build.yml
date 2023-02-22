@@ -7,67 +7,51 @@ on:
 
 jobs:
   BuildExecs:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
     steps:
+      - name: install deps
+        run: |
+          dnf update -y
+          dnf install -y git make gcc g++
+          dnf install -y libX11-devel libXcursor-devel libXrandr-devel libXinerama-devel libXi-devel libGL-devel libXxf86vm-devel
+          dnf install -y gtk3 gtk3-devel
+          dnf install -y wget
+          cd /
+          wget https://go.dev/dl/go1.20.1.linux-amd64.tar.gz
+          tar xvf go1.20.1.linux-amd64.tar.gz
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
+          dnf install -y python3 python3-devel
+          dnf install -y mingw64-gcc mingw64-gcc-c++ mingw64-headers mingw64-python3 mingw64-python3-Cython
+          mkdir app
+          cd app
+          mkdir build
       - name: Checkout out source code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           submodules: 'true'
-      - name: Set up MinGW
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x64
-      - name: Set up Go environment
-        uses: actions/setup-go@v3
-        with:
-          go-version: '1.19.x'
-        id: go
-
-      - name: Set up LibGL, Mesa & X11 libraries
-        if: startsWith(matrix.os,'ubuntu')
+          fetch-depth: 0
+      - run: chown -R root:root .
+      - name: run Make Setup
         run: |
-          sudo apt-get --allow-releaseinfo-change update
-          sudo apt-get install -y libgtk-3-dev libasound2-dev libxxf86vm-dev
-
-      - name: Cache Go modules
-        uses: actions/cache@v3
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ matrix.os }}-go-
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: install pip dependencies
-        run: pip install -r requirements.txt
-
-      - name: make setup
-        run: |
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
           make setup
-
-      - name: Setup tmate session
-        if: startsWith(matrix.os,'windows')
-        uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: true
-      - name: make test
+      - name: build linux
         run: |
-          make test
-
-      - name: make build
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
+          go build -o build/motorola.bin github.com/TheGreaterHeptavirate/motorola/cmd/motorola
+      - name: build for windows
         run: |
-          make build
-
+          export PATH="${PATH}:/go/bin:/gopath/bin"
+          export GOPATH="/gopath"
+          go run scripts/flags.go -o pkg/python_integration/flags.go -ldflags "-static /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpython3.10.dll.a -L/usr/x86_64-w64-mingw32/sys-root/mingw/lib -lpthread -lm -lversion -lshlwapi -lm"  -cflags "-I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10 -I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10  -Wno-unused-result -Wsign-compare  -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -DNDEBUG -g -O3 -Wall"
+          CGO_ENABLED=1 CC=/usr/bin/x86_64-w64-mingw32-gcc CXX=/usr/bin/x86_64-w64-mingw32-g++  GOOS=windows  GOARCH=amd64 go build -o build/motorola.exe github.com/TheGreaterHeptavirate/motorola/cmd/motorola
       - name: "Upload files"
-        uses: "actions/upload-artifact@v3.1.0"
+        uses: "actions/upload-artifact@v3.1.2"
         with:
           name: Builds-${{ matrix.os }}
           path: build/

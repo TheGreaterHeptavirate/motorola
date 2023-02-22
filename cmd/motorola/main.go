@@ -10,8 +10,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
+	"runtime/debug"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app"
 )
@@ -22,7 +24,18 @@ func main() {
 	path := flag.String("i", "", "Load data from file")
 	muteErrors := flag.Bool("no-errors", false, "Do not display error messages in app (messages will be logged anyway)")
 	info := flag.Bool("info", false, "Print app info and exit")
+	version := flag.Bool("version", false, "print project's version")
 	flag.Parse()
+
+	if *version {
+		if info, ok := debug.ReadBuildInfo(); ok {
+			fmt.Println(info)
+		} else {
+			fmt.Println("Build info not available.")
+		}
+
+		os.Exit(0)
+	}
 
 	a := app.New()
 
@@ -32,6 +45,7 @@ func main() {
 	}
 
 	opt := app.Options()
+	shouldSetOptions := false
 	if *path != "" {
 		// check if path exists
 		if d, err := os.Stat(*path); err != nil ||
@@ -39,21 +53,26 @@ func main() {
 			log.Panicf("invalid file path %s", *path)
 		}
 		opt.LoadFile(*path)
+		shouldSetOptions = true
 	}
 
 	if *skip {
 		opt.SkipToProteinsView()
+		shouldSetOptions = true
 	}
 
 	if *muteErrors {
 		opt.NoInAppErrors()
+		shouldSetOptions = true
 	}
 
 	if *verbose {
 		a.Verbose()
 	}
 
-	a.Options(opt)
+	if shouldSetOptions {
+		a.Options(opt)
+	}
 
 	if err := a.Run(); err != nil {
 		panic(err)

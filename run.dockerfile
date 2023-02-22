@@ -1,10 +1,16 @@
-FROM docker.io/library/golang:1.20-bullseye
+FROM docker.io/library/python:3.11
 
 RUN apt-get update
 
 # install dependencies required to run giu application
 RUN apt-get install -y libgtk-3-dev libasound2-dev libxxf86vm-dev
-RUN apt-get install -y python3 python3-dev
+
+# install go
+WORKDIR /
+RUN wget https://go.dev/dl/go1.20.1.linux-amd64.tar.gz
+RUN tar xvf go1.20.1.linux-amd64.tar.gz
+ENV PATH="${PATH}:/go/bin:/gopath/bin"
+ENV GOPATH="/gopath"
 
 # set workidr
 WORKDIR /app

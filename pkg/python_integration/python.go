@@ -26,12 +26,18 @@ typedef long xlong;
 import "C"
 
 import (
+	"embed"
+	_ "embed"
 	"errors"
 	"fmt"
+	"os"
 	"unsafe"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
+
+//go:embed cpython/Lib
+var pythonStdLib embed.FS
 
 type (
 	PyObject C.PyObject
@@ -46,10 +52,25 @@ func (module *Module) toC() *C.PyObject {
 	return (*C.PyObject)(module)
 }
 
-func Initialize() {
+func Initialize() (finisher func(), err error) {
+	path, err := os.MkdirTemp("", "motorola*-python-data")
+	if err != nil {
+		return nil, fmt.Errorf("error creating temporary directory: %w", err)
+	}
+
+	logger.Debugf("[PYTHON] extracting python standard library to %s", path)
+
+	if err := loadDir(path, "cpython/Lib", pythonStdLib); err != nil {
+		return nil, fmt.Errorf("writing temp file: %w", err)
+	}
+
+	os.Setenv("PYTHONPATH", path)
+
 	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()
 	logger.Success("[PYTHON]: Interpreter Initialized")
+
+	return func() { os.RemoveAll(path) }, nil
 }
 
 func Finalize() {

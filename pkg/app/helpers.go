@@ -17,6 +17,7 @@ import (
 	"github.com/AllenDang/imgui-go"
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
+	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	"github.com/faiface/mainthread"
 	animations "github.com/gucio321/giu-animations"
 	"github.com/sqweek/dialog"
@@ -185,9 +186,9 @@ func splitInputTextIntoCodons(c *imgui.InputTextCallbackData) {
 
 func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 	return animations.Animator(
-		animations.HoverColorStyle(
+		animations.ColorFlowStyle(
 			animations.Animator(
-				animations.HoverColor(
+				animations.ColorFlow(
 					button,
 					func() color.RGBA {
 						return colornames.White
@@ -207,14 +208,14 @@ func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 
 func (a *App) OnLoadFromFile() {
 	logger.Debugf("starting transition to loading screen")
-	a.loadingScreen.Start()
+	a.loadingScreen.Start(animations.PlayAuto)
 
 	logger.Info("Loading file to input textbox...")
 
 	go func() {
 		path, err := dialog.File().Load()
 		if err != nil {
-			defer a.loadingScreen.Start()
+			defer a.loadingScreen.Start(animations.PlayAuto)
 			// this error COULD come from fact that user exited dialog
 			// in this case, don't report app's error, just return
 			if errors.Is(err, dialog.ErrCancelled) {
@@ -232,7 +233,9 @@ func (a *App) OnLoadFromFile() {
 
 		a.loadFile(path)
 		logger.Debug("loading finished. Exiting loading screen.")
-		mainthread.Call(a.loadingScreen.Start)
+		mainthread.Call(func() {
+			a.loadingScreen.Start(animations.PlayAuto)
+		})
 	}()
 }
 
@@ -250,6 +253,7 @@ func (a *App) loadFile(path string) {
 
 	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
+		hold := make(chan bool)
 		if a.showInAppErrors {
 			giu.Msgbox(
 				"WARNING! File might contain invalid data!",
@@ -257,8 +261,13 @@ func (a *App) loadFile(path string) {
 It may mean, that the protein will be processed incorrectly. Input files may contain only
 the characters A, C, G, T, or U. All other characters will be considered invalid and removed.
 `,
-			)
+			).ResultCallback(func(_ giu.DialogResult) {
+				hold <- true
+			})
 		}
+
+		<-hold
+
 		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 	}
 
@@ -271,7 +280,8 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 
 func (a *App) OnProceed() {
 	logger.Debugf("Parsing data")
-	a.layout.Start()
+	a.layout.Start(animations.PlayAuto)
+	a.foundProteins = make([]*protein.Protein, 0)
 
 	go func() {
 		// get inputString and let app render normally
