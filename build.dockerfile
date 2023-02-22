@@ -31,7 +31,7 @@ RUN dnf install -y mingw64-gcc mingw64-gcc-c++ mingw64-headers mingw64-python3 m
 WORKDIR /app
 
 # move all the stuff into working directory
-ADD .. /app
+ADD . /app
 
 RUN mkdir -p /build
 
