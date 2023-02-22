@@ -253,8 +253,9 @@ func (a *App) loadFile(path string) {
 
 	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
-		hold := make(chan bool)
+		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 		if a.showInAppErrors {
+			hold := make(chan bool)
 			giu.Msgbox(
 				"WARNING! File might contain invalid data!",
 				`The file contains incorrect characters.
@@ -264,11 +265,8 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 			).ResultCallback(func(_ giu.DialogResult) {
 				hold <- true
 			})
+			<-hold
 		}
-
-		<-hold
-
-		logger.Warn("Input file contains invalid characters - will be cleaned-up.")
 	}
 
 	inputString = GetPresentableCodonsString(inputString, 0)
