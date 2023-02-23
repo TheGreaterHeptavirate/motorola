@@ -1,4 +1,4 @@
-name: Build UI (cmd/constitutor)
+name: Build UI (cmd/motorola)
 
 on:
   workflow_dispatch:
@@ -44,6 +44,7 @@ jobs:
           export PATH="${PATH}:/go/bin:/gopath/bin"
           export GOPATH="/gopath"
           go build -o build/motorola.bin github.com/TheGreaterHeptavirate/motorola/cmd/motorola
+          cp $(find /usr/x86_64-w64-mingw32/ -iname libpython*.*.dll) build/
       - name: build for windows
         run: |
           export PATH="${PATH}:/go/bin:/gopath/bin"
@@ -53,6 +54,6 @@ jobs:
       - name: "Upload files"
         uses: "actions/upload-artifact@v3.1.2"
         with:
-          name: Builds-${{ matrix.os }}
+          name: motorola_builds
           path: build/
 
