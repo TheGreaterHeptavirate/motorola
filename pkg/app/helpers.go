@@ -9,6 +9,7 @@ package app
 import (
 	"errors"
 	"image/color"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -322,14 +323,20 @@ func (a *App) splitTextIntoLines() {
 	a.inputStringLines = make([]giu.Widget, 0)
 	a.appSync.Unlock()
 	var text string
-	for _, c := range a.inputString {
-		text += string(c)
+	for i := 0; i < len(a.inputString); i += 4 {
+		c := a.inputString[i:int(math.Min(float64(i+4), float64(len(a.inputString))))]
+		text += c
 		textW, _ := giu.CalcTextSize(text)
-		if textW >= availableW {
+		switch {
+		case textW >= availableW:
 			a.appSync.Lock()
-			a.inputStringLines = append(a.inputStringLines, giu.Label(text[:len(text)-1]))
+			a.inputStringLines = append(a.inputStringLines, giu.Label(text[:len(text)-4]))
 			a.appSync.Unlock()
-			text = text[len(text):]
+			text = text[len(text)-4:]
+		case i+4 >= len(a.inputString):
+			a.appSync.Lock()
+			a.inputStringLines = append(a.inputStringLines, giu.Label(text))
+			a.appSync.Unlock()
 		}
 	}
 }
