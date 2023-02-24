@@ -322,6 +322,24 @@ func (a *App) inputBar() giu.Layout {
 
 					return WrapInputTextMultiline(widget, c)
 				}).Build()
+			} else {
+				availableW, _ := giu.GetAvailableRegion()
+				lines := make([]giu.Widget, 0)
+				var text string
+				for _, c := range a.inputString {
+					text += string(c)
+					textW, _ := giu.CalcTextSize(text)
+					if textW >= availableW {
+						lines = append(lines, giu.Label(text[:len(text)-1]))
+						text = text[len(text):]
+					}
+				}
+
+				giu.Child().Layout(
+					giu.ListClipper().Layout(lines...),
+				).
+					Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).Build()
+				giu.Tooltip("You cannot edit text loaded from a file.").Build()
 			}
 
 			buttonH := availableH*.01*(100-inputFieldProcentageHeight) - spacingH
