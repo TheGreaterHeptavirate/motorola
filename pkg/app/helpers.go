@@ -317,8 +317,7 @@ func (a *App) OnProceed() {
 	}()
 }
 
-func (a *App) splitTextIntoLines() {
-	availableW, _ := giu.GetAvailableRegion()
+func (a *App) splitTextIntoLines(availableW float32) {
 	a.appSync.Lock()
 	a.inputStringLines = make([]giu.Widget, 0)
 	a.appSync.Unlock()

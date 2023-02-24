@@ -323,12 +323,15 @@ func (a *App) inputBar() giu.Layout {
 					return WrapInputTextMultiline(widget, c)
 				}).Build()
 			} else {
-				if a.inputStringLines == nil {
-					go a.splitTextIntoLines()
-				}
-
 				giu.Child().Layout(
-					giu.ListClipper().Layout(a.inputStringLines...),
+					giu.Custom(func() {
+						if a.inputStringLines == nil {
+							availableW, _ := giu.GetAvailableRegion()
+							go a.splitTextIntoLines(availableW)
+						}
+
+						giu.ListClipper().Layout(a.inputStringLines...).Build()
+					}),
 				).
 					Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).Build()
 				giu.Tooltip("You cannot edit text loaded from a file.").Build()
