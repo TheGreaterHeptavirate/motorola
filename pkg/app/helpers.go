@@ -273,6 +273,7 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 
 	a.appSync.Lock()
 	a.inputString = inputString
+	a.lockInputField = true
 	a.appSync.Unlock()
 }
 
@@ -288,9 +289,11 @@ func (a *App) OnProceed() {
 		a.appSync.Unlock()
 
 		validString, _ := ValidateCodonsString(inputString)
+
 		logger.Debug("string validated")
 
 		d, errChan := inputparser.ParseInput(validString)
+
 		for {
 			select {
 			case p := <-d:
@@ -305,6 +308,7 @@ func (a *App) OnProceed() {
 				}
 
 				logger.Debugf("%v proteins found", len(a.foundProteins))
+
 				return
 			}
 		}
