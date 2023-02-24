@@ -274,6 +274,7 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 	a.appSync.Lock()
 	a.inputString = inputString
 	a.lockInputField = true
+	a.inputStringLines = nil
 	a.appSync.Unlock()
 }
 
@@ -313,4 +314,22 @@ func (a *App) OnProceed() {
 			}
 		}
 	}()
+}
+
+func (a *App) splitTextIntoLines() {
+	availableW, _ := giu.GetAvailableRegion()
+	a.appSync.Lock()
+	a.inputStringLines = make([]giu.Widget, 0)
+	a.appSync.Unlock()
+	var text string
+	for _, c := range a.inputString {
+		text += string(c)
+		textW, _ := giu.CalcTextSize(text)
+		if textW >= availableW {
+			a.appSync.Lock()
+			a.inputStringLines = append(a.inputStringLines, giu.Label(text[:len(text)-1]))
+			a.appSync.Unlock()
+			text = text[len(text):]
+		}
+	}
 }
