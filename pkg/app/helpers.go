@@ -8,6 +8,7 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	"image/color"
 	"math"
 	"os"
@@ -251,6 +252,8 @@ func (a *App) loadFile(path string) {
 	logger.Debug("File loaded successfully!")
 
 	inputString := string(data)
+	// trim newlines
+	inputString = strings.ReplaceAll(inputString, "\n", "")
 
 	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
@@ -259,10 +262,13 @@ func (a *App) loadFile(path string) {
 			hold := make(chan bool)
 			giu.Msgbox(
 				"WARNING! File might contain invalid data!",
-				`The file contains incorrect characters.
+				fmt.Sprintf(
+					`The file contains incorrect characters.
 It may mean, that the protein will be processed incorrectly. Input files may contain only
 the characters A, C, G, T, or U. All other characters will be considered invalid and removed.
-`,
+Oryginally error reported as: %s
+`, err,
+				),
 			).ResultCallback(func(_ giu.DialogResult) {
 				hold <- true
 			})
