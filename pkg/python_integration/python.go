@@ -22,6 +22,14 @@ typedef long long xlong;
 #else
 typedef long xlong;
 #endif
+
+wchar_t* GetWC(char* char_string) {
+    wchar_t* wchar_string;
+    int length = mbstowcs(NULL, char_string, 0) + 1; // get the required buffer size
+    wchar_string = malloc(length * sizeof(wchar_t)); // allocate memory for the wide character string
+    mbstowcs(wchar_string, char_string, length); // convert the char string to wchar_t string
+    return wchar_string;
+}
 */
 import "C"
 
@@ -68,7 +76,10 @@ func Initialize() (finisher func(), err error) {
 	os.Setenv("PYTHONHOME", path)
 
 	logger.Debugf("[PYTHON]: Initialize")
-	C.Py_Initialize()
+	conf := &C.PyConfig{}
+	// conf.home = C.GetWC(C.CString(path))
+	C.PyConfig_InitIsolatedConfig(conf)
+	C.Py_InitializeFromConfig(conf)
 	logger.Success("[PYTHON]: Interpreter Initialized")
 
 	return func() { os.RemoveAll(path) }, nil
