@@ -43,7 +43,9 @@ const (
 type App struct {
 	viewMode ViewMode
 
-	inputString string
+	inputString      string
+	lockInputField   bool
+	inputStringLines []giu.Widget
 
 	foundProteins  []*protein.Protein
 	currentProtein int32

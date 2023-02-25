@@ -311,16 +311,31 @@ func (a *App) inputBar() giu.Layout {
 			availableW, availableH := giu.GetAvailableRegion()
 			spacingW, spacingH := giu.GetItemSpacing()
 
-			widget := giu.InputTextMultiline(&a.inputString).
-				Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).
-				Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
-			widget.Callback(func(c imgui.InputTextCallbackData) int32 {
-				// we can't do that in OnChange because that method is called only when
-				// user leaves input text field.
-				splitInputTextIntoCodons(&c)
+			if !a.lockInputField {
+				widget := giu.InputTextMultiline(&a.inputString).
+					Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).
+					Flags(imgui.InputTextFlagsCallbackAlways | imgui.InputTextFlagsCallbackCharFilter)
+				widget.Callback(func(c imgui.InputTextCallbackData) int32 {
+					// we can't do that in OnChange because that method is called only when
+					// user leaves input text field.
+					splitInputTextIntoCodons(&c)
 
-				return WrapInputTextMultiline(widget, c)
-			}).Build()
+					return WrapInputTextMultiline(widget, c)
+				}).Build()
+			} else {
+				giu.Child().Layout(
+					giu.Custom(func() {
+						if a.inputStringLines == nil {
+							availableW, _ := giu.GetAvailableRegion()
+							go a.splitTextIntoLines(availableW)
+						}
+
+						giu.ListClipper().Layout(a.inputStringLines...).Build()
+					}),
+				).
+					Size(-1, availableH*.01*inputFieldProcentageHeight-2*spacingH).Build()
+				giu.Tooltip("You cannot edit text loaded from a file.").Build()
+			}
 
 			buttonH := availableH*.01*(100-inputFieldProcentageHeight) - spacingH
 			giu.Row(
@@ -334,6 +349,7 @@ func (a *App) inputBar() giu.Layout {
 						giu.Button("Clear").Size((availableW-2*spacingW)/3, buttonH).OnClick(func() {
 							logger.Debug("Clearing input textbox...")
 							a.inputString = ""
+							a.lockInputField = false
 						}),
 					),
 				),

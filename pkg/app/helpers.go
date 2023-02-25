@@ -8,7 +8,9 @@ package app
 
 import (
 	"errors"
+	"fmt"
 	"image/color"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -250,6 +252,8 @@ func (a *App) loadFile(path string) {
 	logger.Debug("File loaded successfully!")
 
 	inputString := string(data)
+	// trim newlines
+	inputString = strings.ReplaceAll(inputString, "\n", "")
 
 	inputString, err = ValidateCodonsString(inputString)
 	if err != nil {
@@ -258,10 +262,13 @@ func (a *App) loadFile(path string) {
 			hold := make(chan bool)
 			giu.Msgbox(
 				"WARNING! File might contain invalid data!",
-				`The file contains incorrect characters.
+				fmt.Sprintf(
+					`The file contains incorrect characters.
 It may mean, that the protein will be processed incorrectly. Input files may contain only
 the characters A, C, G, T, or U. All other characters will be considered invalid and removed.
-`,
+Oryginally error reported as: %s
+`, err,
+				),
 			).ResultCallback(func(_ giu.DialogResult) {
 				hold <- true
 			})
@@ -273,6 +280,8 @@ the characters A, C, G, T, or U. All other characters will be considered invalid
 
 	a.appSync.Lock()
 	a.inputString = inputString
+	a.lockInputField = true
+	a.inputStringLines = nil
 	a.appSync.Unlock()
 }
 
@@ -288,9 +297,11 @@ func (a *App) OnProceed() {
 		a.appSync.Unlock()
 
 		validString, _ := ValidateCodonsString(inputString)
+
 		logger.Debug("string validated")
 
 		d, errChan := inputparser.ParseInput(validString)
+
 		for {
 			select {
 			case p := <-d:
@@ -305,8 +316,32 @@ func (a *App) OnProceed() {
 				}
 
 				logger.Debugf("%v proteins found", len(a.foundProteins))
+
 				return
 			}
 		}
 	}()
+}
+
+func (a *App) splitTextIntoLines(availableW float32) {
+	a.appSync.Lock()
+	a.inputStringLines = make([]giu.Widget, 0)
+	a.appSync.Unlock()
+	var text string
+	for i := 0; i < len(a.inputString); i += 4 {
+		c := a.inputString[i:int(math.Min(float64(i+4), float64(len(a.inputString))))]
+		text += c
+		textW, _ := giu.CalcTextSize(text)
+		switch {
+		case textW >= availableW:
+			a.appSync.Lock()
+			a.inputStringLines = append(a.inputStringLines, giu.Label(text[:len(text)-4]))
+			a.appSync.Unlock()
+			text = text[len(text)-4:]
+		case i+4 >= len(a.inputString):
+			a.appSync.Lock()
+			a.inputStringLines = append(a.inputStringLines, giu.Label(text))
+			a.appSync.Unlock()
+		}
+	}
 }

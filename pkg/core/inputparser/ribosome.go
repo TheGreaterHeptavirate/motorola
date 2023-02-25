@@ -87,13 +87,13 @@ func Validate(codon string) error {
 	isRNA := strings.ContainsAny(codon, uracil)
 
 	if isRNA && isDNA {
-		return fmt.Errorf("codon %s contains both thymine and uracil: %w", codon, ErrInvalidCodon)
+		return fmt.Errorf("codon contains both thymine and uracil: %w", ErrInvalidCodon)
 	}
 
 	// check if contains something else than ACGT or ACGU
 	for _, c := range codon {
 		if !strings.ContainsAny(string(c), adenine+cytosine+guanine+thymine+uracil) {
-			return fmt.Errorf("codon %s contains invalid character %s: %w", codon, string(c), ErrInvalidCodon)
+			return fmt.Errorf("codon contains invalid character \"%s\": %w", string(c), ErrInvalidCodon)
 		}
 	}
 
