@@ -11,53 +11,64 @@ jobs:
     container:
       image: fedora:latest
     steps:
-      - name: install deps
+      - name: Update OS
+        run: sudo dnf update -y
+      - name: Install linux development packages (git/make/gcc/g++/wget)
+        run: dnf install -y git make gcc g++ wget
+      - name: Install X server and GTK libraries
         run: |
-          dnf update -y
-          dnf install -y git make gcc g++
           dnf install -y libX11-devel libXcursor-devel libXrandr-devel libXinerama-devel libXi-devel libGL-devel libXxf86vm-devel
           dnf install -y gtk3 gtk3-devel
-          dnf install -y wget
-          cd /
-          wget https://go.dev/dl/go1.20.1.linux-amd64.tar.gz
-          tar xvf go1.20.1.linux-amd64.tar.gz
-          export PATH="${PATH}:/go/bin:/gopath/bin"
-          export GOPATH="/gopath"
-          dnf install -y python3 python3-devel
-          dnf install -y mingw64-gcc mingw64-gcc-c++ mingw64-headers mingw64-python3 mingw64-python3-Cython
-          mkdir app
-          cd app
-          mkdir build
-          mkdir build/linux-x86_64
-          mkdir build/windows-x86_64
-      - name: Checkout out source code
+      - name: Set up Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20.x'
+        id: go
+#      - name: install deps
+#        run: |
+#          cd /
+#          wget https://go.dev/dl/go1.20.1.linux-amd64.tar.gz
+#          tar xvf go1.20.1.linux-amd64.tar.gz
+#          export PATH="${PATH}:/go/bin:/gopath/bin"
+#          export GOPATH="/gopath"
+      - name: Install Python 3
+        run: dnf install -y python3 python3-devel
+      - name: Install mingw libraries (gcc, g++ and python)
+        run: dnf install -y mingw64-gcc mingw64-gcc-c++ mingw64-headers mingw64-python3 mingw64-python3-Cython
+#          mkdir app
+#          cd app
+#          mkdir build
+#          mkdir build/linux-x86_64
+#          mkdir build/windows-x86_64
+      - name: Checkout source code
         uses: actions/checkout@v3
         with:
           submodules: 'true'
           fetch-depth: 0
-      - run: chown -R root:root .
+      - name: Set correct access rights
+        run: chown -R root:root .
       - name: run Make Setup
         run: |
-          export PATH="${PATH}:/go/bin:/gopath/bin"
-          export GOPATH="/gopath"
+#          export PATH="${PATH}:/go/bin:/gopath/bin"
+#          export GOPATH="/gopath"
           make setup
-      - name: build linux
+      - name: build for linux
         run: |
-          export PATH="${PATH}:/go/bin:/gopath/bin"
-          export GOPATH="/gopath"
+#          export PATH="${PATH}:/go/bin:/gopath/bin"
+#          export GOPATH="/gopath"
           go build -o build/linux-x86_64/motorola.bin github.com/TheGreaterHeptavirate/motorola/cmd/motorola
-      - name: build for windows
-        run: |
-          export PATH="${PATH}:/go/bin:/gopath/bin"
-          export GOPATH="/gopath"
-          go run scripts/flags.go -o pkg/python_integration/flags.go -ldflags "-static /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpython3.10.dll.a -L/usr/x86_64-w64-mingw32/sys-root/mingw/lib -lpthread -lm -lversion -lshlwapi -lm"  -cflags "-I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10 -I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10  -Wno-unused-result -Wsign-compare  -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -DNDEBUG -g -O3 -Wall"
-          CGO_ENABLED=1 CC=/usr/bin/x86_64-w64-mingw32-gcc CXX=/usr/bin/x86_64-w64-mingw32-g++  GOOS=windows  GOARCH=amd64 go build -o build/windows-x86_64/motorola.exe github.com/TheGreaterHeptavirate/motorola/cmd/motorola
-          cp $(find /usr/x86_64-w64-mingw32/ -iname libpython*.*.dll) build/windows-x86_64
       - name: "Upload files (linux)"
         uses: "actions/upload-artifact@v3.1.2"
         with:
           name: motorola-linux-x86_64
           path: build/linux-x86_64
+      - name: build for windows
+        run: |
+#          export PATH="${PATH}:/go/bin:/gopath/bin"
+#          export GOPATH="/gopath"
+          go run scripts/flags.go -o pkg/python_integration/flags.go -ldflags "-static /usr/x86_64-w64-mingw32/sys-root/mingw/lib/libpython3.10.dll.a -L/usr/x86_64-w64-mingw32/sys-root/mingw/lib -lpthread -lm -lversion -lshlwapi -lm"  -cflags "-I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10 -I/usr/x86_64-w64-mingw32/sys-root/mingw/include/python3.10  -Wno-unused-result -Wsign-compare  -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions --param=ssp-buffer-size=4 -DNDEBUG -g -O3 -Wall"
+          CGO_ENABLED=1 CC=/usr/bin/x86_64-w64-mingw32-gcc CXX=/usr/bin/x86_64-w64-mingw32-g++  GOOS=windows  GOARCH=amd64 go build -o build/windows-x86_64/motorola.exe github.com/TheGreaterHeptavirate/motorola/cmd/motorola
+          cp $(find /usr/x86_64-w64-mingw32/ -iname libpython*.*.dll) build/windows-x86_64
       - name: "Upload files (windows)"
         uses: "actions/upload-artifact@v3.1.2"
         with:
