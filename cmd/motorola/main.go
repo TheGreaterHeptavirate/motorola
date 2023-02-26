@@ -15,6 +15,7 @@ import (
 	"os"
 	"runtime/debug"
 
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/app"
 )
 
@@ -25,7 +26,21 @@ func main() {
 	muteErrors := flag.Bool("no-errors", false, "Do not display error messages in app (messages will be logged anyway)")
 	info := flag.Bool("info", false, "Print app info and exit")
 	version := flag.Bool("version", false, "print project's version")
+	help := flag.Bool("help", false, "Show this message")
+	logLevel := flag.Uint("ll", 0, `Enforce log level
+0 = Do not enforce (default)
+1 = Debug (equal to -verbose)
+2 = Info
+3 = Warnings only
+4 = Errors only
+5 = Practically nothing (prints only fatal errors)
+	`)
 	flag.Parse()
+
+	if *help {
+		flag.Usage()
+		os.Exit(0)
+	}
 
 	if *version {
 		if info, ok := debug.ReadBuildInfo(); ok {
@@ -38,6 +53,8 @@ func main() {
 	}
 
 	a := app.New()
+
+	a.EnforceLogLevel(logger.LogLevel(*logLevel))
 
 	if *info {
 		a.Info()
