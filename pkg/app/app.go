@@ -15,7 +15,9 @@ package app
 import "C"
 
 import (
+	"bytes"
 	"fmt"
+	"image"
 	"strings"
 	"sync"
 	"time"
@@ -73,7 +75,9 @@ func New() *App {
 
 // EnforceLogLevel sets log level to loglevel.
 func (a *App) EnforceLogLevel(loglevel logger.LogLevel) {
-	a.logLevel = loglevel
+	if loglevel != logger.LogLevelNotSpecified {
+		a.logLevel = loglevel
+	}
 }
 
 // Verbose sets log level to debug
@@ -135,6 +139,16 @@ func (a *App) Run() error {
 	if err := giu.ParseCSSStyleSheet([]byte(strings.ReplaceAll(string(assets.AppCSS), "\r", ""))); err != nil {
 		return fmt.Errorf("error parsing CSS stylesheet: %w", err)
 	}
+
+	// set app icon
+	logger.Debug("decoding logo image...")
+	logoImg, _, err := image.Decode(bytes.NewReader(assets.LogoPNG))
+	if err != nil {
+		return fmt.Errorf("decoding logo image: %w", err)
+	}
+
+	logger.Debug("Setting app's icon")
+	a.window.SetIcon([]image.Image{logoImg})
 
 	// start main loop
 	logger.Debug("Starting main loop...")

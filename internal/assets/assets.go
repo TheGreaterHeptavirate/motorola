@@ -30,4 +30,7 @@ var (
 
 	//go:embed database/amino_acids.json
 	AminoAcidsJSON []byte
+
+	//go:embed logo.png
+	LogoPNG []byte
 )
