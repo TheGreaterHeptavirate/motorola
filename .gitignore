@@ -37,3 +37,6 @@ build/
 
 #python virtual enviroument directory
 venv/
+
+# windows icon files
+*syso
