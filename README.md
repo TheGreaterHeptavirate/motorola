@@ -19,6 +19,8 @@ loaded from source file. For more details, take a lok on our [documentation](#do
    (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still enures
    no additional system dependencies needs to be installed.
 
+\* Check for [System Requirements](#system-requirements)
+
 ## Binaries usage
 
 - Go to [the latest release](https://github.com/thegreaterheptavirate/motorola/releases/latest)
