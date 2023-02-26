@@ -9,21 +9,79 @@ Białkomat is intended to be used for analyzing a genetic code typed in or
 loaded from source file. For more details, take a lok on our [documentation](#documentation)
 (*required knowladge of polish lanugage*).
 
+## Unique Selling Point (USP)
+
+1. **Handy and self-contained** - binary is encapsulated in one
+   executable file that does not depend on your OS\*
+2. **High analyzis quality** - Our project uses one of the most
+   qualified, open-source [Bioinformatic library](https://github.com/biopython/biopython)
+3. **Innovative technology** - the project is a unique combination of **4 programming languages**
+   (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still enures
+   no additional system dependencies needs to be installed.
+
+## Binaries usage
+
+- Go to [the latest release](https://github.com/thegreaterheptavirate/motorola/releases/latest)
+  and download a a file appropiate for your OS.
+- extract `.zip` file using any tool.
+- run binary (`.exe` on windows and `.bin` on linux).
+
+### System requirements
+
+In order to run one of our binaries, you need to be in possesion of
+64-bit Windows or Linux Operating System.
+We also require your OS to support OpenGL and have (at least) 0.5GB free disc space.
+
+## Extra flags
+
+You may want to specify some additional flags to see what happens inside of our programm.
+
+```console
+Usage of ./motorola:
+  -help
+    	Show this message
+  -i string
+    	Load data from file
+  -info
+    	Print app info and exit
+  -ll uint
+    	Enforce log level
+    	0 = Do not enforce (default)
+    	1 = Debug (equal to -verbose)
+    	2 = Info
+    	3 = Warnings only
+    	4 = Errors only
+    	5 = Practically nothing (prints only fatal errors)
+
+  -no-errors
+    	Do not display error messages in app (messages will be logged anyway)
+  -skip
+    	Automatically skip to Proteins View mode (usually used together with -i)
+  -verbose
+    	verbosing mode
+  -version
+    	print project's version
+```
+
+So, for example, to load file `path/to/data/file.txt` and immediately
+show results in Proteins View (ignoring all the error messages)
+you can use the following command `./motorla -i /path/to/dat/file.txt -no-errors -skip`.
+
 # Documentation
 
-Reffer [to docs](./docs)
+Reffer [to docs](./docs).
 
 # STATUS
 
-In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/11/MSC3_2022_Bioinformatyka.pdf)
+In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/11/MSC3_2022_Bioinformatyka.pdf):
 - [X] Genetic code reading (35 pts)
 - [X] Proteins presentation (25 pts)
 - [X] More plots and charts (65 pts)
 - [ ] Additional things:
     - [ ] "Application architecture" (10 pts)
-    - [ ] documentation (10 pts) (**CAUTION** the current documentation needs to be rewriten! It contains bad language IIRC.)
+    - [ ] documentation (10 pts)
     - [X] UI (25 pts)
-    - [ ] Unittesting :smile: (5 pts)
+    - [ ] Unittesting (5 pts)
 
 # Installation instruction
 
@@ -33,8 +91,6 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
 - [go](https://go.dev)
 - GCC
 - mingw (**for cross-platform compilation only**)
-
-### for running binaries
 - Python 3.11 (**NOTE** remember to add it to PATH on windows)
 
 ## Source
@@ -53,6 +109,39 @@ go run github.com/TheGreaterHeptavirate/motorola/cmd/motorola
 cd cmd/motorola
 go run .
 ```
+
+### Python config
+You may experience trouble with your binaries, because (for unknown reason)
+not all operating systems support `python3-config` command that is used
+for obtaining right flags. There for please take a quick look at our simple
+configuration script:
+
+```console
+$ go run scripts/flags.go
+Usage of /tmp/go-build4250335646/b001/exe/flags:
+  -cflags string
+    	manually specify CFLAGS
+  -ldflags string
+    	manually specify LDFLAGS
+  -o string
+    	output filename (required)
+  -pycfg string
+    	python3-config executable name/path
+exit status 1
+```
+
+`-o` will be (most often) `pkt/python_integration/flags.go`
+And now you need to figure out valid flags. You have three options:
+- if your system has `pkg-config` configured, don't add any flags.
+- if you know the exact location/name of `python3-config`-like script, specify `-pycfg`
+- else you will need to pass the python3-include flags manually with `-ldflags` and `-cflags`
+  lets explore this a bit more:
+  * C flags specifies wher your system should look for `Python.h` headers.
+    Thats why it should be of the following form: `-Ipath/to/python311/includes/`, e.g.
+    on Windows 10: `-IC:/Users/<your username>/AppData/Local/Programs/Python/Python311/include`
+  * Linker flags are even more tricky. They should point to python libraries (DLLs on Windows and .so files on linux).
+    Here is a value of `-ldflags` with that we managed to build Białkomat on Windows 10:
+    `-LC:/Users/<your username>/AppData/Local/Programs/Python/Python311/libs -LC:/Users/<your username>/AppData/Local/Programs/Python/Python311 -lpython311 -lm`
 
 ## Alternative - `Docker`
 
