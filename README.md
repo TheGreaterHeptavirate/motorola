@@ -1,7 +1,10 @@
-[![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/motorola?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/motorola)
-
 Białkomat project is an application written for
 [Motorola Science Cup](https://science-cup.pl/) competition.
+
+<p align="center">
+<a href="https://science-cup.pl/"><img src="https://science-cup.pl/wp-content/uploads/2020/03/Youngineers-06.png"></a>
+<img src="internal/assets/logo.png">
+</p>
 
 # Description
 
