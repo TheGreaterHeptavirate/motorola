@@ -30,6 +30,27 @@ wchar_t* GetWC(char* char_string) {
     mbstowcs(wchar_string, char_string, length); // convert the char string to wchar_t string
     return wchar_string;
 }
+
+#include <stdlib.h>
+#include <wchar.h>
+
+wchar_t* convert_char_to_wchar(const char* str) {
+    int length = strlen(str);
+    wchar_t* wstr = (wchar_t*) malloc((length + 1) * sizeof(wchar_t));
+
+    if (!wstr) {
+        return NULL;
+    }
+
+    int result = mbstowcs(wstr, str, length + 1);
+
+    if (result == -1) {
+        free(wstr);
+        return NULL;
+    }
+
+    return wstr;
+}
 */
 import "C"
 
@@ -77,7 +98,7 @@ func Initialize() (finisher func(), err error) {
 
 	logger.Debugf("[PYTHON]: Initialize")
 	conf := &C.PyConfig{}
-	// conf.home = C.GetWC(C.CString(path))
+	conf.home = C.convert_char_to_wchar(C.CString(path))
 	C.PyConfig_InitIsolatedConfig(conf)
 	C.Py_InitializeFromConfig(conf)
 	logger.Success("[PYTHON]: Interpreter Initialized")
