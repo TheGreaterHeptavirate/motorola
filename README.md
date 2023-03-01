@@ -1,5 +1,5 @@
 Białkomat project is an application written for
-[Motorola Science Cup](https://science-cup.pl/) competition.
+the [Motorola Science Cup](https://science-cup.pl/) competition.
 
 <p align="center">
 <a href="https://science-cup.pl/"><img src="https://science-cup.pl/wp-content/uploads/2020/03/Youngineers-06.png"></a>
@@ -8,16 +8,16 @@ Białkomat project is an application written for
 
 # Description
 
-Białkomat is intended to be used for analyzing a genetic code typed in or
-loaded from source file. For more details, take a lok on our [documentation](#documentation)
-(*required knowladge of polish lanugage*).
+Białkomat is intended to be used for analyzing genetic code typed in or
+loaded from source file. For more details, take a look at our [documentation](#documentation)
+(*required knowledge of polish language*).
 
 ## Unique Selling Point (USP)
 
 1. **Handy and self-contained** - binary is encapsulated in one
    executable file that does not depend on your OS\*
-2. **High analyzis quality** - Our project uses one of the most
-   qualified, open-source [Bioinformatic library](https://github.com/biopython/biopython)
+2. **High analysis quality** - Our project uses one of the most
+   qualified, open-source [Bioinformatics library](https://github.com/biopython/biopython)
 3. **Innovative technology** - the project is a unique combination of **4 programming languages**
    (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still enures
    no additional system dependencies needs to be installed.
@@ -27,19 +27,19 @@ loaded from source file. For more details, take a lok on our [documentation](#do
 ## Binaries usage
 
 - Go to [the latest release](https://github.com/thegreaterheptavirate/motorola/releases/latest)
-  and download a a file appropiate for your OS.
+  and download the file appropiate for your OS.
 - extract `.zip` file using any tool.
-- run binary (`.exe` on windows and `.bin` on linux).
+- run binary (`.exe` on Windows and `.bin` on linux).
 
 ### System requirements
 
-In order to run one of our binaries, you need to be in possesion of
-64-bit Windows or Linux Operating System.
+In order to run one of our binaries, you need to either have
+access to a 64-bit Windows or Linux Operating System.
 We also require your OS to support OpenGL and have (at least) 0.5GB free disc space.
 
 ## Extra flags
 
-You may want to specify some additional flags to see what happens inside of our programm.
+You may want to specify some additional flags to see what happens inside of our program.
 
 ```console
 Usage of ./motorola:
@@ -74,7 +74,7 @@ you can use the following command `./motorla -i /path/to/dat/file.txt -no-errors
 
 # Documentation
 
-Reffer [to docs](./docs).
+Refer [to docs](./docs).
 
 # STATUS
 
@@ -86,9 +86,9 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
     - [ ] "Application architecture" (10 pts)
     - [ ] documentation (10 pts)
     - [X] UI (25 pts)
-    - [ ] Unittesting (5 pts)
+    - [ ] Unit testing (5 pts)
 
-# Installation instruction
+# Compilation instruction
 
 ## Pre-requirements
 
@@ -96,7 +96,7 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
 - [go](https://go.dev)
 - GCC
 - mingw (**for cross-platform compilation only**)
-- Python 3.11 (**NOTE** remember to add it to PATH on windows)
+- Python 3.11 (**NOTE** remember to add it to PATH on Windows)
 
 ## Source
 
@@ -141,7 +141,7 @@ And now you need to figure out valid flags. You have three options:
 - if you know the exact location/name of `python3-config`-like script, specify `-pycfg`
 - else you will need to pass the python3-include flags manually with `-ldflags` and `-cflags`
   lets explore this a bit more:
-  * C flags specifies wher your system should look for `Python.h` headers.
+  * C flags specifies where your system should look for `Python.h` headers.
     Thats why it should be of the following form: `-Ipath/to/python311/includes/`, e.g.
     on Windows 10: `-IC:/Users/<your username>/AppData/Local/Programs/Python/Python311/include`
   * Linker flags are even more tricky. They should point to python libraries (DLLs on Windows and .so files on linux).
@@ -169,10 +169,10 @@ docker run --name=motorola_app_1 \
 **NOTE** commands above are tested for [podman](https://podman.io),
 but since it has the same api as docker, everything should work.
 
-### windows setup
+### Windows setup
 
-If you wish to run dockerimage on windows, first of all refer to official docker instruction
-for setting up DOcker Desktop on Windows. Then, refer to [this page](https://dev.to/darksmile92/run-gui-app-in-linux-docker-container-on-windows-host-4kde)
+If you wish to run the docker image on Windows, first of all refer to official docker instruction
+for setting up Docker Desktop on Windows. Then, refer to [this page](https://dev.to/darksmile92/run-gui-app-in-linux-docker-container-on-windows-host-4kde)
 to set up X enviroument and be able to display our app.
 
 ### important linux note
