@@ -24,6 +24,9 @@ const (
 // ErrInvalidCodon is returned if InputParser finds some unexpected string.
 var ErrInvalidCodon = errors.New("invalid codon")
 
+// ErrRibosome is returned if ribosome encounters some error.
+var ErrRibosome = errors.New("ribosome error")
+
 // Ribosome is responsible for reading codons from input data stream.
 type Ribosome struct {
 	data       string
@@ -37,20 +40,22 @@ func NewRibosome(input string) *Ribosome {
 }
 
 // ToRNA converts DNA to RNA.
-func (r *Ribosome) ToRNA(codon string) string {
+func ToRNA(codon string) string {
 	return strings.ReplaceAll(codon, thymine, uracil)
 }
 
 // SetOffset sets offset of first codon
 // it panics if offset >= codonLength
 // it also sets read-codons to 0.
-func (r *Ribosome) SetOffset(offset int) {
-	if offset >= CodonLength {
-		panic("offset must be less than codon length")
+func (r *Ribosome) SetOffset(offset int) error {
+	if offset < 0 || offset >= CodonLength {
+		return fmt.Errorf("offset must be less than codon length: %w", ErrRibosome)
 	}
 
 	r.offset = offset
 	r.codonsRead = 0
+
+	return nil
 }
 
 // Reset resets stream to the beginning.
@@ -77,7 +82,7 @@ func (r *Ribosome) ReadCodon() (string, error) {
 		return "", err
 	}
 
-	return r.ToRNA(out), nil
+	return ToRNA(out), nil
 }
 
 // Validate validates codon
