@@ -65,7 +65,7 @@ func Initialize() (finisher func(), err error) {
 	}
 
 	os.Setenv("PYTHONPATH", path)
-	os.Setenv("PYTHONHOME", path)
+	//os.Setenv("PYTHONHOME", path)
 
 	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()
