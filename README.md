@@ -1,6 +1,6 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/TheGreaterHeptavirate/tic-tac-go)](https://goreportcard.com/report/github.com/TheGreaterHeptavirate/tic-tac-go)
-[![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/tic-tac-go?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/tic-tac-go)
-[![codecov](https://codecov.io/gh/TheGreaterHeptavirate/tic-tac-go/branch/master/graph/badge.svg)](https://codecov.io/gh/TheGreaterHeptavirate/tic-tac-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/TheGreaterHeptavirate/motorola)](https://goreportcard.com/report/github.com/TheGreaterHeptavirate/motorola)
+[![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/motorola?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/motorola)
+[![codecov](https://codecov.io/gh/TheGreaterHeptavirate/motorola/branch/master/graph/badge.svg)](https://codecov.io/gh/TheGreaterHeptavirate/motorola)
 
 Białkomat project is an application written for
 the [Motorola Science Cup](https://science-cup.pl/) competition.
