@@ -8,8 +8,9 @@
 
 main {
         frame-rounding: 15,15;
+	frame-padding: 8, 8;
 	background-color: #121212;
-	frame-background-color: #202020;
+	frame-background-color: #000000;
 	scrollbar-grab-color: #202020;
 	scrollbar-grab-hovered-color: #303030;
 	child-background-color: black;
