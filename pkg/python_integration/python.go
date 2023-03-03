@@ -65,13 +65,17 @@ func Initialize() (finisher func(), err error) {
 	}
 
 	os.Setenv("PYTHONPATH", path)
-	//os.Setenv("PYTHONHOME", path)
+	// os.Setenv("PYTHONHOME", path)
 
 	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()
 	logger.Success("[PYTHON]: Interpreter Initialized")
 
-	return func() { os.RemoveAll(path) }, nil
+	return func() {
+		if err := os.RemoveAll(path); err != nil {
+			logger.Error(err)
+		}
+	}, nil
 }
 
 func Finalize() {

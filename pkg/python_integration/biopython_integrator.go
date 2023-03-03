@@ -53,7 +53,11 @@ sys.path.append(r'%s')`, filepath.Clean(newSyspath))))
 		return nil, fmt.Errorf("error loading content of directory: %w", err)
 	}
 
-	return func() { os.RemoveAll(path) }, nil
+	return func() {
+		if err := os.RemoveAll(path); err != nil {
+			logger.Error(err)
+		}
+	}, nil
 }
 
 func loadDir(base, dirname string, fs embed.FS) error {
