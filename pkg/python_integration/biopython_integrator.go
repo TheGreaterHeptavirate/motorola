@@ -46,7 +46,7 @@ func InitializeBiopython() (finisher func(), err error) {
 	logger.Debugf("adding %s to python's syspath", newSyspath)
 
 	C.PyRun_SimpleString(C.CString(fmt.Sprintf(`import sys
-sys.path.append('%s')`, filepath.Clean(newSyspath))))
+sys.path.append(r'%s')`, filepath.Clean(newSyspath))))
 
 	err = loadDir(path, ".", stuff)
 	if err != nil {
