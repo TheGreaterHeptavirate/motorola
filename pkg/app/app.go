@@ -150,6 +150,9 @@ func (a *App) Run() error {
 	logger.Debug("Setting app's icon")
 	a.window.SetIcon([]image.Image{logoImg})
 
+	logger.Debug("Setting default font")
+	giu.Context.FontAtlas.SetDefaultFontFromBytes(assets.NotoSansRegularTTF, 20)
+
 	// start main loop
 	logger.Debug("Starting main loop...")
 	a.window.Run(a.render)

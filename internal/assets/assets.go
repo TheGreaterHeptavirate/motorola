@@ -33,4 +33,7 @@ var (
 
 	//go:embed logo.png
 	LogoPNG []byte
+
+	//go:embed fonts/NotoSans-Regular.ttf
+	NotoSansRegularTTF []byte
 )

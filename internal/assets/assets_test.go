@@ -9,12 +9,14 @@
 package assets
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAssets(t *testing.T) {
 	assert.NotNil(t, AppCSS)
 	assert.NotNil(t, AminoAcidsJSON)
 	assert.NotNil(t, LogoPNG)
+	assert.NotNil(t, NotoSansRegularTTF)
 }
