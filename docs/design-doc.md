@@ -229,10 +229,10 @@ func loop() {
 
 func tab() giu.Layout {
 	return giu.Layout{
-		giu.Label("To jest ten pierdolink:"),
+		giu.Label("To jest ten schemat białka:"),
 		giu.ImageWithRgba(img),
-		giu.Plot("to jest prawdziwy białkowy potwór!").Plots(
-			giu.PlotBar("PH tego potwora", []float64{2}).Shift(0),
+		giu.Plot("to jest wykres ze statystykami!").Plots(
+			giu.PlotBar("PH", []float64{2}).Shift(0),
 			giu.PlotBar("Jakiś inny indeks", []float64{4}).Shift(1),
 		),
 	}
