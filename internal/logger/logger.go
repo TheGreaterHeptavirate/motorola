@@ -9,7 +9,13 @@
 // Package logger contains an abstraction from the currently used logging library.
 package logger
 
-import "github.com/kpango/glg"
+import (
+	"errors"
+	"fmt"
+	"io/fs"
+
+	"github.com/kpango/glg"
+)
 
 func init() {
 	// for glg, need to change caller's length in order to report real caller path
@@ -20,7 +26,12 @@ func init() {
 // Info logs a message at level "Info" on the standard logger.
 func Info(args ...interface{}) {
 	if err := glg.Info(args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
@@ -28,14 +39,24 @@ func Info(args ...interface{}) {
 // It uses fmt.Sprintf to format the message.
 func Infof(format string, args ...interface{}) {
 	if err := glg.Infof(format, args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
 // Debug logs a message at level "Debug" on the standard logger.
 func Debug(args ...interface{}) {
 	if err := glg.Debug(args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
@@ -43,14 +64,24 @@ func Debug(args ...interface{}) {
 // It uses fmt.Sprintf to format the message.
 func Debugf(format string, args ...interface{}) {
 	if err := glg.Debugf(format, args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
 // Warn logs a message at level "Warn" on the standard logger.
 func Warn(args ...interface{}) {
 	if err := glg.Warn(args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
@@ -58,14 +89,24 @@ func Warn(args ...interface{}) {
 // It uses fmt.Sprintf to format the message.
 func Warnf(format string, args ...interface{}) {
 	if err := glg.Warnf(format, args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
 // Error logs a message at level "Error" on the standard logger.
 func Error(args ...interface{}) {
 	if err := glg.Error(args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
@@ -73,7 +114,12 @@ func Error(args ...interface{}) {
 // It uses fmt.Sprintf to format the message.
 func Errorf(format string, args ...interface{}) {
 	if err := glg.Errorf(format, args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
@@ -92,7 +138,12 @@ func Fatalf(format string, args ...interface{}) {
 // This announces a successful operation.
 func Success(args ...interface{}) {
 	if err := glg.Success(args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
@@ -100,7 +151,12 @@ func Success(args ...interface{}) {
 // It uses fmt.Sprintf to format the message.
 func Successf(format string, args ...interface{}) {
 	if err := glg.Successf(format, args...); err != nil {
-		panic(err)
+		if errors.Is(err, err.(*fs.PathError)) {
+			// it means that logging is arbitrarly disabled (e.g. by -H=windowsgui ld flag)
+			return
+		}
+
+		panic(fmt.Errorf("error while logging: %w", err))
 	}
 }
 
