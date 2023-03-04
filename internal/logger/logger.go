@@ -9,16 +9,31 @@
 // Package logger contains an abstraction from the currently used logging library.
 package logger
 
-import "github.com/kpango/glg"
+import (
+	"github.com/kpango/glg"
+	"os"
+)
+
+var logging bool
 
 func init() {
 	// for glg, need to change caller's length in order to report real caller path
 	// instead of path to this file.
 	glg.Get().SetCallerDepth(3)
+
+	if os.Stdout == nil {
+		logging = false
+	} else {
+		logging = true
+	}
 }
 
 // Info logs a message at level "Info" on the standard logger.
 func Info(args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Info(args...); err != nil {
 		panic(err)
 	}
@@ -27,6 +42,10 @@ func Info(args ...interface{}) {
 // Infof logs a message at level "Info" on the standard logger.
 // It uses fmt.Sprintf to format the message.
 func Infof(format string, args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Infof(format, args...); err != nil {
 		panic(err)
 	}
@@ -34,6 +53,10 @@ func Infof(format string, args ...interface{}) {
 
 // Debug logs a message at level "Debug" on the standard logger.
 func Debug(args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Debug(args...); err != nil {
 		panic(err)
 	}
@@ -42,6 +65,10 @@ func Debug(args ...interface{}) {
 // Debugf logs a message at level "Debug" on the standard logger.
 // It uses fmt.Sprintf to format the message.
 func Debugf(format string, args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Debugf(format, args...); err != nil {
 		panic(err)
 	}
@@ -49,6 +76,10 @@ func Debugf(format string, args ...interface{}) {
 
 // Warn logs a message at level "Warn" on the standard logger.
 func Warn(args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Warn(args...); err != nil {
 		panic(err)
 	}
@@ -57,6 +88,10 @@ func Warn(args ...interface{}) {
 // Warnf logs a message at level "Warn" on the standard logger.
 // It uses fmt.Sprintf to format the message.
 func Warnf(format string, args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Warnf(format, args...); err != nil {
 		panic(err)
 	}
@@ -64,6 +99,10 @@ func Warnf(format string, args ...interface{}) {
 
 // Error logs a message at level "Error" on the standard logger.
 func Error(args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Error(args...); err != nil {
 		panic(err)
 	}
@@ -72,6 +111,10 @@ func Error(args ...interface{}) {
 // Errorf logs a message at level "Error" on the standard logger.
 // It uses fmt.Sprintf to format the message.
 func Errorf(format string, args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Errorf(format, args...); err != nil {
 		panic(err)
 	}
@@ -79,18 +122,30 @@ func Errorf(format string, args ...interface{}) {
 
 // Fatal logs a message at level "Fatal" on the standard logger.
 func Fatal(args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	glg.Fatal(args...)
 }
 
 // Fatalf logs a message at level "Fatal" on the standard logger.
 // It uses fmt.Sprintf to format the message.
 func Fatalf(format string, args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	glg.Fatalf(format, args...)
 }
 
 // Success logs a message at level "Info" on the standard logger.
 // This announces a successful operation.
 func Success(args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Success(args...); err != nil {
 		panic(err)
 	}
@@ -99,6 +154,10 @@ func Success(args ...interface{}) {
 // Successf logs a message at level "Info" on the standard logger.
 // It uses fmt.Sprintf to format the message.
 func Successf(format string, args ...interface{}) {
+	if !logging {
+		return
+	}
+
 	if err := glg.Successf(format, args...); err != nil {
 		panic(err)
 	}
