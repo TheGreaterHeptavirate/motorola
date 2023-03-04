@@ -10,8 +10,9 @@
 package logger
 
 import (
-	"github.com/kpango/glg"
 	"os"
+
+	"github.com/kpango/glg"
 )
 
 var logging bool
@@ -34,9 +35,9 @@ func Info(args ...interface{}) {
 		return
 	}
 
-	if err := glg.Info(args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Info(args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Infof logs a message at level "Info" on the standard logger.
@@ -46,9 +47,9 @@ func Infof(format string, args ...interface{}) {
 		return
 	}
 
-	if err := glg.Infof(format, args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Infof(format, args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Debug logs a message at level "Debug" on the standard logger.
@@ -57,9 +58,9 @@ func Debug(args ...interface{}) {
 		return
 	}
 
-	if err := glg.Debug(args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Debug(args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Debugf logs a message at level "Debug" on the standard logger.
@@ -69,9 +70,9 @@ func Debugf(format string, args ...interface{}) {
 		return
 	}
 
-	if err := glg.Debugf(format, args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Debugf(format, args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Warn logs a message at level "Warn" on the standard logger.
@@ -80,9 +81,9 @@ func Warn(args ...interface{}) {
 		return
 	}
 
-	if err := glg.Warn(args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Warn(args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Warnf logs a message at level "Warn" on the standard logger.
@@ -92,9 +93,9 @@ func Warnf(format string, args ...interface{}) {
 		return
 	}
 
-	if err := glg.Warnf(format, args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Warnf(format, args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Error logs a message at level "Error" on the standard logger.
@@ -103,9 +104,9 @@ func Error(args ...interface{}) {
 		return
 	}
 
-	if err := glg.Error(args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Error(args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Errorf logs a message at level "Error" on the standard logger.
@@ -115,9 +116,9 @@ func Errorf(format string, args ...interface{}) {
 		return
 	}
 
-	if err := glg.Errorf(format, args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Errorf(format, args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Fatal logs a message at level "Fatal" on the standard logger.
@@ -146,9 +147,9 @@ func Success(args ...interface{}) {
 		return
 	}
 
-	if err := glg.Success(args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Success(args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // Successf logs a message at level "Info" on the standard logger.
@@ -158,9 +159,9 @@ func Successf(format string, args ...interface{}) {
 		return
 	}
 
-	if err := glg.Successf(format, args...); err != nil {
-		panic(err)
-	}
+	// if err := glg.Successf(format, args...); err != nil {
+	// 	panic(err)
+	// }
 }
 
 // SetLevel sets the logging level.
