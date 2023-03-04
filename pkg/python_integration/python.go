@@ -157,3 +157,9 @@ func (obj *PyObject) FromPyFloat() float32 {
 func (obj *PyObject) GetDictObject(key *PyObject) *PyObject {
 	return (*PyObject)(C.PyDict_GetItem(obj.toC(), key.toC()))
 }
+
+func RunSimpleString(programm string) {
+	cstring := C.CString(programm)
+	defer C.free(unsafe.Pointer(cstring))
+	C.PyRun_SimpleString(cstring)
+}
