@@ -96,7 +96,7 @@ func runPython(p *python.EmbeddedPython, script string) (result []float32, err e
 		}
 
 		if errStr != "" {
-			return nil, fmt.Errorf("unexpected error while runing python script: %s", errStr)
+			return nil, fmt.Errorf("unexpected error while running python script: %s", errStr)
 		}
 		return nil, err
 	}
@@ -112,8 +112,7 @@ func runPython(p *python.EmbeddedPython, script string) (result []float32, err e
 			return nil, fmt.Errorf("error reading result: %w", err)
 		}
 
-		resultStr = strings.ReplaceAll(resultStr, "\n", "")
-
+		resultStr = strings.TrimSpace(resultStr)
 		x, err := strconv.ParseFloat(resultStr, 32)
 		if err != nil {
 			return nil, fmt.Errorf("converting %s to float32: %w", resultStr, err)
