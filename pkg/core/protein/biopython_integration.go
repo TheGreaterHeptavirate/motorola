@@ -64,37 +64,21 @@ print(resProt.instability_index())
 		p.Stats.AminoAcidsCount[string(c)] = float32(strings.Count(proteinStr, string(c)))
 	}
 
+	results, err = runPython(python2.Python, fmt.Sprintf(`
+import Bio.SeqUtils.IsoelectricPoint
+print(Bio.SeqUtils.IsoelectricPoint.IsoelectricPoint("%s").pi())
+`, proteinStr,
+	))
+	if err != nil {
+		return fmt.Errorf("calling python function: %w", err)
+	}
+
+	p.Stats.PH = results[0]
+
 	return nil
 }
 
 func (p *Protein) pH() (float32, error) {
-	//module, err := python.OpenModule("Bio.SeqUtils.IsoelectricPoint")
-	//if err != nil {
-	//	return -1, fmt.Errorf("cannot open module: %w", err)
-	//}
-	//
-	//args := python.Tuple(1)
-	//defer python.Destroy(args)
-	//
-	//proteinStr := p.AminoAcids.String()
-	//proteinStr = strings.ReplaceAll(proteinStr, aminoacid.StartCodon, "M")
-	//proteinStr = strings.TrimSuffix(proteinStr, aminoacid.StopCodon)
-	//
-	//argument := python.ToPyString(proteinStr)
-	//
-	//python.Tuple_Set(args, 0, argument)
-	//
-	//resultProtein, err := module.CallFunc("IsoelectricPoint", args)
-	//if err != nil {
-	//	return -1, fmt.Errorf("calling python function: %w", err)
-	//}
-	//
-	//defer python.Destroy(resultProtein)
-	//
-	//result := resultProtein.CallMethodNoArgs("pi")
-	//defer python.Destroy(result)
-	//
-	//return result.FromPyFloat(), nil
 	return 0, nil
 }
 
@@ -119,14 +103,12 @@ func runPython(p *python.EmbeddedPython, script string) (result []float32, err e
 
 	result = make([]float32, 0)
 	for {
-		fmt.Println("reading")
 		resultStr, err := outReader.ReadString(byte('\n'))
-		fmt.Print(resultStr)
 		if err != nil {
 			if errors.Is(err, io.EOF) {
-				fmt.Print("eof")
 				break
 			}
+
 			return nil, fmt.Errorf("error reading result: %w", err)
 		}
 
