@@ -23,7 +23,7 @@ loaded from source file. For more details, take a look at our [documentation](#d
 2. **High analysis quality** - Our project uses one of the most
    qualified, open-source [Bioinformatics library](https://github.com/biopython/biopython)
 3. **Innovative technology** - the project is a unique combination of **4 programming languages**
-   (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still enures
+   (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still ensures
    no additional system dependencies needs to be installed.
 
 \* Check for [System Requirements](#system-requirements)
@@ -67,7 +67,7 @@ Usage of ./motorola:
   -skip
     	Automatically skip to Proteins View mode (usually used together with -i)
   -verbose
-    	verbosing mode
+    	verbose mode
   -version
     	print project's version
 ```
@@ -86,9 +86,9 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
 - [X] Genetic code reading (35 pts)
 - [X] Proteins presentation (25 pts)
 - [X] More plots and charts (65 pts)
-- [ ] Additional things:
-    - [ ] "Application architecture" (10 pts)
-    - [ ] documentation (10 pts)
+- [X] Additional things:
+    - [X] "Application architecture" (10 pts)
+    - [X] documentation (10 pts)
     - [X] UI (25 pts)
     - [ ] Unit testing (5 pts)
 
