@@ -39,7 +39,6 @@ setup:
 	$(GOCMD) get -d ./...
 	$(GOCMD) mod download -x
 	$(GOCMD) generate -v ./...
-	$(GOCMD) run scripts/flags.go -o pkg/python_integration/flags.go -pycfg python3-config
 	cp cmd/motorola/*syso .
 
 ## test: Runs the tests with coverage
