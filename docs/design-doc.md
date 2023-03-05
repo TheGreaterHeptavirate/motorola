@@ -130,28 +130,16 @@ takich schemacików. Miałby on używać implota (wykresów)
 
 ## liczenie masy
 
-to mam nadzieje 1 prosty wzór i 1 więcej pole w jsonie powyżej.
+To proste sumowanie mas aminokwasów, więc nie trudne.
 
 ## Jeszcze więcej wykresów i diagramów
 
-Niestety wzory nie są proste, **ale** o dziwo istnieje biblioteka
-w GO, która załatwia to za nas: https://github.com/biogo/biogoo
-(Moje przypuszczenie na temat dlaczego: bo GO ma to (nie)szczęście być
-językiem tworzonym przez Google).
-<details><summary>Ciekawostka</summary>
-
-Podczas szukania  biblioteki natknęliśmy się z @Garnn na BioPython,
-który robi mniej więcej to samo. Kontynuując dalsze poszukiwania prubowaliśmy
+Niestety wzory nie są proste, **ale** Podczas szukania  biblioteki natknęliśmy się z @Garnn na BioPython,
+który zawiera już potrzebne implementacje. Kontynuując dalsze poszukiwania próbowaliśmy
 zaimplementować Pythona w GO!
 Polega to na tym, że istnieje CGO - integralna część języka pozwalająca wintegrować
-C, a Python posiada CPython - zestaw headerów czyli _teoretycznie_ byłoby to możliwe.
-Niestety z powodu _tego, że python nie ma [Go 1 compatibility promise](https://go.dev/doc/go1compat)_
-z powodu różnic między Pythonem 3.7 a (obecnie używanym przez Red Hata 3.11) niemożliwe
-okazało się korzystanie z istniejących już repozytoriów, natomiast
-próba kompilacji najprostszych przykładów kończyła się crashem linkera.
-Natywna biblioteka w GO rozwiązała problem w jego istocie, więc nie
-dokońćzyliśmy researchu (może [@gucio321](https://github.com/gucio321)) dokończyy
-go w wolnej chwili).
+C, a Python posiada CPython - zestaw headerów czyli jest to możliwe.
+Aby uniknąć niepotrzebnej dodatkowej implementacji zastosowaliśmy bibliotekę go-embed-python (https://github.com/kluctl/go-embed-python)
 
 Poniższe referencje mogą okazać się ciekawe:
 - przykład: https://poweruser.blog/embedding-python-in-go-338c0399f3d5
@@ -160,12 +148,12 @@ Poniższe referencje mogą okazać się ciekawe:
 
 </details>
 
-no, to to właśnie po to ImPlot - te wykresy powinny być
+to właśnie po to ImPlot - te wykresy powinny być
 całkiem proste do zrobienia tylko trzeba znaleźć wzory.
 
 ### Punkt izoelektryczny
 
-Po rozmowie z [Chatem GPT](https://chat.openai.com) otrzymaliśmy następujący kod:
+Po rozmowie z [Chatem GPT](https://chat.openai.com) na temat punktów izoelektrycznych, wymyśliliśmy następujący kod:
 
 ```go
 package main
@@ -190,70 +178,11 @@ Teraz tylko wystarczy zweryfikować i może mamy punkt izoelektryczny :smile:
 
 # UI
 
-napisałem prostą symulację, wygląd mniej więcej tak:
-
-![UI](./ui.png)
-
-obrazek niestety wklejony z pliku, ale myśle że da rade zrobić tak jak mówiłem
-
-<details><summary>to jest mały kod w go, który rysuje to UI</summary>
-
-```golang
-package main
-
-import (
-	"image"
-
-	"github.com/AllenDang/giu"
-)
-
-var (
-	val1 string = "AUGUGUTUGUA"
-	img  *image.RGBA
-)
-
-func loop() {
-	giu.SingleWindow().Layout(
-		giu.Row(
-			giu.Label("dobra, to jest ten popieprzony input"),
-			giu.InputText(&val1),
-		),
-		giu.Label("po konwersji z polskiego na nasze: AVRPS albo ... albo ... (jak kto woli)"),
-		giu.Label("więc po analizie znaleźliśmy takie białka:"),
-		giu.TabBar().TabItems(
-			giu.TabItem("Białko kurde 1").Layout(tab()),
-			giu.TabItem("albo też takie bo chyba może być więcej").Layout(tab()),
-		),
-	)
-}
-
-func tab() giu.Layout {
-	return giu.Layout{
-		giu.Label("To jest ten schemat białka:"),
-		giu.ImageWithRgba(img),
-		giu.Plot("to jest wykres ze statystykami!").Plots(
-			giu.PlotBar("PH", []float64{2}).Shift(0),
-			giu.PlotBar("Jakiś inny indeks", []float64{4}).Shift(1),
-		),
-	}
-}
-
-func main() {
-	wnd := giu.NewMasterWindow("to gówno na motorole - konspekt", 640, 480, 0)
-	var err error
-	img, err = giu.LoadImage("./image.png")
-	if err != nil {
-		panic(err)
-	}
-	wnd.Run(loop)
-}
-
-```
-
-</details>
+![Czytnik](./Czytnik.PNG)
+![Analiza](./Analiza.PNG)
 
 # PODSUMOWANIE
 
-mam nadzieje że coś zrozumieliście.
+mam nadzieje że opis był zrozumiały.
 Wykonanie nie powinno być zbyt trudne.
 _czekamy teraz klasyczne 10 minut później_
