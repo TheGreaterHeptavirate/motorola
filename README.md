@@ -23,7 +23,7 @@ loaded from source file. For more details, take a look at our [documentation](#d
 2. **High analysis quality** - Our project uses one of the most
    qualified, open-source [Bioinformatics library](https://github.com/biopython/biopython)
 3. **Innovative technology** - the project is a unique combination of **4 programming languages**
-   (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still enures
+   (GO, C, C++ and Python). Such a connection while being a kind of precedent on IT market, still ensures
    no additional system dependencies needs to be installed.
 
 \* Check for [System Requirements](#system-requirements)
