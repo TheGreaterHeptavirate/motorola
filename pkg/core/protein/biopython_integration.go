@@ -121,13 +121,18 @@ func runPython(p *python.EmbeddedPython, script string) (result []float32, err e
 
 	result = make([]float32, 0)
 	for {
-		resultStr, err := errReader.ReadString(byte('\n'))
+		fmt.Println("reading")
+		resultStr, err := outReader.ReadString(byte('\n'))
+		fmt.Print(resultStr)
 		if err != nil {
 			if errors.Is(err, io.EOF) {
+				fmt.Print("eof")
 				break
 			}
 			return nil, fmt.Errorf("error reading result: %w", err)
 		}
+
+		resultStr = strings.ReplaceAll(resultStr, "\n", "")
 
 		x, err := strconv.ParseFloat(resultStr, 32)
 		if err != nil {
