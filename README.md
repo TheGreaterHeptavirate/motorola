@@ -67,7 +67,7 @@ Usage of ./motorola:
   -skip
     	Automatically skip to Proteins View mode (usually used together with -i)
   -verbose
-    	verbosing mode
+    	verbose mode
   -version
     	print project's version
 ```
@@ -86,9 +86,9 @@ In reference to [this document](https://science-cup.pl/wp-content/uploads/2022/1
 - [X] Genetic code reading (35 pts)
 - [X] Proteins presentation (25 pts)
 - [X] More plots and charts (65 pts)
-- [ ] Additional things:
-    - [ ] "Application architecture" (10 pts)
-    - [ ] documentation (10 pts)
+- [X] Additional things:
+    - [X] "Application architecture" (10 pts)
+    - [X] documentation (10 pts)
     - [X] UI (25 pts)
     - [ ] Unit testing (5 pts)
 
