@@ -1,0 +1,19 @@
+diff --git a/pkg/python_integration/biopython b/pkg/python_integration/biopython
+--- a/pkg/python_integration/biopython
++++ b/pkg/python_integration/biopython
+@@ -1 +1 @@
+-Subproject commit 7b112cf105675eeedf117fa0c8ca29c52cd26d09
++Subproject commit 7b112cf105675eeedf117fa0c8ca29c52cd26d09-dirty
+diff --git a/pkg/python_integration/python.go b/pkg/python_integration/python.go
+index 7cf9404..0bb52da 100644
+--- a/pkg/python_integration/python.go
++++ b/pkg/python_integration/python.go
+@@ -64,7 +64,7 @@ func Initialize() (finisher func(), err error) {
+ 		return nil, fmt.Errorf("writing temp file: %w", err)
+ 	}
+ 
+-	os.Setenv("PYTHONPATH", path)
++	// os.Setenv("PYTHONPATH", path)
+ 	// os.Setenv("PYTHONHOME", path)
+ 
+ 	logger.Debugf("[PYTHON]: Initialize")

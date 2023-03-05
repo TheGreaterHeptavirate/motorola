@@ -8,14 +8,6 @@
 
 package python
 
-//#include <Python.h>
-/*
-PyObject* PyObjectCallMethod(PyObject* obj, char* name, char* arg) {
-	PyObject_CallMethod(obj,name,arg);
-}
-*/
-import "C"
-
 import (
 	"embed"
 	"fmt"
@@ -43,10 +35,7 @@ func InitializeBiopython() (finisher func(), err error) {
 
 	newSyspath := joinPath(path, "biopython")
 
-	logger.Debugf("adding %s to python's syspath", newSyspath)
-
-	C.PyRun_SimpleString(C.CString(fmt.Sprintf(`import sys
-sys.path.append(r'%s')`, filepath.Clean(newSyspath))))
+	Python.AddPythonPath(newSyspath)
 
 	err = loadDir(path, ".", stuff)
 	if err != nil {
