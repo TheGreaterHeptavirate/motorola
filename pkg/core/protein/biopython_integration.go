@@ -14,11 +14,12 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	python2 "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
-	"github.com/kluctl/go-embed-python/python"
 	"io"
 	"strconv"
 	"strings"
+
+	python2 "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
+	"github.com/kluctl/go-embed-python/python"
 
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/aminoacid"
 )
@@ -45,7 +46,7 @@ func (p *Protein) analysis() error {
 
 	results, err := runPython(python2.Python, fmt.Sprintf(`
 import Bio.SeqUtils.ProtParam
-resProt = ProteinAnalysis.ProteinAnalysis(%s)
+resProt = Bio.SeqUtils.ProtParam.ProteinAnalysis(%s)
 print(resProt.molecular_weight())
 print(resProt.aromaticity())
 print(resProt.instability_index())
