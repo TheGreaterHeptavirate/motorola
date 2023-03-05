@@ -3,6 +3,14 @@
 
 package python
 
+import (
+	"fmt"
+	"os/exec"
+	"path/filepath"
+
+	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
+)
+
 func activateVenv(path string) error {
 	cmd := exec.Command(filepath.Join(path, "venv/Scripts/activate"))
 	logger.Debugf("executing command: %v", cmd)
