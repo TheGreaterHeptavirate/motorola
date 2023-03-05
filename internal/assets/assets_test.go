@@ -18,5 +18,5 @@ func TestAssets(t *testing.T) {
 	assert.NotNil(t, AppCSS)
 	assert.NotNil(t, AminoAcidsJSON)
 	assert.NotNil(t, LogoPNG)
-	assert.NotNil(t, NotoSansRegularTTF)
+	assert.NotNil(t, SpaceGroteskRegularTTF)
 }
