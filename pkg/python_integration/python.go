@@ -36,8 +36,9 @@ import (
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 )
 
-//go:embed cpython/Lib
-var pythonStdLib embed.FS
+//go:generate python3 -m virtualenv venv
+//go:embed venv
+var pythonVenv embed.FS
 
 type (
 	PyObject C.PyObject
@@ -60,12 +61,14 @@ func Initialize() (finisher func(), err error) {
 
 	logger.Debugf("[PYTHON] extracting python standard library to %s", path)
 
-	if err := loadDir(path, "cpython/Lib", pythonStdLib); err != nil {
+	if err := loadDir(path, ".", pythonVenv); err != nil {
 		return nil, fmt.Errorf("writing temp file: %w", err)
 	}
 
-	os.Setenv("PYTHONPATH", path)
-	// os.Setenv("PYTHONHOME", path)
+	// activate venv here
+	if err := activateVenv(path); err != nil {
+		return nil, err
+	}
 
 	logger.Debugf("[PYTHON]: Initialize")
 	C.Py_Initialize()
