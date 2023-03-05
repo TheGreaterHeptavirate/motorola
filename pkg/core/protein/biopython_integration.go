@@ -46,7 +46,7 @@ func (p *Protein) analysis() error {
 
 	results, err := runPython(python2.Python, fmt.Sprintf(`
 import Bio.SeqUtils.ProtParam
-resProt = Bio.SeqUtils.ProtParam.ProteinAnalysis(%s)
+resProt = Bio.SeqUtils.ProtParam.ProteinAnalysis("%s")
 print(resProt.molecular_weight())
 print(resProt.aromaticity())
 print(resProt.instability_index())
