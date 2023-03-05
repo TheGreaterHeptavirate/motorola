@@ -42,7 +42,7 @@ func (a *App) ReportError(err error) {
 
 		giu.Msgbox("An error occurred!", text)
 	} else {
-		logger.Debugf("Noth snowing an error in app - disabled in options.")
+		logger.Debugf("Not showing an error in app - disabled in options.")
 	}
 }
 

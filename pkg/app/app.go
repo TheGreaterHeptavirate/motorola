@@ -106,17 +106,6 @@ func (a *App) Run() error {
 	logger.Infof("Setting log level to %s", a.logLevel)
 	logger.SetLevel(a.logLevel)
 
-	logger.Debug("Initializing Python3")
-	f, err := python.Initialize()
-	if err != nil {
-		return fmt.Errorf("initializing python: %w", err)
-	}
-
-	defer func() {
-		f()
-		python.Finalize()
-	}()
-
 	logger.Debug("Initialize BioPython module")
 
 	biopythonFinisher, err := python.InitializeBiopython()
