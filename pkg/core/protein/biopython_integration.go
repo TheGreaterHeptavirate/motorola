@@ -55,17 +55,15 @@ print(resProt.instability_index())
 	if err != nil {
 		return fmt.Errorf("calling python function: %w", err)
 	}
-	fmt.Print(results)
 
-	//p.Stats.MolecularWeight = resultProtein.CallMethodNoArgs("molecular_weight").FromPyFloat()
-	//p.Stats.Aromaticity = resultProtein.CallMethodNoArgs("aromaticity").FromPyFloat()
-	//p.Stats.InstabilityIndex = resultProtein.CallMethodNoArgs("instability_index").FromPyFloat()
+	p.Stats.MolecularWeight = results[0]
+	p.Stats.Aromaticity = results[1]
+	p.Stats.InstabilityIndex = results[2]
 
-	//percentageMap := resultProtein.CallMethodNoArgs("count_amino_acids")
-	//for _, c := range Codons {
-	//	p.Stats.AminoAcidsCount[string(c)] = percentageMap.GetDictObject(python.ToPyString(string(c))).FromPyFloat()
-	//}
-	//
+	for _, c := range Codons {
+		p.Stats.AminoAcidsCount[string(c)] = float32(strings.Count(proteinStr, string(c)))
+	}
+
 	return nil
 }
 
