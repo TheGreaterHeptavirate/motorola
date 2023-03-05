@@ -233,7 +233,7 @@ PSF LICENSE AGREEMENT FOR PYTHON 3.11.1
 8. By copying, installing or otherwise using Python 3.11.1, Licensee agrees
    to be bound by the terms and conditions of this License Agreement.
 
-- [Google Noto Sans font](https://fonts.google.com/noto/specimen/Noto+Sans):
+- [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk)
 Copyright 2015-2021 Google LLC. All Rights Reserved.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
