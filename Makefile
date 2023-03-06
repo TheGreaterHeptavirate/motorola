@@ -39,7 +39,7 @@ setup:
 	$(GOCMD) get -d ./...
 	$(GOCMD) mod download -x
 	$(GOCMD) generate -v ./...
-	cp cmd/motorola/*syso .
+	if test -f cmd/motorola/*syso ; then cp cmd/motorola/*syso . ;fi
 
 ## test: Runs the tests with coverage
 test:
