@@ -1,3 +1,6 @@
+//go:build windows
+// +build windows
+
 /*
  * Copyright (c) 2022. The Greater Heptavirate (https://github.com/TheGreaterHeptavirate). All Rights Reserved
  *
