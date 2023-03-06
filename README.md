@@ -1,6 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/TheGreaterHeptavirate/motorola)](https://goreportcard.com/report/github.com/TheGreaterHeptavirate/motorola)
 [![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/motorola?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/motorola)
 [![codecov](https://codecov.io/gh/TheGreaterHeptavirate/motorola/branch/master/graph/badge.svg)](https://codecov.io/gh/TheGreaterHeptavirate/motorola)
+[![Docker Repository on Quay](https://quay.io/repository/gucio321/bialkomat/status "Docker Repository on Quay")](https://quay.io/repository/gucio321/bialkomat)
 
 Białkomat project is an application written for
 the [Motorola Science Cup](https://science-cup.pl/) competition.
