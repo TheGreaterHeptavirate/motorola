@@ -16,7 +16,7 @@ import (
 	"github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
 
-	animations "github.com/gucio321/giu-animations"
+	animations "github.com/gucio321/giu-animations/v2"
 
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/drawer"
@@ -42,12 +42,12 @@ func (a *App) render() {
 	giu.PrepareMsgbox().Build()
 
 	a.layout = animations.Animator(animations.Transition(
-		func(starter func()) {
+		func(starter animations.StarterFunc) {
 			giu.SingleWindow().Layout(
 				a.inputBar(),
 			)
 		},
-		func(starter func()) {
+		func(starter animations.StarterFunc) {
 			a.toolbox()
 
 			if len(a.foundProteins) == 0 {
@@ -61,10 +61,10 @@ func (a *App) render() {
 	))
 
 	a.loadingScreen = animations.Animator(animations.Transition(
-		func(_ func()) {
+		func(_ animations.StarterFunc) {
 			a.layout.Build()
 		},
-		func(_ func()) {
+		func(_ animations.StarterFunc) {
 			giu.SingleWindow().Layout(
 				giu.Custom(func() {
 					availableW, availableH := giu.GetAvailableRegion()
@@ -190,7 +190,7 @@ func (a *App) toolbox() {
 					giu.Align(giu.AlignCenter).To(
 						giu.Row(
 							giu.Button("Back").OnClick(func() {
-								a.layout.Start(animations.PlayAuto)
+								a.layout.Start(animations.PlayForward)
 							}),
 							giu.Button("About us").OnClick(func() {
 								giu.OpenPopup("About us")

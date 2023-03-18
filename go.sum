@@ -20,8 +20,8 @@ github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b/go.mod h1:tQ2
 github.com/gobwas/glob v0.2.3 h1:A4xDbljILXROh+kObIiy5kIaPYD8e96x1tgBhUI5J+Y=
 github.com/goccy/go-json v0.9.11 h1:/pAaQDLHEoCq/5FFmSKBswWmK6H0e8g4159Kc/X/nqk=
 github.com/goccy/go-json v0.9.11/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
-github.com/gucio321/giu-animations v0.0.0-20230218133529-c30b47d56607 h1:RUsVlZ7UW35oAZaWuIbAVpsHSJOXN1qkUiIdIYRjc50=
-github.com/gucio321/giu-animations v0.0.0-20230218133529-c30b47d56607/go.mod h1:HxhzGovmcQvWex8y/plepzGT4dWfxNJeV2/o/h2GUy4=
+github.com/gucio321/giu-animations/v2 v2.0.0 h1:xLqTleJzQ9Nc3Mz5YnL8QHLLdA4xEbAUlWr1T6au8mg=
+github.com/gucio321/giu-animations/v2 v2.0.0/go.mod h1:0BPqHy5XcbOfFu5RWNg5O06/HCadRDmmqKUkYlSkY3c=
 github.com/kluctl/go-embed-python v0.0.0-3.10.9-20230206-2 h1:K96SwIr8MzBQ3kFFz2H/pA2y+EEk04vZ4fWj/YZghBU=
 github.com/kluctl/go-embed-python v0.0.0-3.10.9-20230206-2/go.mod h1:vzngsPshNKUtq0gxkYQKNJafrcH7Qy7Qt6yGNt7JmQI=
 github.com/kpango/fastime v1.1.6 h1:lAw1Tiwnlbsx1xZs6W9eM7/8niwabknewbmLkh/yTVo=

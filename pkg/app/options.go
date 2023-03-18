@@ -10,7 +10,7 @@ package app
 
 import (
 	"github.com/TheGreaterHeptavirate/motorola/internal/logger"
-	animations "github.com/gucio321/giu-animations"
+	animations "github.com/gucio321/giu-animations/v2"
 )
 
 type AppOptions struct {

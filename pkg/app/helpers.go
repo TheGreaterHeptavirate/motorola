@@ -23,7 +23,7 @@ import (
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/inputparser"
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	"github.com/faiface/mainthread"
-	animations "github.com/gucio321/giu-animations"
+	animations "github.com/gucio321/giu-animations/v2"
 	"github.com/sqweek/dialog"
 	"golang.org/x/image/colornames"
 )
@@ -194,32 +194,31 @@ func AnimatedButton(button *giu.ButtonWidget) giu.Widget {
 			animations.Animator(
 				animations.ColorFlow(
 					button,
-					func() color.RGBA {
-						return colornames.White
-					},
+					[]giu.StyleColorID{giu.StyleColorText},
 					func() color.RGBA {
 						return giu.Vec4ToRGBA(imgui.CurrentStyle().GetColor(imgui.StyleColorText))
 					},
-					giu.StyleColorText,
-					giu.StyleColorText,
+					func() color.RGBA {
+						return colornames.White
+					},
 				),
-			).Duration(animationDuration).FPS(animationFPS),
-			giu.StyleColorButtonHovered,
+			).Duration(animationDuration).FPS(animationFPS).Trigger(animations.TriggerOnChange, animations.PlayForward, imgui.IsItemHovered),
 			giu.StyleColorButton,
+			giu.StyleColorButtonHovered,
 		),
-	).Duration(animationDuration).FPS(animationFPS)
+	).Duration(animationDuration).FPS(animationFPS).Trigger(animations.TriggerOnChange, animations.PlayForward, imgui.IsItemHovered)
 }
 
 func (a *App) OnLoadFromFile() {
 	logger.Debugf("starting transition to loading screen")
-	a.loadingScreen.Start(animations.PlayAuto)
+	a.loadingScreen.Start(animations.PlayForward)
 
 	logger.Info("Loading file to input textbox...")
 
 	go func() {
 		path, err := dialog.File().Load()
 		if err != nil {
-			defer a.loadingScreen.Start(animations.PlayAuto)
+			defer a.loadingScreen.Start(animations.PlayForward)
 			// this error COULD come from fact that user exited dialog
 			// in this case, don't report app's error, just return
 			if errors.Is(err, dialog.ErrCancelled) {
@@ -238,7 +237,7 @@ func (a *App) OnLoadFromFile() {
 		a.loadFile(path)
 		logger.Debug("loading finished. Exiting loading screen.")
 		mainthread.Call(func() {
-			a.loadingScreen.Start(animations.PlayAuto)
+			a.loadingScreen.Start(animations.PlayForward)
 		})
 	}()
 }
@@ -289,7 +288,7 @@ Oryginally error reported as: %s
 
 func (a *App) OnProceed() {
 	logger.Debugf("Parsing data")
-	a.layout.Start(animations.PlayAuto)
+	a.layout.Start(animations.PlayForward)
 	a.foundProteins = make([]*protein.Protein, 0)
 
 	go func() {

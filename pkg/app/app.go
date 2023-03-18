@@ -25,7 +25,7 @@ import (
 	"github.com/TheGreaterHeptavirate/motorola/pkg/core/protein"
 	python "github.com/TheGreaterHeptavirate/motorola/pkg/python_integration"
 
-	animations "github.com/gucio321/giu-animations"
+	animations "github.com/gucio321/giu-animations/v2"
 
 	"github.com/AllenDang/giu"
 
