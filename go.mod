@@ -8,7 +8,7 @@ require (
 	github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3
 	github.com/gucio321/giu-animations/v2 v2.0.0
 	github.com/kluctl/go-embed-python v0.0.0-3.10.9-20230206-2
-	github.com/kpango/glg v1.6.14
+	github.com/kpango/glg v1.6.15
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/stretchr/testify v1.8.2
 	golang.org/x/image v0.6.0
@@ -20,8 +20,8 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b // indirect
-	github.com/goccy/go-json v0.9.11 // indirect
-	github.com/kpango/fastime v1.1.6 // indirect
+	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/kpango/fastime v1.1.9 // indirect
 	github.com/mazznoer/csscolorparser v0.1.3 // indirect
 	github.com/napsy/go-css v0.0.0-20221107082635-4ed403047a64 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
