@@ -11,7 +11,7 @@ require (
 	github.com/kpango/glg v1.6.15
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
 	github.com/stretchr/testify v1.8.2
-	golang.org/x/image v0.6.0
+	golang.org/x/image v0.7.0
 )
 
 require (
