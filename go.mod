@@ -10,7 +10,7 @@ require (
 	github.com/kluctl/go-embed-python v0.0.0-3.10.9-20230206-2
 	github.com/kpango/glg v1.6.15
 	github.com/sqweek/dialog v0.0.0-20220809060634-e981b270ebbf
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	golang.org/x/image v0.7.0
 )
 
