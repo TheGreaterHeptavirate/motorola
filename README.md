@@ -1,3 +1,16 @@
+# NOTE 
+<image align="left" src="https://user-images.githubusercontent.com/242652/138285004-b27d55b3-163b-4fe3-a8ff-6c34518044bd.png">
+Dear Users/visitors\
+Since the fact that at April 2023 Motorola Science Cup has finished (at least for our team), and the project didn't win anything,
+as well as because of lack of interesst in further development,
+We've decided to announce its end-of-life.
+If you're interessted in resuming the development anyhow, feel free to
+contact us for details.
+
+Thanx!
+gucio321 <gucio321@protonmail.com> - the Head Developer.
+<br clear="all" />
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/TheGreaterHeptavirate/motorola)](https://goreportcard.com/report/github.com/TheGreaterHeptavirate/motorola)
 [![GoDoc](https://pkg.go.dev/badge/github.com/TheGreaterHeptavirate/motorola?utm_source=godoc)](https://pkg.go.dev/mod/github.com/TheGreaterHeptavirate/motorola)
 [![codecov](https://codecov.io/gh/TheGreaterHeptavirate/motorola/branch/master/graph/badge.svg)](https://codecov.io/gh/TheGreaterHeptavirate/motorola)
