@@ -1,13 +1,13 @@
 # NOTE 
 <image align="left" src="https://user-images.githubusercontent.com/242652/138285004-b27d55b3-163b-4fe3-a8ff-6c34518044bd.png">
-Dear Users/visitors\
+Dear Users/visitors<br>
 Since the fact that at April 2023 Motorola Science Cup has finished (at least for our team), and the project didn't win anything,
 as well as because of lack of interesst in further development,
 We've decided to announce its end-of-life.
 If you're interessted in resuming the development anyhow, feel free to
-contact us for details.
+contact us for details.<br>
 
-Thanx!
+Thanx!<br>
 gucio321 <gucio321@protonmail.com> - the Head Developer.
 <br clear="all" />
 
